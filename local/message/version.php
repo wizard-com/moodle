@@ -1,5 +1,5 @@
 <?php
-
+//version.php
 /**
  * Version details
  *
@@ -12,4 +12,4 @@ defined('MOODLE_INTERNAL') || die();
 
 $plugin->version   = 2021052500;        // The current plugin version (Date: YYYYMMDDXX)
 $plugin->requires  = 2021052500;        // Requires this Moodle version
-$plugin->component = 'local_message';      // Full name of the plugin (used for diagnostics)
+$plugin->component = 'local_message';   // Full name of the plugin (used for diagnostics)

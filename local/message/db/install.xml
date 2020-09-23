@@ -3,7 +3,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="../../../lib/xmldb/xmldb.xsd">
     <TABLES>
-        <TABLE NAME="message" COMMENT="This table saves information about message">
+        <TABLE NAME="sample1" COMMENT="This table saves information about message">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="messagetext" TYPE="text" NOTNULL="true" SEQUENCE="false"/>
@@ -12,7 +12,7 @@
                 <KEY NAME="primary" TYPE="primary" FIELDS="id" COMMENT="The unique id for this assignment instance."/>
             </KEYS>
         </TABLE>
-        <TABLE NAME="message_read" COMMENT="This table keeps information about messages read.">
+        <TABLE NAME="sample2" COMMENT="This table keeps information about messages read.">
             <FIELDS>
                 <FIELD NAME="id" TYPE="int" LENGTH="10" NOTNULL="true" SEQUENCE="true"/>
                 <FIELD NAME="messageid" TYPE="int" LENGTH="10" NOTNULL="true" DEFAULT="0" SEQUENCE="false"/>
