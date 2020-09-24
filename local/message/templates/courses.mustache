@@ -40,27 +40,46 @@
 <div class="row">
    {{#title}}
     <div class="col-lg-2">
-        <div class="card text-white" style="background-color: #0c0c0c; height: 200px">
+        <div class="card text-white" style="background-color: #0c0c0c; height: 200px; margin-bottom: 40px; box-shadow: 5px 5px 5px 5px grey;">
             <div class="card-header">{{fullname}}</div>
-            <div class="card-body">Content</div>
-            <div class="card-footer"><button class="btn btn-light">Begin <i class="fa fa-arrow-right"></i></button></div>
+            <div class="card-body">Due on {{enddate}}</div>
+            <div class="card-footer">
+                <a href="../course_details.php?id={{id}}" style="border-radius: 30px" class="btn btn-light">Begin <i class="fa fa-arrow-right"></i>
+                </a>
+            </div>
         </div>
     </div>
     {{/title}}
 </div>
+<div class="row">
+    <div style="padding-top: 20px" class="col-12">
+        <h4><b>Kick-Start your career</b></h4>
+    </div>
+</div>
 <div class="row" style="padding-top: 40px">
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">Header</div>
-            <div class="card-body">Content</div>
-            <div class="card-footer">Footer</div>
+    <div class="col-lg-6 col-md-6">
+        <div class="card text-white" style="background-color: #0c0c0c; height:500px; padding-top: 40px; box-shadow: 5px 5px 5px 5px grey;">
+            <div class="card-header"><h3>Become a Data Scientist</h3></div>
+            <div class="card-body"><button style="border-radius: 30px" class="btn btn-warning">Join Discussion <i class="fa fa-arrow-right"></i></button></div>
+            <div class="card-footer"></div>
         </div>
     </div>
-    <div class="col-lg-6">
-        <div class="card">
-            <div class="card-header">Header</div>
-            <div class="card-body">Content</div>
-            <div class="card-footer">Footer</div>
+    <div class="col-lg-6 col-md-6">
+        <div class="row" style="padding-left: 10px">
+            <div class="col-lg-8 col-md-8">
+                <div class="card text-white" style="background-color: #0c0c0c; height: 240px; padding-top: 40px; box-shadow: 5px 5px 5px 5px grey; margin-bottom: 20px">
+                    <div class="card-header"><h3>Ace That Job Interview</h3></div>
+                    <div class="card-body"><button style="border-radius: 30px" class="btn btn-warning">Join Discussion <i class="fa fa-arrow-right"></i></button></div>
+                    <div class="card-footer"></div>
+                </div>
+            </div>
+            <div class="col-lg-8 col-md-8">
+                <div class="card text-white" style="background-color: #0c0c0c; height: 240px; padding-top: 40px; box-shadow: 5px 5px 5px 5px grey;">
+                    <div class="card-header"><h3>A.I. Demystified</h3></div>
+                    <div class="card-body"><button style="border-radius: 30px" class="btn btn-warning">Join Discussion <i class="fa fa-arrow-right"></i></button></div>
+                    <div class="card-footer"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
