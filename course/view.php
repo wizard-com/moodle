@@ -240,7 +240,7 @@
         $PAGE->set_title(get_string('coursetitle', 'moodle', array('course' => $course->fullname)));
     }
 
-    $PAGE->set_heading($course->fullname);
+    $PAGE->set_heading($course->fullname. ' title');
     echo $OUTPUT->header();
 
     if ($USER->editing == 1) {
@@ -267,7 +267,7 @@
     }
 
     // Course wrapper start.
-    echo html_writer::start_tag('div', array('class'=>'course-content'));
+    echo html_writer::start_tag('div', array('class'=>'course-content myclass'));
 
     // make sure that section 0 exists (this function will create one if it is missing)
     course_create_sections_if_missing($course, 0);

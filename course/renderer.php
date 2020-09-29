@@ -972,6 +972,8 @@ class core_course_renderer extends plugin_renderer_base {
         $output .= html_writer::end_tag('div');
 
         $output .= html_writer::end_tag('div');
+
+
         return $output;
     }
 
@@ -1015,6 +1017,8 @@ class core_course_renderer extends plugin_renderer_base {
      * @param int $displayoptions
      * @return void
      */
+
+
     public function course_section_cm_list($course, $section, $sectionreturn = null, $displayoptions = array()) {
         global $USER;
 
@@ -1045,8 +1049,7 @@ class core_course_renderer extends plugin_renderer_base {
                     continue;
                 }
 
-                if ($modulehtml = $this->course_section_cm_list_item($course,
-                        $completioninfo, $mod, $sectionreturn, $displayoptions)) {
+                if ($modulehtml = $this->course_section_cm_list_item($course,$completioninfo, $mod, $sectionreturn, $displayoptions)) {
                     $moduleshtml[$modnumber] = $modulehtml;
                 }
             }
@@ -1057,9 +1060,8 @@ class core_course_renderer extends plugin_renderer_base {
             foreach ($moduleshtml as $modnumber => $modulehtml) {
                 if ($ismoving) {
                     $movingurl = new moodle_url('/course/mod.php', array('moveto' => $modnumber, 'sesskey' => sesskey()));
-                    $sectionoutput .= html_writer::tag('li',
-                            html_writer::link($movingurl, $this->output->render($movingpix), array('title' => $strmovefull)),
-                            array('class' => 'movehere'));
+                    $sectionoutput .= html_writer::tag('li', html_writer::link($movingurl, $this->output->render($movingpix), array('title' => $strmovefull)), array('class' => 'movehere'));
+
                 }
 
                 $sectionoutput .= $modulehtml;
@@ -1067,14 +1069,13 @@ class core_course_renderer extends plugin_renderer_base {
 
             if ($ismoving) {
                 $movingurl = new moodle_url('/course/mod.php', array('movetosection' => $section->id, 'sesskey' => sesskey()));
-                $sectionoutput .= html_writer::tag('li',
-                        html_writer::link($movingurl, $this->output->render($movingpix), array('title' => $strmovefull)),
-                        array('class' => 'movehere'));
+                $sectionoutput .= html_writer::tag('li', html_writer::link($movingurl, $this->output->render($movingpix), array('title' => $strmovefull)), array('class' => 'movehere'));
             }
         }
 
         // Always output the section module list.
         $output .= html_writer::tag('ul', $sectionoutput, array('class' => 'section img-text'));
+
 
         return $output;
     }

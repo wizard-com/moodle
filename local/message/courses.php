@@ -16,6 +16,7 @@ $courses = $DB->get_records_sql('SELECT id, fullname, enddate FROM {course} WHER
 //print_object($info);
 foreach ($courses as $course){
     $course->enddate = substr(date('d-M-Y', $course->enddate), 0, 6);
+    $course->url = $CFG->wwwroot."/local/message/course_details.php?id=".$course->id;
 }
 //$records = $DB->get_records('sample1');
 //
