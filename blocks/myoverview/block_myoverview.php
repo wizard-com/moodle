@@ -60,7 +60,7 @@ class block_myoverview extends block_base {
 
         $this->content = new stdClass();
         $this->content->text = $renderer->render($renderable);
-        $this->content->footer = '';
+        $this->content->footer = 'vwv';
 
         return $this->content;
     }
