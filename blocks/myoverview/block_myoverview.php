@@ -37,7 +37,7 @@ class block_myoverview extends block_base {
      * Init.
      */
     public function init() {
-        $this->title = get_string('pluginname', 'block_myoverview');
+        $this->title = '';
     }
 
     /**
@@ -59,8 +59,8 @@ class block_myoverview extends block_base {
         $renderer = $this->page->get_renderer('block_myoverview');
 
         $this->content = new stdClass();
-        $this->content->text = $renderer->render($renderable);
-        $this->content->footer = 'vwv';
+        $this->content->text = '';
+        $this->content->footer = '';
 
         return $this->content;
     }
