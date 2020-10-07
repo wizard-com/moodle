@@ -59,8 +59,8 @@ class block_myoverview extends block_base {
         $renderer = $this->page->get_renderer('block_myoverview');
 
         $this->content = new stdClass();
-        $this->content->text = '';
-        $this->content->footer = '';
+        $this->content->text = 'text';
+        $this->content->footer = 'footer';
 
         return $this->content;
     }

@@ -240,7 +240,7 @@
         $PAGE->set_title(get_string('coursetitle', 'moodle', array('course' => $course->fullname)));
     }
 
-    $PAGE->set_heading($course->fullname. ' title');
+    $PAGE->set_heading($course->fullname);
     echo $OUTPUT->header();
 
     if ($USER->editing == 1) {
@@ -253,45 +253,47 @@
         }
     }
 
-    if ($completion->is_enabled()) {
-        // This value tracks whether there has been a dynamic change to the page.
-        // It is used so that if a user does this - (a) set some tickmarks, (b)
-        // go to another page, (c) clicks Back button - the page will
-        // automatically reload. Otherwise it would start with the wrong tick
-        // values.
-        echo html_writer::start_tag('form', array('action'=>'.', 'method'=>'get'));
-        echo html_writer::start_tag('div');
-        echo html_writer::empty_tag('input', array('type'=>'hidden', 'id'=>'completion_dynamic_change', 'name'=>'completion_dynamic_change', 'value'=>'0'));
-        echo html_writer::end_tag('div');
-        echo html_writer::end_tag('form');
-    }
+//    if ($completion->is_enabled()) {
+//        // This value tracks whether there has been a dynamic change to the page.
+//        // It is used so that if a user does this - (a) set some tickmarks, (b)
+//        // go to another page, (c) clicks Back button - the page will
+//        // automatically reload. Otherwise it would start with the wrong tick
+//        // values.
+//        echo html_writer::start_tag('form', array('action'=>'.', 'method'=>'get'));
+//        echo html_writer::start_tag('div');
+//        echo html_writer::empty_tag('input', array('type'=>'hidden', 'id'=>'completion_dynamic_change', 'name'=>'completion_dynamic_change', 'value'=>'0'));
+//        echo html_writer::end_tag('div');
+//        echo html_writer::end_tag('form');
+//    }
 
     // Course wrapper start.
-    echo html_writer::start_tag('div', array('class'=>'course-content myclass'));
+  //  echo html_writer::start_tag('div', array('class'=>'course-content myclass'));
 
     // make sure that section 0 exists (this function will create one if it is missing)
-    course_create_sections_if_missing($course, 0);
+   // course_create_sections_if_missing($course, 0);
 
     // get information about course modules and existing module types
     // format.php in course formats may rely on presence of these variables
-    $modinfo = get_fast_modinfo($course);
-    $modnames = get_module_types_names();
-    $modnamesplural = get_module_types_names(true);
-    $modnamesused = $modinfo->get_used_module_names();
-    $mods = $modinfo->get_cms();
-    $sections = $modinfo->get_section_info_all();
+//    $modinfo = get_fast_modinfo($course);
+//    $modnames = get_module_types_names();
+//    $modnamesplural = get_module_types_names(true);
+//    $modnamesused = $modinfo->get_used_module_names();
+//    $mods = $modinfo->get_cms();
+//    $sections = $modinfo->get_section_info_all();
+//
+//    // CAUTION, hacky fundamental variable defintion to follow!
+//    // Note that because of the way course fromats are constructed though
+//    // inclusion we pass parameters around this way..
+//    $displaysection = $section;
+//
+//    // Include the actual course format.
+//    require($CFG->dirroot .'/course/format/'. $course->format .'/format.php');
+//    // Content wrapper end.
+//
+//    echo html_writer::end_tag('div');
+    echo "<strong>Course Description</strong></br>";
 
-    // CAUTION, hacky fundamental variable defintion to follow!
-    // Note that because of the way course fromats are constructed though
-    // inclusion we pass parameters around this way..
-    $displaysection = $section;
-
-    // Include the actual course format.
-    require($CFG->dirroot .'/course/format/'. $course->format .'/format.php');
-    // Content wrapper end.
-
-    echo html_writer::end_tag('div');
-
+    echo $course->summary;
     // Trigger course viewed event.
     // We don't trust $context here. Course format inclusion above executes in the global space. We can't assume
     // anything after that point.

@@ -53,7 +53,7 @@ if ($COURSE->id != SITEID && !empty($coverimagecss)) {
 echo $OUTPUT->custom_menu_spacer();
 ?>
 <div id="page-header" class="clearfix <?php echo $mastimage; ?>">
-    <div class="breadcrumb-nav" aria-label="breadcrumb"><?php echo $OUTPUT->navbar($mastimage); ?></div>
+<!--    <div class="breadcrumb-nav" aria-label="breadcrumb">--><?php //echo $OUTPUT->navbar($mastimage); ?><!--</div>-->
 
     <div id="page-mast">
     <?php
@@ -62,8 +62,7 @@ echo $OUTPUT->custom_menu_spacer();
         echo $output->course_format_warning();
     }
     echo $OUTPUT->page_heading();
-    echo $OUTPUT->course_header();
-    echo "Something";
+    //echo $OUTPUT->course_header();
     // Note, there is no blacklisting for the edit blocks button on course pages.
     echo $OUTPUT->page_heading_button();
     if ($tocformat && !$leftnav) {
@@ -74,12 +73,12 @@ echo $OUTPUT->custom_menu_spacer();
 </div>
 <?php
 if ($tocformat && $leftnav) {
-    echo '<div id="snap-course-wrapper">';
-    echo '<div class="row">';
-    echo '<div class="col-lg-3">';
-    echo $OUTPUT->course_toc();
-    echo '</div>';
-    echo '<div class="col-lg-9">';
+//    echo '<div id="snap-course-wrapper">';
+//    echo '<div class="row">';
+//    echo '<div class="col-lg-3">';
+//    echo $OUTPUT->course_toc();
+//    echo '</div>';
+//    echo '<div class="col-lg-9">';
 }
 ?>
 <section id="region-main">
@@ -96,11 +95,11 @@ echo $OUTPUT->course_content_footer();
 <?php
 require(__DIR__.'/moodle-blocks.php');
 
-if ($tocformat && $leftnav) {
-    echo '</div> <!-- close section -->';
-    echo '</div> <!-- close row -->';
-    echo '</div> <!-- close course wrapper -->';
-}
+//if ($tocformat && $leftnav) {
+//    echo '</div> <!-- close section -->';
+//    echo '</div> <!-- close row -->';
+//    echo '</div> <!-- close course wrapper -->';
+//}
 
 if ($coursemainpage) {
     $coursefooter = $output->course_footer();

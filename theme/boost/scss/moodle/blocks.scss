@@ -26,11 +26,11 @@
 }
 
 $blocks-column-width: 360px !default;
-
-[data-region="blocks-column"] {
-    width: $blocks-column-width;
-    float: right;
-}
+//
+//[data-region="blocks-column"] {
+//    width: $blocks-column-width;
+//    float: right;
+//}
 
 $blocks-plus-gutter: $blocks-column-width + ( $grid-gutter-width / 2 );
 
@@ -70,7 +70,7 @@ $blocks-plus-gutter: $blocks-column-width + ( $grid-gutter-width / 2 );
 #region-main-settings-menu.has-blocks,
 #region-main.has-blocks {
     display: inline-block;
-    width: calc(100% - #{$blocks-plus-gutter});
+    //width: calc(100% - #{$blocks-plus-gutter});
     @include media-breakpoint-down(lg) {
         width: 100%;
         /* MDL-63102 - Remove extra space at bottom.
