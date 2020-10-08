@@ -1,0 +1,33 @@
+[data-region="blocks-column"] {
+    width: 100%;
+    float: right;
+}
+
+// Required for IE11 to prevent blocks being pushed under the content.
+#region-main-settings-menu.has-blocks,
+#region-main.has-blocks {
+    display: inline-block;
+    width: 100%;
+    @include media-breakpoint-down(lg) {
+        width: 100%;
+        /* MDL-63102 - Remove extra space at bottom.
+        If modifying make sure block-region is horizontally stacked when in full screen */
+        display: block;
+    }
+}
+
+.course-description-header {
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.course-content ul.topics,
+.course-content ul.weeks {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+
+    li.section {
+        display: inline;
+    }
+}

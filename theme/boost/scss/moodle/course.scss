@@ -328,7 +328,7 @@ body:not(.editing)  .sitetopic ul.section {
 .course-content ul.weeks {
     padding: 0;
     margin: 0;
-    list-style: none;
+    list-style: circle;
 
     li.section {
         margin-top: $spacer;
