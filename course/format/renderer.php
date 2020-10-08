@@ -200,7 +200,7 @@ abstract class format_section_renderer_base extends plugin_renderer_base {
 
         $o .= html_writer::start_tag('li', [
             'id' => 'section-'.$section->section,
-            'class' => 'section main clearfix'.$sectionstyle,
+            'class' => 'section main clearfix col-lg-2'.$sectionstyle,
             'role' => 'region',
             'aria-labelledby' => "sectionid-{$section->id}-title",
             'data-sectionid' => $section->section,
