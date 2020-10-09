@@ -268,6 +268,8 @@
     echo html_writer::tag('h4', 'Course Description', array('class'=>'course-description-header'));
     //
     echo $course->summary;
+
+    echo html_writer::tag('h4', 'What you will learn', array('class' =>'course-topic-header'));
     // Course wrapper start.
     echo html_writer::start_tag('div', array('class'=>'course-content myclass'));
 
@@ -294,6 +296,14 @@
 
     echo html_writer::end_tag('div');
 
+    $review = $DB->get_record('course_reviews', array('courseid'=>$course->id));
+$templatecontext = (object)[
+
+
+];
+   // echo html_writer::tag('h4', 'Syllabus', array('class' =>'course-topic-header'));
+
+    echo $OUTPUT->render_from_template("theme_ycampus/reviews", $templatecontext);
     // Trigger course viewed event.
     // We don't trust $context here. Course format inclusion above executes in the global space. We can't assume
     // anything after that point.

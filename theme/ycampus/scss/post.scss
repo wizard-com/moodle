@@ -16,9 +16,17 @@
     }
 }
 
-.course-description-header {
+.course-description-header, .course-topic-header {
     font-weight: bold;
     margin-bottom: 20px;
+}
+
+.course-topic-header {
+    margin-top: 40px;
+}
+.course-content {
+    margin-top: 0;
+    margin-bottom: 30px;
 }
 
 .course-content ul.topics,
@@ -28,7 +36,7 @@
     list-style: none;
 
     li.section {
-        display: inline;
+        display: inline-block;
     }
 }
 
