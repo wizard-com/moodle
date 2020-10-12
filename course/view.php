@@ -296,11 +296,22 @@
 
     echo html_writer::end_tag('div');
 
-    $review = $DB->get_record('course_reviews', array('courseid'=>$course->id));
-$templatecontext = (object)[
+    $query = 'SELECT mdl_course_reviews.id, mdl_course_reviews.comment,mdl_course_reviews.rating, mdl_course_reviews.time_created, mdl_user.username, mdl_user.id AS user_id FROM `mdl_course_reviews` INNER JOIN mdl_user ON mdl_course_reviews.userid = mdl_user.id WHERE mdl_course_reviews.courseid = '.$course->id;
+
+    $reviews = $DB->get_records_sql($query);
 
 
-];
+    foreach ($reviews as $review){
+        $review->time_created = date('M d, Y', $review->time_created);
+        $review->url = $CFG->wwwroot."/user/profile.php?id=".$review->user_id;
+        $review->grey_block_count = array_fill(0, 5-$review->rating, 0);
+        $review->gold_block_count = array_fill(0, $review->rating, 0);
+    }
+
+
+    $templatecontext = (object)[
+        'reviews' => array_values($reviews)
+    ];
    // echo html_writer::tag('h4', 'Syllabus', array('class' =>'course-topic-header'));
 
     echo $OUTPUT->render_from_template("theme_ycampus/reviews", $templatecontext);
