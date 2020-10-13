@@ -271,7 +271,7 @@
 
     echo html_writer::tag('h4', 'What you will learn', array('class' =>'course-topic-header'));
     // Course wrapper start.
-    echo html_writer::start_tag('div', array('class'=>'course-content myclass'));
+  //  echo html_writer::start_tag('div', array('class'=>'course-content'));
 
     // make sure that section 0 exists (this function will create one if it is missing)
     course_create_sections_if_missing($course, 0);
@@ -294,27 +294,8 @@
     require($CFG->dirroot .'/course/format/'. $course->format .'/format.php');
     // Content wrapper end.
 
-    echo html_writer::end_tag('div');
+  //  echo html_writer::end_tag('div');
 
-    $query = 'SELECT mdl_course_reviews.id, mdl_course_reviews.comment,mdl_course_reviews.rating, mdl_course_reviews.time_created, mdl_user.username, mdl_user.id AS user_id FROM `mdl_course_reviews` INNER JOIN mdl_user ON mdl_course_reviews.userid = mdl_user.id WHERE mdl_course_reviews.courseid = '.$course->id;
-
-    $reviews = $DB->get_records_sql($query);
-
-
-    foreach ($reviews as $review){
-        $review->time_created = date('M d, Y', $review->time_created);
-        $review->url = $CFG->wwwroot."/user/profile.php?id=".$review->user_id;
-        $review->grey_block_count = array_fill(0, 5-$review->rating, 0);
-        $review->gold_block_count = array_fill(0, $review->rating, 0);
-    }
-
-
-    $templatecontext = (object)[
-        'reviews' => array_values($reviews)
-    ];
-   // echo html_writer::tag('h4', 'Syllabus', array('class' =>'course-topic-header'));
-
-    echo $OUTPUT->render_from_template("theme_ycampus/reviews", $templatecontext);
     // Trigger course viewed event.
     // We don't trust $context here. Course format inclusion above executes in the global space. We can't assume
     // anything after that point.
