@@ -94,3 +94,27 @@ body {
     font-size: 24px;
     color: #d17581;
 }
+.info {
+    clear:both;
+}
+.button {
+    -moz-border-radius: 15px;
+    border-radius: 15px;
+    display: table-cell;
+    background-color: #c33;
+    width: 240px;
+    min-height:149px;
+    float: left;
+    text-align:center;
+    margin: 5px;
+    overflow:hidden;
+}
+.button a {
+    color: #fff;
+    display:block;
+    font-size:1.2em;
+    font-weight:bold;
+}
+.catbutton {
+    width:100%;
+}

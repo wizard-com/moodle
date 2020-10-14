@@ -116,60 +116,65 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
     }
 }
 class theme_ycampus_core_course_renderer extends core_course_renderer {
+
     /**
-     * Returns HTML to print list of available courses for the frontpage
+     * Returns HTML to print tree of course categories (with number of courses) for the frontpage
      *
      * @return string
      */
-    public function frontpage_available_courses() {
-        global $CFG, $PAGE, $DB;
-
-        $html = '';
-        // LearningWorks.
-        $PAGE->requires->js(new moodle_url($CFG->wwwroot.'/blocks/lw_courses/js/custom.js'));
-        $config = get_config('block_lw_courses');
-        $categories = $DB->get_records('course_categories');
-
-        // LearningWorks.
-        $gridsplit = intval(12 / count($categories)); // Added intval to avoid any float.
-
-        // Set a minimum size for the course 'cards'.
-        $colsize = intval($config->coursegridwidth) > 0 ? intval($config->coursegridwidth) : BLOCKS_LW_COURSES_DEFAULT_COL_SIZE;
-        if ($gridsplit < $colsize) {
-            $gridsplit = $colsize;
+    public function frontpage_categories_list() {
+        global $CFG;
+        // TODO MDL-10965 improve.
+        $tree = core_course_category::top();
+        if (!$tree->get_children_count()) {
+            return '';
         }
-
-        $courseclass = $config->startgrid == BLOCKS_LW_COURSES_STARTGRID_YES ? "grid" : "list";
-        $startvalue = $courseclass == "list" ? "12" : $gridsplit;
-
-       // $html .= html_writer::start_tag('section', array('class'=>'block lw_courses_block card mb-3'))
-        $html .= html_writer::start_tag('div', array('class'=>'card-body p3'));
-        $html .= html_writer::start_tag('div', array('class'=>'card-text content mt-3'));
-
-        $listonly = false;
-        if ($gridsplit == 12) {
-            $listonly = true;
-            $startvalue = 12;
-            $courseclass = "list";
-        } else {
-            $html .= html_writer::tag('a', 'Change View', array('href' => '#', 'id' => 'box-or-lines',
-                'styles' => '', 'class' => "$courseclass col-md-$startvalue span$startvalue $courseclass"));
-        }
-        $html .= html_writer::tag('div', '', array("class" => "hidden startgrid $courseclass", "grid-size" => $gridsplit));
-        $html .= html_writer::div('', 'box flush');
-
-        $html .= html_writer::start_div('lw_courses_list');
-        $html .= html_writer::start_tag('div', array('class'=>"box py-3 coursebox $courseclass span$startvalue col-md-$startvalue $courseclass col-xs-12"));
-
-        foreach ($categories as $category){
-            $html .= $category->name;
-        }
-        $html .= html_writer::end_tag('div');
-        // Wrap course list in a div and return.
-        $html .= html_writer::end_div();
-
-        $html .= html_writer::end_tag('div');
-        $html .= html_writer::end_tag('div');
-        return $html;
+        $chelper = new coursecat_helper();
+        $chelper->set_subcat_depth($CFG->maxcategorydepth)->
+        set_show_courses(self::COURSECAT_SHOW_COURSES_COUNT)->
+        set_categories_display_options(array(
+            'limit' => $CFG->coursesperpage,
+            'viewmoreurl' => new moodle_url('/course/index.php',
+                array('browse' => 'categories', 'page' => 1))
+        ))->
+        set_attributes(array('class' => 'frontpage-category-names'));
+        return $this->coursecat_tree($chelper, $tree);
     }
+
+    /**
+     * Returns HTML to display a tree of subcategories and courses in the given category
+     *
+     * @param coursecat_helper $chelper various display options
+     * @param core_course_category $coursecat top category (this category's name and description will NOT be added to the tree)
+     * @return string
+     */
+    protected function coursecat_tree(coursecat_helper $chelper, $coursecat) {
+
+        global $DB, $CFG;
+
+        $output = '';
+        $img_path = $CFG->wwwroot.'/theme/ycampus/infocomm.png';
+
+        $output .= html_writer::start_tag('div', array('class'=>'row'));
+
+        $course_categories = $DB->get_records('course_categories');
+
+        foreach ($course_categories as $category){
+            $output .= html_writer::start_tag('div', array('class'=>'col-lg-2 col-md-4'));
+            $output .= html_writer::start_tag('div', array('class'=>'card'));
+            $output .= html_writer::start_tag('img', array('class'=>'card-img-top', 'src'=>$img_path, 'alt'=>'Card image')).html_writer::end_tag('img');
+            $output .= html_writer::start_tag('div', array('class'=>'card-img-overlay'));
+            $output .= html_writer::tag('p', $category->name, array('class'=>'card-text text-white'));
+            $output .= html_writer::end_tag('div');
+            $output .= html_writer::end_tag('div');
+            $output .= html_writer::end_tag('div');
+        }
+
+
+        $output .= html_writer::end_tag('div');
+
+        return $output;
+    }
+
+
 }
