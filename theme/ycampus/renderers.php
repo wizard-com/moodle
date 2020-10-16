@@ -153,7 +153,6 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 
         $course = new core_course_list_element($course);
         // Check to see if a file has been set on the course level.
-        $course = new core_course_list_element($course);
         // Check to see if a file has been set on the course level.
         if ($course->id > 0 && $course->get_course_overviewfiles()) {
             foreach ($course->get_course_overviewfiles() as $file) {
