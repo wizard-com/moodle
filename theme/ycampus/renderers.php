@@ -93,7 +93,7 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
     }
 
     protected function get_course_reviews(){
-        global $DB;
+        global $DB, $CFG;
         $id = 0;
         try {
             $id = optional_param('id', 0, PARAM_INT);
@@ -112,9 +112,67 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
             $review->gold_block_count = array_fill(0, $review->rating, 0);
         }
 
+        $related_courses = $this->get_related_courses();
+
         return (object)[
-            'reviews' => array_values($reviews)
+            'reviews' => array_values($reviews),
+            'url'=> $CFG->wwwroot.'/theme/ycampus/infocomm.png',
+            'related_courses' => $related_courses
         ];
+    }
+
+    protected function get_related_courses(){
+        global $DB, $USER;
+
+        $course_id = optional_param('id', 0, PARAM_INT);
+        $category_id = $this->get_course_category_id($course_id);
+        $query = "SELECT * FROM {course} INNER JOIN mdl_course_categories ON mdl_course.category = mdl_course_categories.id INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_course_categories.id = $category_id AND mdl_user_enrolments.userid != $USER->id";
+        $related_courses = $DB->get_records_sql($query);
+
+        foreach ($related_courses as $related){
+            $related->img_url = $this->course_image($related);
+        }
+
+        return array_values($related_courses);
+    }
+    private function get_course_category_id($course_id){
+        global $DB;
+
+        $catid = 0;
+        $category_query = "SELECT mdl_course_categories.id FROM {course_categories} INNER JOIN mdl_course ON mdl_course_categories.id = mdl_course.category WHERE mdl_course.id = $course_id";
+        $category_id = $DB->get_records_sql($category_query);
+
+        foreach ($category_id as $id){
+            $catid = $id->id;
+        }
+        return $catid;
+    }
+
+    private function course_image($course) {
+        global $CFG;
+
+        $course = new core_course_list_element($course);
+        // Check to see if a file has been set on the course level.
+        $course = new core_course_list_element($course);
+        // Check to see if a file has been set on the course level.
+        if ($course->id > 0 && $course->get_course_overviewfiles()) {
+            foreach ($course->get_course_overviewfiles() as $file) {
+                $isimage = $file->is_valid_image();
+                $url = file_encode_url("$CFG->wwwroot/pluginfile.php",
+                    '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+                    $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+                if ($isimage) {
+                    $config = get_config('block_lw_courses');
+                    if (is_null($config->lw_courses_bgimage) ||
+                        $config->lw_courses_bgimage == BLOCKS_LW_COURSES_IMAGEASBACKGROUND_FALSE) {
+                        return $url;
+                    }
+                } else {
+                    return "";
+                }
+            }
+        }
+        return "image/path";
     }
 }
 class theme_ycampus_core_course_renderer extends core_course_renderer {
@@ -190,6 +248,38 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         return $output;
     }
 
+//    /**
+//     * Returns HTML to display course overview files.
+//     *
+//     * @param core_course_list_element $course
+//     * @return string
+//     */
+//    protected function course_overview_files(core_course_list_element $course): string {
+//        global $CFG;
+
+//        $contentimages = $contentfiles = '';
+//        foreach ($course->get_course_overviewfiles() as $file) {
+//            $isimage = $file->is_valid_image();
+//            $url = moodle_url::make_file_url("$CFG->wwwroot/pluginfile.php",
+//                '/' . $file->get_contextid() . '/' . $file->get_component() . '/' .
+//                $file->get_filearea() . $file->get_filepath() . $file->get_filename(), !$isimage);
+//            if ($isimage) {
+//                $contentimages .= html_writer::tag('div',
+//                    html_writer::empty_tag('img', ['src' => $url]),
+//                    ['class' => 'courseimage']);
+//            } else {
+//                $image = $this->output->pix_icon(file_file_icon($file, 24), $file->get_filename(), 'moodle');
+//                $filename = html_writer::tag('span', $image, ['class' => 'fp-icon']).
+//                    html_writer::tag('span', $file->get_filename(), ['class' => 'fp-filename']);
+//                $contentfiles .= html_writer::tag('span',
+//                    html_writer::link($url, $filename),
+//                    ['class' => 'coursefile fp-filename-icon']);
+//            }
+//        }
+//        return "";
+//    }
+
+
 
     /**
      * Output frontpage summary text and frontpage modules (stored as section 1 in site course)
@@ -261,5 +351,5 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         return $output;
     }
-//"SELECT userid, fullname, mdl_course_categories.name FROM `mdl_user_enrolments` INNER JOIN mdl_enrol ON mdl_user_enrolments.enrolid = mdl_enrol.id INNER JOIN mdl_course ON mdl_enrol.courseid = mdl_course.id INNER JOIN mdl_course_categories ON mdl_course.category = mdl_course_categories.id WHERE mdl_course_categories.id = 1 AND mdl_user_enrolments.userid != 2"
+
 }
