@@ -261,6 +261,5 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         return $output;
     }
-
-
+//"SELECT userid, fullname, mdl_course_categories.name FROM `mdl_user_enrolments` INNER JOIN mdl_enrol ON mdl_user_enrolments.enrolid = mdl_enrol.id INNER JOIN mdl_course ON mdl_enrol.courseid = mdl_course.id INNER JOIN mdl_course_categories ON mdl_course.category = mdl_course_categories.id WHERE mdl_course_categories.id = 1 AND mdl_user_enrolments.userid != 2"
 }
