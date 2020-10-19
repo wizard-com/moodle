@@ -114,10 +114,12 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 
         $related_courses = $this->get_related_courses();
 
+        var_dump($related_courses);
+
         return (object)[
             'reviews' => array_values($reviews),
             'url'=> $CFG->wwwroot.'/theme/ycampus/infocomm.png',
-            'related_courses' => $related_courses
+            'related_courses' => array_values($related_courses)
         ];
     }
 
@@ -126,14 +128,15 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 
         $course_id = optional_param('id', 0, PARAM_INT);
         $category_id = $this->get_course_category_id($course_id);
-        $query = "SELECT * FROM {course} INNER JOIN mdl_course_categories ON mdl_course.category = mdl_course_categories.id INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_course_categories.id = $category_id AND mdl_user_enrolments.userid != $USER->id";
+        $fields = "mdl_course.id, mdl_course.category, mdl_course.sortorder, fullname, shortname, mdl_course.idnumber, mdl_course.summary, summaryformat, mdl_course.format, mdl_course.showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, mdl_course.visible, mdl_course.visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, mdl_course.theme, mdl_course.timecreated, mdl_course.timemodified, requested, enablecompletion, completionnotify, cacherev";
+        $query = "SELECT $fields FROM {course} INNER JOIN mdl_course_categories ON mdl_course.category = mdl_course_categories.id INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_course_categories.id = $category_id AND mdl_user_enrolments.userid != $USER->id";
         $related_courses = $DB->get_records_sql($query);
 
         foreach ($related_courses as $related){
             $related->img_url = $this->course_image($related);
         }
 
-        return array_values($related_courses);
+        return $related_courses;
     }
     private function get_course_category_id($course_id){
         global $DB;
@@ -152,26 +155,22 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         global $CFG;
 
         $course = new core_course_list_element($course);
+        $url = "";
         // Check to see if a file has been set on the course level.
         // Check to see if a file has been set on the course level.
         if ($course->id > 0 && $course->get_course_overviewfiles()) {
             foreach ($course->get_course_overviewfiles() as $file) {
                 $isimage = $file->is_valid_image();
-                $url = file_encode_url("$CFG->wwwroot/pluginfile.php",
-                    '/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
-                    $file->get_filearea(). $file->get_filepath(). $file->get_filename(), !$isimage);
+                $url = "$CFG->wwwroot/pluginfile.php".'/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+                    $file->get_filearea(). $file->get_filepath(). $file->get_filename();
                 if ($isimage) {
-                    $config = get_config('block_lw_courses');
-                    if (is_null($config->lw_courses_bgimage) ||
-                        $config->lw_courses_bgimage == BLOCKS_LW_COURSES_IMAGEASBACKGROUND_FALSE) {
-                        return $url;
-                    }
+                    return $url;
                 } else {
                     return "";
                 }
             }
         }
-        return "image/path";
+        return $url;
     }
 }
 class theme_ycampus_core_course_renderer extends core_course_renderer {
