@@ -6,6 +6,7 @@ require_once($CFG->dirroot.'/course/format/topics/renderer.php');
 
 class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 
+
     /**
      * Generate the display of the header part of a section before
      * course modules are included
@@ -124,6 +125,7 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
     protected function get_related_courses(){
         global $DB, $USER;
 
+        $helper = new course_image_helper();
         $course_id = optional_param('id', 0, PARAM_INT);
         $category_id = $this->get_course_category_id($course_id);
         $fields = "mdl_course.id, mdl_course.category, mdl_course.sortorder, fullname, shortname, mdl_course.idnumber, mdl_course.summary, summaryformat, mdl_course.format, mdl_course.showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, mdl_course.visible, mdl_course.visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, mdl_course.theme, mdl_course.timecreated, mdl_course.timemodified, requested, enablecompletion, completionnotify, cacherev";
@@ -131,7 +133,7 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         $related_courses = $DB->get_records_sql($query);
 
         foreach ($related_courses as $related){
-            $related->img_url = $this->course_image($related);
+            $related->img_url = $helper->course_image($related);
         }
 
         return $related_courses;
@@ -148,8 +150,9 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         }
         return $catid;
     }
-
-    private function course_image($course) {
+}
+class course_image_helper{
+    public function course_image($course) {
         global $CFG;
 
         $course = new core_course_list_element($course);
@@ -167,11 +170,11 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
             }
         }
         $courseimagedefault = get_config('block_lw_courses', 'courseimagedefault');
-        $url = $this->get_course_image_url($courseimagedefault);
+        $url = $this->get_default_image_url($courseimagedefault);
         return $url;
     }
 
-    function get_course_image_url($fileorfilename) {
+    private function get_default_image_url($fileorfilename) {
         // If the fileorfilename param is a file.
         if ($fileorfilename instanceof stored_file) {
             // Separate each component of the url.
@@ -192,6 +195,12 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         // Generate a moodle url to the file in the blocks file area.
         return new moodle_url("/pluginfile.php/1/block_lw_courses/courseimagedefault{$fileorfilename}");
     }
+    public function get_default_heading_image_url(){
+        $courseimagedefault = get_config('block_lw_courses', 'courseimagedefault');
+        $url = $this->get_default_image_url($courseimagedefault);
+        return $url;
+    }
+
 }
 class theme_ycampus_core_course_renderer extends core_course_renderer {
 
@@ -260,45 +269,10 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             $output .= html_writer::end_tag('div');
         }
 
-
         $output .= html_writer::end_tag('div');
 
         return $output;
     }
-
-//    /**
-//     * Returns HTML to display course overview files.
-//     *
-//     * @param core_course_list_element $course
-//     * @return string
-//     */
-//    protected function course_overview_files(core_course_list_element $course): string {
-//        global $CFG;
-
-//        $contentimages = $contentfiles = '';
-//        foreach ($course->get_course_overviewfiles() as $file) {
-//            $isimage = $file->is_valid_image();
-//            $url = moodle_url::make_file_url("$CFG->wwwroot/pluginfile.php",
-//                '/' . $file->get_contextid() . '/' . $file->get_component() . '/' .
-//                $file->get_filearea() . $file->get_filepath() . $file->get_filename(), !$isimage);
-//            if ($isimage) {
-//                $contentimages .= html_writer::tag('div',
-//                    html_writer::empty_tag('img', ['src' => $url]),
-//                    ['class' => 'courseimage']);
-//            } else {
-//                $image = $this->output->pix_icon(file_file_icon($file, 24), $file->get_filename(), 'moodle');
-//                $filename = html_writer::tag('span', $image, ['class' => 'fp-icon']).
-//                    html_writer::tag('span', $file->get_filename(), ['class' => 'fp-filename']);
-//                $contentfiles .= html_writer::tag('span',
-//                    html_writer::link($url, $filename),
-//                    ['class' => 'coursefile fp-filename-icon']);
-//            }
-//        }
-//        return "";
-//    }
-
-
-
     /**
      * Output frontpage summary text and frontpage modules (stored as section 1 in site course)
      *
@@ -368,6 +342,53 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         }
 
         return $output;
+    }
+
+}
+
+class theme_ycampus_core_renderer extends core_renderer{
+
+    /**
+     * Wrapper for header elements.
+     *
+     * @return string HTML to display the main header.
+     */
+    public function full_header() {
+        global $DB;
+
+        if ($this->page->include_region_main_settings_in_header_actions() &&
+            !$this->page->blocks->is_block_present('settings')) {
+            // Only include the region main settings if the page has requested it and it doesn't already have
+            // the settings block on it. The region main settings are included in the settings block and
+            // duplicating the content causes behat failures.
+            $this->page->add_header_action(html_writer::div(
+                $this->region_main_settings_menu(),
+                'd-print-none',
+                ['id' => 'region-main-settings-menu']
+            ));
+        }
+
+        $header = new stdClass();
+        $header->settingsmenu = $this->context_header_settings_menu();
+        $header->contextheader = $this->context_header();
+        $header->hasnavbar = empty($this->page->layout_options['nonavbar']);
+        $header->navbar = $this->navbar();
+        $header->pageheadingbutton = $this->page_heading_button();
+        $header->courseheader = $this->course_header();
+        $header->headeractions = $this->page->get_header_actions();
+
+        $image_helper = new course_image_helper();
+        $course_id = optional_param('id', 0, PARAM_INT);
+
+        if($course_id == 0){
+            $header->img_url = $image_helper->get_default_heading_image_url();
+            return $this->render_from_template('core/full_header', $header);
+        }
+        $course = $DB->get_record('course', array('id'=>$course_id));
+        $image = $image_helper->course_image($course);
+
+        $header->img_url = $image;
+        return $this->render_from_template('core/full_header', $header);
     }
 
 }

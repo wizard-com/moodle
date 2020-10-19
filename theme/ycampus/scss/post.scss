@@ -359,8 +359,15 @@ body {
     text-align: left;
 }
 
-.card-img-top {
+.related-course {
     width: 100%;
     height: 10vw;
     object-fit: cover;
+}
+h4 {
+    font-weight: bold;
+}
+.header-image {
+    max-height: 150px;
+    overflow: auto;
 }
