@@ -114,8 +114,6 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 
         $related_courses = $this->get_related_courses();
 
-        var_dump($related_courses);
-
         return (object)[
             'reviews' => array_values($reviews),
             'url'=> $CFG->wwwroot.'/theme/ycampus/infocomm.png',
@@ -165,12 +163,34 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
                     $file->get_filearea(). $file->get_filepath(). $file->get_filename();
                 if ($isimage) {
                     return $url;
-                } else {
-                    return "";
                 }
             }
         }
+        $courseimagedefault = get_config('block_lw_courses', 'courseimagedefault');
+        $url = $this->get_course_image_url($courseimagedefault);
         return $url;
+    }
+
+    function get_course_image_url($fileorfilename) {
+        // If the fileorfilename param is a file.
+        if ($fileorfilename instanceof stored_file) {
+            // Separate each component of the url.
+            $filecontextid  = $fileorfilename->get_contextid();
+            $filecomponent  = $fileorfilename->get_component();
+            $filearea       = $fileorfilename->get_filearea();
+            $filepath       = $fileorfilename->get_filepath();
+            $filename       = $fileorfilename->get_filename();
+
+            // Generate a moodle url to the file.
+            $url = new moodle_url("/pluginfile.php/{$filecontextid}/{$filecomponent}/{$filearea}/{$filepath}/{$filename}");
+
+            // Return an img element containing the file.
+            return $url;
+        }
+
+        // The fileorfilename param is not a stored_file object, assume this is the name of the file in the blocks file area.
+        // Generate a moodle url to the file in the blocks file area.
+        return new moodle_url("/pluginfile.php/1/block_lw_courses/courseimagedefault{$fileorfilename}");
     }
 }
 class theme_ycampus_core_course_renderer extends core_course_renderer {
