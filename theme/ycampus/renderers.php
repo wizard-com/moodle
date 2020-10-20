@@ -240,7 +240,6 @@ class course_image_helper{
 }
 class theme_ycampus_core_course_renderer extends core_course_renderer {
 
-
     /**
      * Renders part of frontpage with a skip link (i.e. "My courses", "Site news", etc.)
      *
@@ -308,7 +307,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             $output .= html_writer::end_tag('div');
         }
 
-        $output .= html_writer::end_tag('div');
+        $output .= html_writer::end_tag('div').'front_page';
 
         return $output;
     }
