@@ -93,6 +93,38 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         return $end_list;
     }
 
+    private function get_average_rating_value(){
+        global $DB;
+
+        $id = optional_param('id', 0, PARAM_INT);
+        $query = "SELECT ROUND(AVG(rating), 1) AS average_rating FROM {course_reviews} WHERE courseid = $id";
+        $average_rating = $DB->get_records_sql($query);
+
+        return $average_rating;
+
+    }
+
+    private function get_rating_breakdown(){
+        global $DB;
+
+        $id = optional_param('id', 0, PARAM_INT);
+        $query = "SELECT rating, COUNT(id) AS rating_count, (rating*20) AS percent FROM {course_reviews}  WHERE courseid = $id GROUP BY rating ORDER BY rating DESC";
+        $rating_breakdown = $DB->get_records_sql($query);
+
+        $count = count($rating_breakdown);
+
+        while($count < 5){
+            $obj = (object) new stdClass();
+            $obj->rating = 5 - $count;
+            $obj->rating_count = 0;
+            $obj->percent = $obj->rating * 20;
+            array_push($rating_breakdown, $obj);
+            $count++;
+        }
+
+        return $rating_breakdown;
+    }
+
     protected function get_course_reviews(){
         global $DB, $CFG;
         $id = 0;
@@ -114,10 +146,14 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         }
 
         $related_courses = $this->get_related_courses();
+        $average_rating = $this->get_average_rating_value();
+        $rating_breakdown = $this->get_rating_breakdown();
+
 
         return (object)[
             'reviews' => array_values($reviews),
-            'url'=> $CFG->wwwroot.'/theme/ycampus/infocomm.png',
+            'average_ratings'=> array_values($average_rating),
+            'rating_breakdowns' => array_values($rating_breakdown),
             'related_courses' => array_values($related_courses)
         ];
     }
@@ -132,7 +168,7 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         $query = "SELECT $fields FROM {course} INNER JOIN mdl_course_categories ON mdl_course.category = mdl_course_categories.id INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_course_categories.id = $category_id AND mdl_user_enrolments.userid != $USER->id";
         $related_courses = $DB->get_records_sql($query);
 
-        foreach ($related_courses as $related){
+        foreach ($related_courses as $related) {
             $related->img_url = $helper->course_image($related);
         }
 
@@ -253,6 +289,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         $output = '';
         $img_path = $CFG->wwwroot.'/theme/ycampus/infocomm.png';
+        $course_cat_url = $CFG->wwwroot.'/course/index.php';
 
         $output .= html_writer::start_tag('div', array('class'=>'row'));
 
@@ -260,12 +297,14 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         foreach ($course_categories as $category){
             $output .= html_writer::start_tag('div', array('class'=>'col-lg-2 col-md-4 col-sm-6'));
+            $output .= html_writer::start_tag('a', array('href'=>$course_cat_url));
             $output .= html_writer::start_tag('div', array('class'=>'card category'));
             $output .= html_writer::start_tag('img', array('class'=>'card-img-top', 'src'=>$img_path, 'alt'=>'Card image')).html_writer::end_tag('img');
             $output .= html_writer::start_tag('div', array('class'=>'card-img-overlay'));
             $output .= html_writer::tag('p', $category->name, array('class'=>'card-text text-white'));
             $output .= html_writer::end_tag('div');
             $output .= html_writer::end_tag('div');
+            $output .= html_writer::end_tag('a');
             $output .= html_writer::end_tag('div');
         }
 
