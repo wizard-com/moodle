@@ -377,7 +377,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
      */
 
     private function get_courses_by_category($category_id){
-        global $DB;
+        global $DB, $CFG;
 
         $courses = $DB->get_records('course', array('category'=>$category_id), 'shortname');
         $output = '';
@@ -393,18 +393,18 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         $output .= html_writer::start_tag('ul', array('class'=>'list-group'));
         foreach ($courses as $course) {
-//            $url = new moodle_url($CFG->wwwroot.'/course/view.php', ['id'=>$course->id]);
-//            $output .= html_writer::start_tag('a', array('href'=>$url));
+            $url = new moodle_url($CFG->wwwroot.'/course/view.php', ['id'=>$course->id]);
+            $output .= html_writer::start_tag('a', array('href'=>$url));
             $image = $helper->course_image($course);
             $output .= html_writer::start_tag('li', array('class'=>'list-group-item', 'id'=>'course-card-list'));
             $output .= html_writer::start_tag('div', array('class'=>'card'));
             $output .= html_writer::start_tag('img', array('class'=>'card-img-top', 'src'=>$image, 'alt'=>'Card image')).html_writer::end_tag('img');
             $output .= html_writer::start_tag('div', array('class'=>'card-img-overlay'));
-            $output .= html_writer::tag('p', $course->fullname, array('class'=>'card-text text-white'));
+            $output .= html_writer::tag('h3', $course->fullname, array('class'=>'card-text text-white'));
             $output .= html_writer::end_tag('div');
             $output .= html_writer::end_tag('div');
             $output .= html_writer::end_tag('li');
-          // $output .= html_writer::end_tag('a');
+            $output .= html_writer::end_tag('a');
         }
         $output .= html_writer::end_tag('ul');
         return $output;
