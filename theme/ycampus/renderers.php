@@ -93,6 +93,11 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         return $end_list;
     }
 
+    /**
+     * Query db to get avg rating value
+     *
+     * @return array
+     */
     private function get_average_rating_value(){
         global $DB;
 
@@ -104,6 +109,11 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 
     }
 
+    /**
+     * Query db to get rating breakdown
+     *
+     * @return array
+     */
     private function get_rating_breakdown(){
         global $DB;
 
@@ -125,6 +135,11 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         return $rating_breakdown;
     }
 
+    /**
+     * Query db to get course reviews
+     *
+     * @return object
+     */
     protected function get_course_reviews(){
         global $DB, $CFG;
         $id = 0;
@@ -158,6 +173,11 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         ];
     }
 
+    /**
+     * Query db to get related courses for a course
+     *
+     * @return array
+     */
     protected function get_related_courses(){
         global $DB, $USER;
 
@@ -174,6 +194,12 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 
         return $related_courses;
     }
+
+    /**
+     * Query db to get category id
+     *
+     * @return array
+     */
     private function get_course_category_id($course_id){
         global $DB;
 
@@ -187,7 +213,14 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         return $catid;
     }
 }
-class course_image_helper{
+class course_image_helper {
+
+    /**
+     * Get the image for a course if it exists
+     *
+     * @param object $course The course whose image we want
+     * @return string|void
+     */
     public function course_image($course) {
         global $CFG;
 
@@ -210,6 +243,12 @@ class course_image_helper{
         return $url;
     }
 
+    /**
+     * Build the Image url
+     *
+     * @param string $fileorfilename Name of the image
+     * @return moodle_url|string
+     */
     private function get_default_image_url($fileorfilename) {
         // If the fileorfilename param is a file.
         if ($fileorfilename instanceof stored_file) {
@@ -231,6 +270,12 @@ class course_image_helper{
         // Generate a moodle url to the file in the blocks file area.
         return new moodle_url("/pluginfile.php/1/block_lw_courses/courseimagedefault{$fileorfilename}");
     }
+
+    /**
+     * Build the headingImage url
+     * @return moodle_url|string
+     * @throws dml_exception
+     */
     public function get_default_heading_image_url(){
         $courseimagedefault = get_config('block_lw_courses', 'courseimagedefault');
         $url = $this->get_default_image_url($courseimagedefault);
@@ -281,6 +326,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
      * @param coursecat_helper $chelper various display options
      * @param core_course_category $coursecat top category (this category's name and description will NOT be added to the tree)
      * @return string
+     * @throws moodle_exception
      */
     protected function coursecat_tree(coursecat_helper $chelper, $coursecat) {
 
@@ -288,14 +334,24 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         $output = '';
         $img_path = $CFG->wwwroot.'/theme/ycampus/infocomm.png';
-        $course_cat_url = $CFG->wwwroot.'/course/index.php';
+        $course_cat_url = new moodle_url($CFG->wwwroot.'/course/index.php');
 
         $output .= html_writer::start_tag('div', array('class'=>'row'));
+
+        $current_page = $this->page;
+
+        if ($current_page->has_set_url()) {
+            if ($current_page->url->get_param('categoryid') != null) {
+                $id = optional_param('categoryid', 0, PARAM_INT);
+                return $this->get_courses_by_category($id);
+            }
+        }
 
         $course_categories = $DB->get_records('course_categories', null, 'name');
 
         foreach ($course_categories as $category){
             $output .= html_writer::start_tag('div', array('class'=>'col-lg-2 col-md-4 col-sm-6'));
+            $course_cat_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid'=>$category->id));
             $output .= html_writer::start_tag('a', array('href'=>$course_cat_url));
             $output .= html_writer::start_tag('div', array('class'=>'card category'));
             $output .= html_writer::start_tag('img', array('class'=>'card-img-top', 'src'=>$img_path, 'alt'=>'Card image')).html_writer::end_tag('img');
@@ -307,78 +363,50 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             $output .= html_writer::end_tag('div');
         }
 
-        $output .= html_writer::end_tag('div').'front_page';
+
+        $output .= html_writer::end_tag('div');
 
         return $output;
     }
+
     /**
-     * Output frontpage summary text and frontpage modules (stored as section 1 in site course)
+     * Displays courses under a category
      *
-     * This may be disabled in settings
-     *
+     * @param int $category_id
      * @return string
      */
-    public function frontpage_section1() {
-        global $SITE, $USER;
 
+    private function get_courses_by_category($category_id){
+        global $DB;
+
+        $courses = $DB->get_records('course', array('category'=>$category_id), 'shortname');
         $output = '';
-        $editing = $this->page->user_is_editing();
+        $helper = new course_image_helper();
 
-        if ($editing) {
-            // Make sure section with number 1 exists.
-            course_create_sections_if_missing($SITE, 1);
+        if(count($courses) == 0){
+            $output .= html_writer::start_tag('div', array('class'=>'alert alert-warning'));
+            $output .= html_writer::tag('strong', 'No courses to show');
+            $output .= '<br/>Currently, there are no courses under this category';
+            $output .= html_writer::end_tag('div');
+            return $output;
         }
 
-        $modinfo = get_fast_modinfo($SITE);
-        $section = $modinfo->get_section_info(1);
-        if (($section && (!empty($modinfo->sections[1]) or !empty($section->summary))) or $editing) {
-            $output .= $this->box_start('generalbox sitetopic');
-
-            // If currently moving a file then show the current clipboard.
-            if (ismoving($SITE->id)) {
-                $stractivityclipboard = strip_tags(get_string('activityclipboard', '', $USER->activitycopyname));
-                $output .= '<p><font size="2">';
-                $cancelcopyurl = new moodle_url('/course/mod.php', ['cancelcopy' => 'true', 'sesskey' => sesskey()]);
-                $output .= "$stractivityclipboard&nbsp;&nbsp;(" . html_writer::link($cancelcopyurl, get_string('cancel')) .')';
-                $output .= '</font></p>';
-            }
-
-            $context = context_course::instance(SITEID);
-
-            // If the section name is set we show it.
-            if (trim($section->name) !== '') {
-                $output .= $this->heading(
-                    format_string($section->name, true, array('context' => $context)),
-                    2,
-                    'sectionname'
-                );
-            }
-
-            $summarytext = file_rewrite_pluginfile_urls($section->summary,
-                'pluginfile.php',
-                $context->id,
-                'course',
-                'section',
-                $section->id);
-            $summaryformatoptions = new stdClass();
-            $summaryformatoptions->noclean = true;
-            $summaryformatoptions->overflowdiv = true;
-
-            $output .= format_text($summarytext, $section->summaryformat, $summaryformatoptions);
-
-            if ($editing && has_capability('moodle/course:update', $context)) {
-                $streditsummary = get_string('editsummary');
-                $editsectionurl = new moodle_url('/course/editsection.php', ['id' => $section->id]);
-                $output .= html_writer::link($editsectionurl, $this->pix_icon('t/edit', $streditsummary)) .
-                    "<br /><br />";
-            }
-
-            $output .= $this->course_section_cm_list($SITE, $section);
-
-            $output .= $this->course_section_add_cm_control($SITE, $section->section);
-            $output .= $this->box_end();
+        $output .= html_writer::start_tag('ul', array('class'=>'list-group'));
+        foreach ($courses as $course) {
+//            $url = new moodle_url($CFG->wwwroot.'/course/view.php', ['id'=>$course->id]);
+//            $output .= html_writer::start_tag('a', array('href'=>$url));
+            $image = $helper->course_image($course);
+            $output .= html_writer::start_tag('li', array('class'=>'list-group-item', 'id'=>'course-card-list'));
+            $output .= html_writer::start_tag('div', array('class'=>'card'));
+            $output .= html_writer::start_tag('img', array('class'=>'card-img-top', 'src'=>$image, 'alt'=>'Card image')).html_writer::end_tag('img');
+            $output .= html_writer::start_tag('div', array('class'=>'card-img-overlay'));
+            $output .= html_writer::tag('p', $course->fullname, array('class'=>'card-text text-white'));
+            $output .= html_writer::end_tag('div');
+            $output .= html_writer::end_tag('div');
+            $output .= html_writer::end_tag('li');
+          // $output .= html_writer::end_tag('a');
         }
-
+        $output .= html_writer::end_tag('ul');
         return $output;
     }
 
