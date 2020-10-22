@@ -46,7 +46,7 @@
 
                 <div class="row" id="post-review-box" style="display:none;">
                     <div class="col-md-12">
-                        <form accept-charset="UTF-8" action="" method="post">
+                        <form id="review-form" accept-charset="UTF-8" action="" method="post">
                             <input id="ratings-hidden" name="rating" type="hidden">
 
                             <div class="form-group" id="rating-ability-wrapper">
@@ -163,7 +163,7 @@
 
     }));
 
-    $("form").submit(function(){
+    $("#review-form").submit(function(){
 
     var comment = $("#new-review").val();
 

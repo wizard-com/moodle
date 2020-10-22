@@ -418,6 +418,7 @@ class theme_ycampus_core_renderer extends core_renderer{
      * Wrapper for header elements.
      *
      * @return string HTML to display the main header.
+     * @throws moodle_exception
      */
     public function full_header() {
         global $DB;
@@ -446,11 +447,12 @@ class theme_ycampus_core_renderer extends core_renderer{
         $image_helper = new course_image_helper();
         $course_id = optional_param('id', 0, PARAM_INT);
 
-        if($course_id == 0){
+        $course = $DB->get_record('course', array('id'=>$course_id));
+
+        if($course_id == 0 || empty($course)){
             $header->img_url = $image_helper->get_default_heading_image_url();
             return $this->render_from_template('core/full_header', $header);
         }
-        $course = $DB->get_record('course', array('id'=>$course_id));
         $image = $image_helper->course_image($course);
 
         $header->img_url = $image;
