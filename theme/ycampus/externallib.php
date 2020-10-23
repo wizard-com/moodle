@@ -75,7 +75,7 @@ class manage_reviews_external extends external_api {
 
             $transaction->allow_commit();
 
-            $reviews = $DB->get_records()
+         //   $reviews = $DB->get_records()
 
         } catch(Exception $e) {
             $transaction->rollback($e);

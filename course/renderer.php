@@ -1015,7 +1015,7 @@ class core_course_renderer extends plugin_renderer_base {
      * @param int|stdClass|section_info $section relative section number or section object
      * @param int $sectionreturn section number to return to
      * @param int $displayoptions
-     * @return void
+     * @return string
      */
 
 

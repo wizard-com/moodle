@@ -269,7 +269,7 @@
     //
     echo $course->summary;
 
-    echo html_writer::tag('h4', 'What you will learn', array('class' =>'course-topic-header'));
+    echo html_writer::tag('h4', 'Syllabus', array('class' =>'course-topic-header'));
     // Course wrapper start.
   //  echo html_writer::start_tag('div', array('class'=>'course-content'));
 

@@ -81,6 +81,9 @@ if (!empty($options['printintro'])) {
 }
 
 $content = file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $context->id, 'mod_page', 'content', $page->revision);
+
+//echo $page->content;
+//die();
 $formatoptions = new stdClass;
 $formatoptions->noclean = true;
 $formatoptions->overflowdiv = true;
