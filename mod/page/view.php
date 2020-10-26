@@ -82,13 +82,13 @@ if (!empty($options['printintro'])) {
 
 $content = file_rewrite_pluginfile_urls($page->content, 'pluginfile.php', $context->id, 'mod_page', 'content', $page->revision);
 
-//echo $page->content;
 //die();
 $formatoptions = new stdClass;
 $formatoptions->noclean = true;
 $formatoptions->overflowdiv = true;
 $formatoptions->context = $context;
-$content = format_text($content, $page->contentformat, $formatoptions);
+//echo $content;
+//$content = format_text($content, $page->contentformat, $formatoptions);
 echo $OUTPUT->box($content, "generalbox center clearfix");
 
 if (!isset($options['printlastmodified']) || !empty($options['printlastmodified'])) {
