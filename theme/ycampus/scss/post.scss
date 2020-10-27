@@ -376,6 +376,51 @@ h4 {
     border: none;
 }
 
+p[dir=ltr] {
+    width: inherit;
+}
+
 video {
-    max-width: 800px;
+    width: inherit;
+}
+
+#note-form {
+    background-color: #fff;
+}
+
+#note-form-heading {
+    padding-top: 5px;
+    padding-left: 20px;
+}
+
+#btn-add-note {
+    border-radius: 15px;
+}
+
+.note-form-cols {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.one, .two, .three {
+    position: absolute;
+    margin-top: -10px;
+    z-index: 1;
+    height: 40px;
+    width: 40px;
+    border-radius: 25px;
+
+}
+
+.warning-color {
+    background-color: #f0ad4e;
+}
+.one {
+    left: 25%;
+}
+.two {
+    left: 50%;
+}
+.three {
+    left: 75%;
 }

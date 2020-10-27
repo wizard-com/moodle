@@ -4,7 +4,6 @@ defined('MOODLE_INTERNAL') || die();
 require_once($CFG->dirroot.'/course/renderer.php');
 require_once($CFG->dirroot.'/course/format/topics/renderer.php');
 
-
 class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 
     /**
@@ -674,7 +673,25 @@ class theme_ycampus_core_renderer extends core_renderer{
      * @return string the HTML to output.
      */
     public function box($contents, $classes = 'generalbox', $id = null, $attributes = array()) {
-        return $this->box_start($classes, $id, $attributes) . $contents . $this->box_end();
+        $output = '';
+        $output .= $this->box_start($classes, $id, $attributes);
+        $output .= html_writer::start_tag('div', array('class'=>'col-lg-8 col-md-6 col-sm-12'));
+        $output .= $contents;
+        $output .= html_writer::end_tag('div');
+        $output .= $this->generate_form();
+        $output .= $this->box_end();
+
+        return $output;
+    }
+
+    private function generate_form(){
+        $output = '';
+        $data = (object)[];
+        $output .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-6 col-sm-12'));
+        $output .= $this->render_from_template('theme_ycampus/note-input', $data);
+        $output .= html_writer::end_tag('div');
+
+        return $output;
     }
 
     /**
@@ -688,7 +705,7 @@ class theme_ycampus_core_renderer extends core_renderer{
     public function box_start($classes = 'generalbox', $id = null, $attributes = array()) {
         $this->opencontainers->push('box', html_writer::end_tag('div'));
         $attributes['id'] = $id;
-        $attributes['class'] = 'box py-3 ' . renderer_base::prepare_classes($classes);
+        $attributes['class'] = 'box py-3 ' . renderer_base::prepare_classes($classes).' row';
         return html_writer::start_tag('div', $attributes);
     }
 
