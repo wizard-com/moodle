@@ -726,5 +726,84 @@ class theme_ycampus_core_renderer extends core_renderer{
         return $this->opencontainers->pop('box');
     }
 
+    /**
+     * Returns standard navigation between activities in a course.
+     *
+     * @return string the navigation HTML.
+     */
+    public function activity_navigation() {
+        // First we should check if we want to add navigation.
+        $context = $this->page->context;
+        if (($this->page->pagelayout !== 'incourse' && $this->page->pagelayout !== 'frametop')
+            || $context->contextlevel != CONTEXT_MODULE) {
+            return '';
+        }
+
+        // If the activity is in stealth mode, show no links.
+        if ($this->page->cm->is_stealth()) {
+            return '';
+        }
+
+        // Get a list of all the activities in the course.
+        $course = $this->page->cm->get_course();
+        $modules = get_fast_modinfo($course->id)->get_cms();
+
+        // Put the modules into an array in order by the position they are shown in the course.
+        $mods = [];
+        $activitylist = [];
+        $mod_no = 1;
+        $percent = 100/(count($modules)+1);
+
+        foreach ($modules as $module) {
+            // Only add activities the user can access, aren't in stealth mode and have a url (eg. mod_label does not).
+            if (!$module->uservisible || $module->is_stealth() || empty($module->url)) {
+                continue;
+            }
+            $mods[$module->id] = $module;
+
+            // Module name.
+            $modname = $module->get_formatted_name();
+            // Display the hidden text if necessary.
+            if (!$module->visible) {
+                $modname .= ' ' . get_string('hiddenwithbrackets');
+            }
+            // Module URL.
+            $linkurl = new moodle_url($module->url);
+
+            // Add module URL (as key) and name (as value) to the activity list array.
+            $value = ['link'=>$linkurl->out(false), 'name'=>$modname, 'mod_no'=>$mod_no, 'percent'=>$percent*$mod_no];
+            array_push($activitylist, $value);
+            $mod_no++;
+        }
+
+        $nummods = count($mods);
+
+        // If there is only one mod then do nothing.
+        if ($nummods == 1) {
+            return '';
+        }
+
+        // Get an array of just the course module ids used to get the cmid value based on their position in the course.
+//        $modids = array_keys($mods);
+//
+//        // Get the position in the array of the course module we are viewing.
+//        $position = array_search($this->page->cm->id, $modids);
+//
+//        $prevmod = null;
+//        $nextmod = null;
+//
+//        // Check if we have a previous mod to show.
+//        if ($position > 0) {
+//            $prevmod = $mods[$modids[$position - 1]];
+//        }
+//
+//        // Check if we have a next mod to show.
+//        if ($position < ($nummods - 1)) {
+//            $nextmod = $mods[$modids[$position + 1]];
+//        }
+
+        //$activitynav = new \core_course\output\activity_navigation($prevmod, $nextmod, $activitylist);
+        return $this->render_from_template('core_course/activity_navigation', (object)['activitylist'=>array_values($activitylist)]);
+    }
 
 }

@@ -386,6 +386,7 @@ video {
 
 #note-form {
     background-color: #fff;
+    border: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 #note-form-heading {
@@ -402,26 +403,21 @@ video {
     padding-bottom: 10px;
 }
 
-.one, .two, .three {
+.progress-circle {
     position: absolute;
     margin-top: -10px;
     z-index: 1;
     height: 40px;
     width: 40px;
     border-radius: 25px;
-
 }
 
+.mod-label {
+    position: absolute;
+    z-index: 1;
+    margin-top: 20px;
+}
 
 .warning-color {
     background-color: #f0ad4e;
-}
-.one {
-    left: 25%;
-}
-.two {
-    left: 50%;
-}
-.three {
-    left: 75%;
 }

@@ -54,7 +54,7 @@
     along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 }}
 {{!
-    @template theme_ycampus/comment-input
+    @template local/comment-input
 
 
     Example context (json):
@@ -76,9 +76,10 @@
     }
 }}
 <div class="progress">
-    <div class="one warning-color"></div><div class="two warning-color"></div><div class="three no-color"></div>
-    <div class="progress-bar progress-bar-warning warning-color" style="width: 60%"></div>
+    <a class="btn progress-circle one warning-color" href="#">1</a><div class="progress-circle two warning-color"><a href="#">Lesson 2</a></div><div class="progress-circle three warning-color"><a href="#">Lesson 3</a></div>
+    <div class="progress-bar progress-bar-warning warning-color" style="width: 100%"></div>
 </div>
+<div class="mod-label one">Lesson 1</div><div class="mod-label two">Lesson 2</div><div class="mod-label three">Lesson 3</div>
 
 
 
