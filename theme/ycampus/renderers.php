@@ -673,6 +673,14 @@ class theme_ycampus_core_renderer extends core_renderer{
      * @return string the HTML to output.
      */
     public function box($contents, $classes = 'generalbox', $id = null, $attributes = array()) {
+        global $CFG;
+
+        $mod_page_url = new moodle_url($CFG->wwwroot.'/mod/page/view.php');
+        $current_page_url = $this->page->url;
+
+        if($mod_page_url->compare($current_page_url, URL_MATCH_PARAMS) == false){
+            return parent::box($contents, $classes, $id, $attributes);
+        }
         $output = '';
         $output .= $this->box_start($classes, $id, $attributes);
         $output .= html_writer::start_tag('div', array('class'=>'col-lg-8 col-md-6 col-sm-12'));
@@ -687,7 +695,7 @@ class theme_ycampus_core_renderer extends core_renderer{
     private function generate_form(){
         $output = '';
         $data = (object)[];
-        $output .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-6 col-sm-12'));
+        $output .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-6 col-sm-12', 'style'=>'padding-top: 20px'));
         $output .= $this->render_from_template('theme_ycampus/note-input', $data);
         $output .= html_writer::end_tag('div');
 
