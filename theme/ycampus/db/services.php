@@ -27,12 +27,19 @@ $functions = array(
 
     // === review function ===
     'add_reviews' => array(
-        'classname'   => 'manage_reviews_external',
+        'classname'   => 'manage_form_submission_external',
         'methodname'  => 'add_review',
         'classpath'   => 'theme/ycampus/externallib.php',
         'description' => 'Add reviews',
-        'capabilities' => array(),
         'type'        => 'write',
+        'ajax'          => true,
+    ),
+    'add_notes' => array(
+        'classname' => 'manage_form_submission_external',
+        'methodname'  => 'add_note',
+        'classpath'   => 'theme/ycampus/externallib.php',
+        'description' => 'Add notes',
+        'type'        => 'write',
+        'ajax'          => true,
     )
-
 );

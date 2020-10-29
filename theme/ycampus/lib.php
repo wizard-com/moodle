@@ -33,3 +33,190 @@ function theme_ycampus_get_main_scss_content($theme) {
     // Combine them together.
     return $pre . "\n" . $scss . "\n" . $post;
 }
+
+/**
+ * Query db to get avg rating value
+ *
+ * @return array
+ * @throws dml_exception
+ * @throws coding_exception
+ */
+function get_average_rating_value(){
+    global $DB;
+
+    $id = optional_param('id', 0, PARAM_INT);
+    $query = "SELECT ROUND(AVG(rating), 1) AS average_rating FROM {course_reviews} WHERE courseid = $id";
+    $average_rating = $DB->get_records_sql($query);
+
+    return $average_rating;
+
+}
+
+/**
+ * Query db to get rating breakdown
+ * @throws dml_exception
+ * @throws coding_exception
+ * @return array
+ */
+function get_rating_breakdown(){
+    global $DB;
+
+    $id = optional_param('id', 0, PARAM_INT);
+    $query = "SELECT rating, COUNT(id) AS rating_count, (rating*20) AS percent FROM {course_reviews}  WHERE courseid = $id GROUP BY rating ORDER BY rating DESC";
+    $rating_breakdown = $DB->get_records_sql($query);
+
+    $count = count($rating_breakdown);
+
+    while($count < 5){
+        $obj = (object) new stdClass();
+        $obj->rating = 5 - $count;
+        $obj->rating_count = 0;
+        $obj->percent = $obj->rating * 20;
+        array_push($rating_breakdown, $obj);
+        $count++;
+    }
+
+    return $rating_breakdown;
+}
+function get_course_reviews(){
+    global $DB, $CFG;
+    $id = 0;
+    try {
+        $id = optional_param('id', 0, PARAM_INT);
+    } catch (coding_exception $e) {
+
+    }
+    $query = 'SELECT mdl_course_reviews.id, mdl_course_reviews.comment, mdl_course_reviews.rating, mdl_course_reviews.time_created, mdl_user.username, mdl_user.id AS user_id FROM `mdl_course_reviews` INNER JOIN mdl_user ON mdl_course_reviews.userid = mdl_user.id WHERE mdl_course_reviews.courseid = '.$id;
+
+    $reviews = $DB->get_records_sql($query);
+
+
+    foreach ($reviews as $review){
+        $review->time_created = date('M d, Y', $review->time_created);
+        $review->url = $CFG->wwwroot."/user/profile.php?id=".$review->user_id;
+        $review->grey_block_count = array_fill(0, 5-$review->rating, 0);
+        $review->gold_block_count = array_fill(0, $review->rating, 0);
+    }
+
+    $related_courses = get_related_courses();
+    $average_rating = get_average_rating_value();
+    $rating_breakdown = get_rating_breakdown();
+
+    return [
+        'reviews' => array_values($reviews),
+        'average_ratings'=> array_values($average_rating),
+        'rating_breakdowns' => array_values($rating_breakdown),
+        'related_courses' => array_values($related_courses)
+    ];
+}
+
+/**
+ * Query db to get related courses for a course
+ *
+ * @return array
+ * @throws coding_exception
+ * @throws dml_exception
+ */
+function get_related_courses(){
+    global $DB, $USER;
+
+    $course_id = optional_param('id', 0, PARAM_INT);
+    $category_id = get_course_category_id($course_id);
+    $fields = "mdl_course.id, mdl_course.category, mdl_course.sortorder, fullname, shortname, mdl_course.idnumber, mdl_course.summary, summaryformat, mdl_course.format, mdl_course.showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, mdl_course.visible, mdl_course.visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, mdl_course.theme, mdl_course.timecreated, mdl_course.timemodified, requested, enablecompletion, completionnotify, cacherev";
+    $query = "SELECT $fields FROM {course} INNER JOIN mdl_course_categories ON mdl_course.category = mdl_course_categories.id INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_course_categories.id = $category_id AND mdl_user_enrolments.userid != $USER->id";
+    $related_courses = $DB->get_records_sql($query);
+
+    foreach ($related_courses as $related) {
+        $related->img_url = course_image($related);
+    }
+
+    return $related_courses;
+}
+
+/**
+ * Query db to get category id
+ *
+ * @return array
+ * @throws dml_exception
+ */
+function get_course_category_id($course_id){
+    global $DB;
+
+    $catid = 0;
+    $category_query = "SELECT mdl_course_categories.id FROM {course_categories} INNER JOIN mdl_course ON mdl_course_categories.id = mdl_course.category WHERE mdl_course.id = $course_id";
+    $category_id = $DB->get_records_sql($category_query);
+
+    foreach ($category_id as $id){
+        $catid = $id->id;
+    }
+    return $catid;
+}
+
+/**
+ * Get the image for a course if it exists
+ *
+ * @param object $course The course whose image we want
+ * @return string|void
+ */
+function course_image($course) {
+    global $CFG;
+
+    $course = new core_course_list_element($course);
+    $url = "";
+    // Check to see if a file has been set on the course level.
+    // Check to see if a file has been set on the course level.
+    if ($course->id > 0 && $course->get_course_overviewfiles()) {
+        foreach ($course->get_course_overviewfiles() as $file) {
+            $isimage = $file->is_valid_image();
+            $url = "$CFG->wwwroot/pluginfile.php".'/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+                $file->get_filearea(). $file->get_filepath(). $file->get_filename();
+            if ($isimage) {
+                return $url;
+            }
+        }
+    }
+    $courseimagedefault = get_config('block_lw_courses', 'courseimagedefault');
+    $url = get_default_image_url($courseimagedefault);
+    return $url;
+}
+
+/**
+ * Build the Image url
+ *
+ * @param string $fileorfilename Name of the image
+ * @return moodle_url|string
+ */
+function get_default_image_url($fileorfilename) {
+    // If the fileorfilename param is a file.
+    if ($fileorfilename instanceof stored_file) {
+        // Separate each component of the url.
+        $filecontextid  = $fileorfilename->get_contextid();
+        $filecomponent  = $fileorfilename->get_component();
+        $filearea       = $fileorfilename->get_filearea();
+        $filepath       = $fileorfilename->get_filepath();
+        $filename       = $fileorfilename->get_filename();
+
+        // Generate a moodle url to the file.
+        $url = new moodle_url("/pluginfile.php/{$filecontextid}/{$filecomponent}/{$filearea}/{$filepath}/{$filename}");
+
+        // Return an img element containing the file.
+        return $url;
+    }
+
+    // The fileorfilename param is not a stored_file object, assume this is the name of the file in the blocks file area.
+    // Generate a moodle url to the file in the blocks file area.
+    return new moodle_url("/pluginfile.php/1/block_lw_courses/courseimagedefault{$fileorfilename}");
+}
+
+/**
+ * Build the headingImage url
+ * @return moodle_url|string
+ * @throws dml_exception
+ */
+function get_default_heading_image_url(){
+    $courseimagedefault = get_config('block_lw_courses', 'courseimagedefault');
+    $url = get_default_image_url($courseimagedefault);
+    return $url;
+}
+
+
