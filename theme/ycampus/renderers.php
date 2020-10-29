@@ -649,18 +649,31 @@ class theme_ycampus_core_renderer extends core_renderer{
         $image_helper = new course_image_helper();
         $course_id = optional_param('id', 0, PARAM_INT);
 
-        $course = $DB->get_record('course', array('id'=>$course_id));
-        $current_page_url = $this->page->url;
-        $course_page_url = new moodle_url($CFG->wwwroot.'/course/view.php');
-
-        if($course_id == 0 || empty($course) || $course_page_url->compare($current_page_url) == false){
+        if($course_id == 0){
             $header->img_url = $image_helper->get_default_heading_image_url();
             return $this->render_from_template('core/full_header', $header);
         }
-        $image = $image_helper->course_image($course);
 
-        $header->img_url = $image;
+        $course = $DB->get_record('course', array('id'=>$course_id));
+
+        $current_context = $this->page->context->contextlevel;
+
+        if($current_context == CONTEXT_COURSE) {
+            $image = $image_helper->course_image($course);
+            $header->img_url = $image;
+        }
+        else if($current_context == CONTEXT_MODULE) {
+            $mod_id = optional_param('id', 0, PARAM_INT);
+            $course_id_by_mod = $DB->get_record('course_modules', array('id' => $mod_id), 'course');
+            $course_for_mod = $DB->get_record('course', array('id' => $course_id_by_mod->course));
+            $image = $image_helper->course_image($course_for_mod);
+            $header->img_url = $image;
+        }
+        else {
+                $header->img_url = $image_helper->get_default_heading_image_url();
+        }
         return $this->render_from_template('core/full_header', $header);
+
     }
 
     /**
@@ -783,26 +796,6 @@ class theme_ycampus_core_renderer extends core_renderer{
             return '';
         }
 
-        // Get an array of just the course module ids used to get the cmid value based on their position in the course.
-//        $modids = array_keys($mods);
-//
-//        // Get the position in the array of the course module we are viewing.
-//        $position = array_search($this->page->cm->id, $modids);
-//
-//        $prevmod = null;
-//        $nextmod = null;
-//
-//        // Check if we have a previous mod to show.
-//        if ($position > 0) {
-//            $prevmod = $mods[$modids[$position - 1]];
-//        }
-//
-//        // Check if we have a next mod to show.
-//        if ($position < ($nummods - 1)) {
-//            $nextmod = $mods[$modids[$position + 1]];
-//        }
-
-        //$activitynav = new \core_course\output\activity_navigation($prevmod, $nextmod, $activitylist);
         return $this->render_from_template('core_course/activity_navigation', (object)['activitylist'=>array_values($activitylist)]);
     }
 
