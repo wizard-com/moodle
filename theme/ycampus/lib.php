@@ -48,6 +48,11 @@ function get_average_rating_value(){
     $query = "SELECT ROUND(AVG(rating), 1) AS average_rating FROM {course_reviews} WHERE courseid = $id";
     $average_rating = $DB->get_records_sql($query);
 
+    foreach ($average_rating as $rating){
+        if(empty($rating->average_rating)){
+            return array();
+        }
+    }
     return $average_rating;
 
 }
@@ -66,6 +71,10 @@ function get_rating_breakdown(){
     $rating_breakdown = $DB->get_records_sql($query);
 
     $count = count($rating_breakdown);
+
+    if($count == 0){
+        return array();
+    }
 
     while($count < 5){
         $obj = (object) new stdClass();
@@ -98,16 +107,24 @@ function get_course_reviews(){
         $review->gold_block_count = array_fill(0, $review->rating, 0);
     }
 
+    $course_reviews = [];
     $related_courses = get_related_courses();
     $average_rating = get_average_rating_value();
     $rating_breakdown = get_rating_breakdown();
 
-    return [
-        'reviews' => array_values($reviews),
-        'average_ratings'=> array_values($average_rating),
-        'rating_breakdowns' => array_values($rating_breakdown),
-        'related_courses' => array_values($related_courses)
-    ];
+    $course_reviews['reviews'] = array_values($reviews);
+    $course_reviews['related_courses'] = array_values($related_courses);
+
+    if(count($average_rating) > 0){
+        $course_reviews['average_ratings'] = array_values($average_rating);
+    }
+
+    if(count($rating_breakdown) > 0){
+        $course_reviews['rating_breakdowns'] = array_values($rating_breakdown);
+        $course_reviews['header_text'] = 'Rating breakdown';
+    }
+
+    return $course_reviews;
 }
 
 /**

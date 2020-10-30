@@ -64,6 +64,7 @@
         }
     }
 }}
+
 <div class="mt-5 mb-1 activity-navigation container-fluid">
 
       <div class="mdl-align">
@@ -74,7 +75,8 @@
                     <div class="progress-bar progress-bar-warning warning-color" style="width: 100%"></div>
                 </div>
             {{#activitylist}}
-               <div class="mod-label" style="left: {{percent}}%">{{name}}</div>
+                <div style="left: {{percent}}%" class="mod-label">{{name}}</div>
             {{/activitylist}}
       </div>
 </div>
+<div class="hidden" style="width: 100%; height: 150px;"></div>
