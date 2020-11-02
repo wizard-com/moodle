@@ -236,4 +236,28 @@ function get_default_heading_image_url(){
     return $url;
 }
 
+/**
+ * Query db to get user notes
+ * @throws dml_exception
+ * @throws coding_exception
+ * @return array
+ */
+function get_notes(){
+
+    global $DB, $PAGE, $USER;
+
+    $user_id = $USER->id;
+    $context = $PAGE->context->contextlevel;
+
+    if($context == CONTEXT_MODULE){
+        $id = optional_param('id', 0, PARAM_INT);
+        $query = "SELECT * FROM {course_module_notes} WHERE modid = $id AND userid = $user_id";
+        $notes = $DB->get_records_sql($query);
+        return $notes;
+    }
+
+    return array();
+
+}
+
 

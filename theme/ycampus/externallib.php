@@ -139,12 +139,12 @@ class manage_form_submission_external extends external_api {
         try {
             $DB->insert_record('course_module_notes', $record);
             $transaction->allow_commit();
+            return get_notes();
         }
         catch (Exception $e){
             $transaction->rollback($e);
         }
 
-        //   $reviews = $DB->get_records()
         return $notes;
     }
 
