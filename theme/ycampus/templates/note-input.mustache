@@ -57,79 +57,39 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="add_form" method="post">
+                <form id="add_form">
                     <div class="form-body">
                         <div class="form-group">
-                            <textarea class="form-control" cols="50" id="new-note" name="note" placeholder="Enter your notes here..." rows="5"></textarea>
+                            <textarea class="form-control" cols="50" id="new-note" name="note" placeholder="Enter your notes here..." rows="5" required></textarea>
+                            <div id="hidden-data" class="user-{{userid}} mod-{{modid}}"></div>
                         </div>
                     </div>
+                    <button type="submit" class="btn btn-warning" style="font-weight: bold">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 </form>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-warning" style="font-weight: bold">Save changes</button>
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-            </div>
         </div>
     </div>
 </div>
-<div class="card notes-card">
-    <div class="card-title">
-        <div class="row">
-            <div class="col-lg-8 col-md-8 col-sm-9 col-9 note-form-cols">
-                <i style="margin-left: 12px; margin-top: 10px" class="fa fa-calendar"></i> 1:25
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-3 col-3 note-form-cols">
-                <div class="row">
-                    <i class="btn fa fa-edit"></i>
-                    <i class="btn fa fa-trash"></i>
+<div id="cards">
+    {{#notes}}
+    <div class="card notes-card mod-{{modid}}">
+        <div class="card-title">
+            <div class="row">
+                <div class="col-lg-8 col-md-8 col-sm-9 col-9 note-form-cols">
+                    <i style="margin-left: 12px; margin-top: 10px" class="fa fa-calendar"></i> {{timecreated}}
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-3 col-3 note-form-cols">
+                    <div class="row">
+                        <i class="btn fa fa-edit"></i>
+                        <i class="btn fa fa-trash"></i>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="card-body">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    </div>
-</div>
-<div class="card notes-card">
-    <div class="card-title">
-        <div class="row">
-            <div class="col-lg-8 col-md-8 col-sm-9 col-9 note-form-cols">
-                <i style="margin-left: 12px; margin-top: 10px" class="fa fa-calendar"></i> 1:25
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-3 col-3 note-form-cols">
-                <div class="row">
-                    <i class="btn fa fa-edit"></i>
-                    <i class="btn fa fa-trash"></i>
-                </div>
-            </div>
+        <div class="card-body">
+            {{notecontent}}
         </div>
     </div>
-    <div class="card-body">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-    </div>
+    {{/notes}}
 </div>
-
-    {{#js}}
-        require(['jquery', 'core/ajax', 'core/templates', 'core/notifications'], function($, ajax, templates, notification) {
-        return {
-        refresh: function() {
-        $('#add_form').submit(function() {
-
-
-        var promises = ajax.call([
-        {methodname: 'core_get_string', args: {component: 'mod_wiki', stringid: 'pluginname'}}
-        ]);
-
-        promises[0].done(function(response) {
-        alert("success");
-        }).fail(function(ex) {
-        // Do something with the exception
-        alert("failed");
-        return false;
-        });
-
-        });
-        }
-        };
-        });
-    {{/js}}

@@ -95,13 +95,13 @@ function get_course_reviews(){
     } catch (coding_exception $e) {
 
     }
-    $query = 'SELECT mdl_course_reviews.id, mdl_course_reviews.comment, mdl_course_reviews.rating, mdl_course_reviews.time_created, mdl_user.username, mdl_user.id AS user_id FROM `mdl_course_reviews` INNER JOIN mdl_user ON mdl_course_reviews.userid = mdl_user.id WHERE mdl_course_reviews.courseid = '.$id;
+    $query = 'SELECT mdl_course_reviews.id, mdl_course_reviews.comment, mdl_course_reviews.rating, mdl_course_reviews.timecreated, mdl_user.username, mdl_user.id AS user_id FROM `mdl_course_reviews` INNER JOIN mdl_user ON mdl_course_reviews.userid = mdl_user.id WHERE mdl_course_reviews.courseid = '.$id;
 
     $reviews = $DB->get_records_sql($query);
 
 
     foreach ($reviews as $review){
-        $review->time_created = date('M d, Y', $review->time_created);
+        $review->timecreated = date('M d, Y', $review->timecreated);
         $review->url = $CFG->wwwroot."/user/profile.php?id=".$review->user_id;
         $review->grey_block_count = array_fill(0, 5-$review->rating, 0);
         $review->gold_block_count = array_fill(0, $review->rating, 0);
@@ -253,11 +253,29 @@ function get_notes(){
         $id = optional_param('id', 0, PARAM_INT);
         $query = "SELECT * FROM {course_module_notes} WHERE modid = $id AND userid = $user_id";
         $notes = $DB->get_records_sql($query);
+        $notes = array_values($notes);
         return $notes;
     }
 
     return array();
 
 }
+/**
+ * Get current userid and moduleid
+ * @return object
+ */
+function get_current_user_and_mod(){
+    global $USER;
 
+    $data = (object) array();
+
+    $id = optional_param('id', 0, PARAM_INT);
+
+    $data->userid = $USER->id;
+
+    $data->modid = $id;
+
+    return $data;
+
+}
 

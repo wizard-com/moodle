@@ -26,12 +26,14 @@ class manage_form_submission_external extends external_api {
     public static function add_review_parameters() {
         return new external_function_parameters(
             array(
-                'review' => array(
-                    'courseid' => new external_value(PARAM_INT, 'The course where review is submitted'),
-                    'userid' => new external_value(PARAM_INT, 'The user who submitted review'),
-                    'time_created' => new external_value(PARAM_INT, 'The review submission time'),
-                    'comment' => new external_value(PARAM_TEXT, 'The comment written by user'),
-                    'rating' => new external_value(PARAM_INT, 'Timestamp when the enrolment end')
+                'review' => new external_single_structure(
+                    array(
+                        'courseid' => new external_value(PARAM_INT, 'The course where review is submitted'),
+                        'userid' => new external_value(PARAM_INT, 'The user who submitted review'),
+                        'time_created' => new external_value(PARAM_INT, 'The review submission time'),
+                        'comment' => new external_value(PARAM_TEXT, 'The comment written by user'),
+                        'rating' => new external_value(PARAM_INT, 'Timestamp when the enrolment end')
+                    )
                 )
             )
         );
@@ -93,11 +95,13 @@ class manage_form_submission_external extends external_api {
     public static function add_note_parameters() {
         return new external_function_parameters(
             array(
-                'note' => array(
-                    'modid' => new external_value(PARAM_INT, 'The course module where notes are submitted'),
-                    'userid' => new external_value(PARAM_INT, 'The user who added notes'),
-                    'time_created' => new external_value(PARAM_INT, 'The notes creation time'),
-                    'note_content' => new external_value(PARAM_TEXT, 'The comment written by user')
+                'note' => new external_single_structure(
+                    array(
+                        'modid' => new external_value(PARAM_INT, 'The course module where notes are submitted'),
+                        'userid' => new external_value(PARAM_INT, 'The user who added notes'),
+                        'timecreated' => new external_value(PARAM_INT, 'The notes creation time'),
+                        'notecontent' => new external_value(PARAM_TEXT, 'The comment written by user')
+                    )
                 )
             )
         );
@@ -107,10 +111,11 @@ class manage_form_submission_external extends external_api {
         return new external_multiple_structure(
             new external_single_structure(
                 array(
+                    'id' => new external_value(PARAM_INT, 'note record id'),
                     'modid' => new external_value(PARAM_INT, 'The course module where notes are submitted'),
                     'userid' => new external_value(PARAM_INT, 'The user who added notes'),
-                    'time_created' => new external_value(PARAM_INT, 'The notes creation time'),
-                    'note_content' => new external_value(PARAM_TEXT, 'The comment written by user')
+                    'timecreated' => new external_value(PARAM_INT, 'The notes creation time'),
+                    'notecontent' => new external_value(PARAM_TEXT, 'The comment written by user')
                 )
             )
         );
@@ -118,7 +123,7 @@ class manage_form_submission_external extends external_api {
 
     /**
      * Adds a review
-     * @param array
+     * @param object
      * @return array of newly created groups
      * @throws invalid_parameter_exception
      * @throws restricted_context_exception
@@ -130,7 +135,7 @@ class manage_form_submission_external extends external_api {
         $params = self::validate_parameters(self::add_review_parameters(), array('note' => $note));
         $transaction = $DB->start_delegated_transaction();
 
-        $context = context_module::instance($note->modid);
+        $context = context_module::instance($params['note']->modid);
         self::validate_context($context);
 
         $record = new stdClass();
