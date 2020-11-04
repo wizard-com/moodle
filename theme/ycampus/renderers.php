@@ -465,7 +465,7 @@ class theme_ycampus_core_renderer extends core_renderer{
 
         $current_context = $this->page->context->contextlevel;
 
-        if($current_context == CONTEXT_COURSE) {
+        if($current_context == CONTEXT_COURSE && empty($course) == false) {
             $image = course_image($course);
             $header->img_url = $image;
         }
@@ -572,15 +572,20 @@ class theme_ycampus_core_renderer extends core_renderer{
             return '';
         }
 
+        $id = optional_param('id', 0, PARAM_INT);
+
         // Get a list of all the activities in the course.
         $course = $this->page->cm->get_course();
         $modules = get_fast_modinfo($course->id)->get_cms();
+
 
         // Put the modules into an array in order by the position they are shown in the course.
         $mods = [];
         $activitylist = [];
         $mod_no = 1;
-        $percent = 100/(count($modules)+1);
+        $total = count($modules);
+        $percent = 0;
+        $width = 100;
 
         foreach ($modules as $module) {
             // Only add activities the user can access, aren't in stealth mode and have a url (eg. mod_label does not).
@@ -598,8 +603,26 @@ class theme_ycampus_core_renderer extends core_renderer{
             // Module URL.
             $linkurl = new moodle_url($module->url);
 
+            if($mod_no == 1){
+                $percent = 3.2;
+            }
+            else if($mod_no == $total){
+                $percent = 94;
+            }
+            else{
+                $percent = 90.8 * (($mod_no-1)/($total-1));
+            }
+
+            if($id == $module->id){
+                if($mod_no == $total){
+                    $width = 100;
+                }
+                else {
+                    $width = $percent + ($mod_no-1);
+                }
+            }
             // Add module URL (as key) and name (as value) to the activity list array.
-            $value = ['link'=>$linkurl->out(false), 'name'=>$modname, 'mod_no'=>$mod_no, 'percent'=>$percent*$mod_no];
+            $value = ['link'=>$linkurl->out(false), 'name'=>$modname, 'mod_no'=>$mod_no, 'percent'=>$percent];
             array_push($activitylist, $value);
             $mod_no++;
         }
@@ -611,7 +634,7 @@ class theme_ycampus_core_renderer extends core_renderer{
             return '';
         }
 
-        return $this->render_from_template('core_course/activity_navigation', (object)['activitylist'=>array_values($activitylist)]);
+        return $this->render_from_template('core_course/activity_navigation', ['activitylist'=>array_values($activitylist), 'width'=>$width]);
     }
 
 }

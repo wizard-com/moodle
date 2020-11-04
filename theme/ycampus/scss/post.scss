@@ -31,6 +31,7 @@
 .course-content {
     margin-top: 0;
     margin-bottom: 30px;
+    padding-right: 80px;
 }
 
 body {
@@ -420,4 +421,11 @@ video {
 
 .warning-color {
     background-color: #f0ad4e;
+}
+
+.path-course-view .completionprogress {
+    display: none;
+    float: right;
+    height: 20px;
+    position: relative;
 }

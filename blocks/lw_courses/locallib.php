@@ -236,6 +236,28 @@ function block_lw_courses_get_sorted_courses($showallcourses = false) {
     return array($sortedcourses, count($courses));
 }
 
+/**
+ * Query db to get new courses \
+ * @throws dml_exception
+ * @throws coding_exception
+ * @return array
+ */
+function get_new_courses() {
+    global $USER, $DB;
+
+    $fields = "mdl_course.id, mdl_course.category, mdl_course.sortorder, fullname, shortname, mdl_course.idnumber, mdl_course.summary, summaryformat, mdl_course.format, mdl_course.showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, mdl_course.visible, mdl_course.visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, mdl_course.theme, mdl_course.timecreated, mdl_course.timemodified, requested, enablecompletion, completionnotify, cacherev";
+    $query = "SELECT $fields FROM {course} INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid AND mdl_user_enrolments.userid != $USER->id";
+    $new_courses = $DB->get_records_sql($query);
+
+    if(empty($new_courses)){
+        return array();
+    }
+
+    $new_courses = array_values($new_courses);
+
+    return $new_courses;
+}
+
 // Custom LearningWorks functions.
 
 /**
