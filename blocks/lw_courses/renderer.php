@@ -203,23 +203,6 @@ class block_lw_courses_renderer extends plugin_renderer_base {
                 $html .= html_writer::div($teachernames, 'teacher_names');
             }
 
-            if ($config->showcategories != BLOCKS_LW_COURSES_SHOWCATEGORIES_NONE) {
-                // List category parent or categories path here.
-                $currentcategory = core_course_category::get($course->category, IGNORE_MISSING);
-                if ($currentcategory !== null) {
-                    $html .= html_writer::start_tag('div', array('class' => 'categorypath'));
-                    if ($config->showcategories == BLOCKS_LW_COURSES_SHOWCATEGORIES_FULL_PATH) {
-                        foreach ($currentcategory->get_parents() as $categoryid) {
-                            $category = core_course_category::get($categoryid, IGNORE_MISSING);
-                            if ($category !== null) {
-                                $html .= $category->get_formatted_name().' / ';
-                            }
-                        }
-                    }
-                    $html .= $currentcategory->get_formatted_name();
-                    $html .= html_writer::end_tag('div');
-                }
-            }
 
             $html .= $this->output->box('', 'flush');
             $html .= $this->output->box_end();
@@ -250,6 +233,77 @@ class block_lw_courses_renderer extends plugin_renderer_base {
         // Wrap course list in a div and return.
         $html .= html_writer::end_div();
         return $html;
+    }
+
+    /**
+     * Construct contents of new courses
+     *
+     * @param array $courses list of courses in sorted order
+     * @return string html to be displayed in lw_courses block
+     */
+    public function new_courses($courses) {
+
+        $output = html_writer::tag('h5', 'New courses for you');
+
+        $courseordernumber = 0;
+        $config = get_config('block_lw_courses');
+        $gridsplit = intval(12 / count($courses)); // Added intval to avoid any float.
+
+        $colsize = intval($config->coursegridwidth) > 0 ? intval($config->coursegridwidth) : BLOCKS_LW_COURSES_DEFAULT_COL_SIZE;
+        if ($gridsplit < $colsize) {
+            $gridsplit = $colsize;
+        }
+
+        $courseclass = $config->startgrid == BLOCKS_LW_COURSES_STARTGRID_YES ? "grid" : "list";
+        $startvalue = $courseclass == "list" ? "12" : $gridsplit;
+
+        $output .= html_writer::tag('div', '', array("class" => "hidden startgrid $courseclass", "grid-size" => $gridsplit));
+        $output .= html_writer::div('', 'box flush');
+
+        $output .= html_writer::start_div('lw_courses_list');
+        foreach ($courses as $key => $course) {
+
+            $output .= $this->output->box_start(
+                "coursebox $courseclass span$startvalue col-md-$startvalue $courseclass col-xs-12",
+                "course-{$course->id}");
+            $output .= $this->course_image($course);
+
+            if (method_exists($this->output, 'image_url')) {
+                // Use the new method.
+                $moveicon = $this->image_url('t/move');
+            } else {
+                // Still a pre Moodle 3.3 release. Use pix_url because image_url doesn't exist yet.
+                $moveicon = $this->pix_url('t/move');
+            }
+            $output .= html_writer::start_tag('div', array('class' => 'course_title'));
+            // No need to pass title through s() here as it will be done automatically by html_writer.
+            $attributes = array('title' => $course->fullname);
+            if ($course->id > 0) {
+                if (empty($course->visible)) {
+                    $attributes['class'] = 'dimmed';
+                }
+                $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
+                $coursefullname = format_string(get_course_display_name_for_list($course), true, $course->id);
+                $link = html_writer::link($courseurl, $coursefullname, $attributes);
+                $output .= $this->output->heading($link, 2, 'title');
+            }
+            $output .= $this->output->box('', 'flush');
+            $output .= html_writer::end_tag('div');
+
+            if ($course->id > 0) {
+                $output .= $this->course_description($course);
+            }
+
+            $output .= $this->output->box('', 'flush');
+            $output .= $this->output->box_end();
+            $courseordernumber++;
+
+        }
+
+        // Wrap course list in a div and return.
+        $output .= html_writer::end_div();
+        return $output;
+
     }
 
     /**

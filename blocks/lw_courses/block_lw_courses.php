@@ -71,6 +71,7 @@ class block_lw_courses extends block_base {
 
         $showallcourses = ($updatemynumber === self::SHOW_ALL_COURSES);
         list($sortedcourses, $totalcourses) = block_lw_courses_get_sorted_courses($showallcourses);
+        $new_courses = get_new_courses();
 
         $renderer = $this->page->get_renderer('block_lw_courses');
         if (!empty($config->showwelcomearea)) {
@@ -91,7 +92,7 @@ class block_lw_courses extends block_base {
             $this->content->text .= $renderer->lw_courses($sortedcourses);
             $this->content->text .= $renderer->hidden_courses($totalcourses - count($sortedcourses));
         }
-
+        $this->content->footer = $renderer->new_courses($new_courses);
         return $this->content;
     }
 

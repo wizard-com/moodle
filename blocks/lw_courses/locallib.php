@@ -246,7 +246,7 @@ function get_new_courses() {
     global $USER, $DB;
 
     $fields = "mdl_course.id, mdl_course.category, mdl_course.sortorder, fullname, shortname, mdl_course.idnumber, mdl_course.summary, summaryformat, mdl_course.format, mdl_course.showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, mdl_course.visible, mdl_course.visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, mdl_course.theme, mdl_course.timecreated, mdl_course.timemodified, requested, enablecompletion, completionnotify, cacherev";
-    $query = "SELECT $fields FROM {course} INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid AND mdl_user_enrolments.userid != $USER->id";
+    $query = "SELECT $fields FROM {course} INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_user_enrolments.userid != $USER->id ORDER BY mdl_course.fullname";
     $new_courses = $DB->get_records_sql($query);
 
     if(empty($new_courses)){
