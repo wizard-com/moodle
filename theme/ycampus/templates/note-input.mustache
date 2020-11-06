@@ -36,41 +36,27 @@
         ]
     }
 }}
-    <div class="card">
-        <div class="card-title row">
-            <div class="col-lg-8 col-md-8 col-sm-9 col-9 note-form-cols">
-                <h5 id="note-form-heading">Note</h5>
-            </div>
-            <div class="col-lg-4 col-md-4 col-sm-3 col-3 note-form-cols">
-                <button style="margin-right: 22px" id="btn-add-note" class="btn btn-warning" data-toggle="modal" data-target="#addNoteModal">Add Note</button>
-            </div>
+<!--    <div class="card">-->
+<!--        <div class="card-title row">-->
+<!--            <div class="col-lg-8 col-md-8 col-sm-9 col-9 note-form-cols">-->
+<!--                <h5 id="note-form-heading">Note</h5>-->
+<!--            </div>-->
+<!--            <div class="col-lg-4 col-md-4 col-sm-3 col-3 note-form-cols">-->
+<!--                <button style="margin-right: 22px" id="btn-add-note" class="btn btn-warning" data-toggle="modal" data-target="#addNoteModal">Add Note</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+    <form id="review-form" accept-charset="UTF-8" action="" method="post">
+
+        <textarea class="form-control animated" cols="50" id="new-review" name="comment" placeholder="Enter your review here..." rows="5"></textarea>
+
+
+        <div class="text-right" style="padding-top: 10px">
+
+            <button class="btn btn-primary" type="submit">Save</button>
+            <a class="btn btn-danger" href="#" id="close-review-box" style="display:none;">Cancel</a>
         </div>
-    </div>
-<div class="modal fade" id="addNoteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header bg-warning">
-                <h5 style="font-weight: bold" class="modal-title text-white" id="exampleModalLabel">Add note</h5>
-                <i style="color: white" class="fa fa-sticky-note"></i>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="add_form">
-                    <div class="form-body">
-                        <div class="form-group">
-                            <textarea class="form-control" cols="50" id="new-note" name="note" placeholder="Enter your notes here..." rows="5" required></textarea>
-                            <div id="hidden-data" class="user-{{userid}} mod-{{modid}}"></div>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-warning" style="font-weight: bold">Save changes</button>
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
+    </form>
 <div id="cards">
     {{#notes}}
     <div class="card notes-card mod-{{modid}}">
