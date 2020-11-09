@@ -12,9 +12,9 @@ require_once($CFG->libdir.'/adminlib.php');
 
 admin_externalpage_setup('course_customfield');
 
-$handler = \theme_ycampus\customfield\coursecat_handler::create(1);
-
 $output = $PAGE->get_renderer('core_customfield');
+$handler = theme_ycampus\customfield\coursecat_handler::create();
+
 $outputpage = new \core_customfield\output\management($handler);
 
 echo $output->header(),

@@ -9,18 +9,36 @@
 
 namespace theme_ycampus\customfield;
 
-use core_customfield\field_controller;
-
 defined('MOODLE_INTERNAL') || die;
+
+use core_customfield\field_controller;
 
 class coursecat_handler extends \core_customfield\handler {
 
+    /**
+     * @var coursecat_handler
+     */
+    static protected $singleton;
     /** @var int Field is displayed in the course listing, visible to everybody */
     const VISIBLETOALL = 2;
     /** @var int Field is displayed in the course listing but only for teachers */
     const VISIBLETOTEACHERS = 1;
     /** @var int Field is not displayed in the course listing */
     const NOTVISIBLE = 0;
+
+    /**
+     * Returns a singleton
+     *
+     * @param int $itemid
+     * @return \theme_ycampus\customfield\coursecat_handler
+     */
+    public static function create(int $itemid = 0) : \core_customfield\handler {
+        if (static::$singleton === null) {
+            self::$singleton = new static(0);
+        }
+        return self::$singleton;
+    }
+
 
     /**
      * Context that should be used for new categories created by this handler
@@ -95,7 +113,7 @@ class coursecat_handler extends \core_customfield\handler {
     }
 
     /**
-     * Returns the parent context for the course
+     * Returns the parent context for the course category
      *
      * @return \context
      */

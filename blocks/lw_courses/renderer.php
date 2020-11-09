@@ -243,7 +243,7 @@ class block_lw_courses_renderer extends plugin_renderer_base {
      */
     public function new_courses($courses) {
 
-        $output = html_writer::tag('h5', 'New courses for you');
+        $output = html_writer::tag('h5', 'New courses Available');
 
         $courseordernumber = 0;
         $config = get_config('block_lw_courses');
