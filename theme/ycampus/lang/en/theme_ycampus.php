@@ -40,3 +40,9 @@ $string['region-side-pre'] = 'Right';
 $string['loginbackgroundimage'] = 'Login page background image';
 // Background image for login page.
 $string['loginbackgroundimage_desc'] = 'An image that will be stretched to fill the background of the login page.';
+// Name of the custom settings tab
+$string['categoryimagesettings'] = 'Category Images';
+// Category Image settings
+$string['categoryimage'] = 'Category';
+//Description for category image settings
+$string['categoryimage_desc'] = 'Image for the category';

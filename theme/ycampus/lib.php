@@ -38,8 +38,6 @@ function theme_ycampus_get_main_scss_content($theme) {
  * Query db to get avg rating value
  *
  * @return array
- * @throws dml_exception
- * @throws coding_exception
  */
 function get_average_rating_value(){
     global $DB;
@@ -59,8 +57,6 @@ function get_average_rating_value(){
 
 /**
  * Query db to get rating breakdown
- * @throws dml_exception
- * @throws coding_exception
  * @return array
  */
 function get_rating_breakdown(){
@@ -131,16 +127,13 @@ function get_course_reviews(){
  * Query db to get related courses for a course
  *
  * @return array
- * @throws coding_exception
- * @throws dml_exception
  */
 function get_related_courses(){
-    global $DB, $USER;
+    global $DB, $USER, $COURSE;
 
-    $course_id = optional_param('id', 0, PARAM_INT);
-    $category_id = get_course_category_id($course_id);
     $fields = "mdl_course.id, mdl_course.category, mdl_course.sortorder, fullname, shortname, mdl_course.idnumber, mdl_course.summary, summaryformat, mdl_course.format, mdl_course.showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, mdl_course.visible, mdl_course.visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, mdl_course.theme, mdl_course.timecreated, mdl_course.timemodified, requested, enablecompletion, completionnotify, cacherev";
-    $query = "SELECT $fields FROM {course} INNER JOIN mdl_course_categories ON mdl_course.category = mdl_course_categories.id INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_course_categories.id = $category_id AND mdl_user_enrolments.userid != $USER->id";
+    $category_id = $COURSE->category;
+    $query = "SELECT $fields FROM {course} INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_course.category = $category_id AND mdl_user_enrolments.userid != $USER->id";
     $related_courses = $DB->get_records_sql($query);
 
     foreach ($related_courses as $related) {
@@ -151,22 +144,18 @@ function get_related_courses(){
 }
 
 /**
- * Query db to get category id
+ * Query db to get categories
  *
  * @return array
  * @throws dml_exception
  */
-function get_course_category_id($course_id){
+function get_course_categories(){
     global $DB;
 
-    $catid = 0;
-    $category_query = "SELECT mdl_course_categories.id FROM {course_categories} INNER JOIN mdl_course ON mdl_course_categories.id = mdl_course.category WHERE mdl_course.id = $course_id";
-    $category_id = $DB->get_records_sql($category_query);
+    $category_query = "SELECT * FROM {course_categories}";
+    $categories = $DB->get_records_sql($category_query);
 
-    foreach ($category_id as $id){
-        $catid = $id->id;
-    }
-    return $catid;
+    return $categories;
 }
 
 /**
@@ -260,9 +249,11 @@ function get_notes(){
     return array();
 
 }
+
 /**
  * Get current userid and moduleid
  * @return object
+ * @throws coding_exception
  */
 function get_current_user_and_mod(){
     global $USER;

@@ -4,7 +4,7 @@
 
 // This line protects the file from being accessed by a URL directly.
 defined('MOODLE_INTERNAL') || die();
-
+require_once($CFG->dirroot.'/theme/ycampus/lib.php');
 // This is used for performance, we don't need to know about these settings on every page in Moodle, only when
 // we are looking at the admin settings pages.
 if ($ADMIN->fulltree) {
@@ -74,6 +74,22 @@ if ($ADMIN->fulltree) {
         get_string('rawscss_desc', 'theme_ycampus'), '', PARAM_RAW);
     $setting->set_updatedcallback('theme_reset_all_caches');
     $page->add($setting);
+
+    $settings->add($page);
+
+    $page = new admin_settingpage('theme_ycampus_category_images', get_string('categoryimagesettings', 'theme_ycampus'));
+
+    try {
+        $categories = get_course_categories();
+    } catch (dml_exception $e) {
+    }
+
+    foreach ($categories as $category){
+        $name = 'theme_ycampus/categoryimage'.$category->id;
+        $title = $category->name;
+        $setting = new admin_setting_configstoredfile($name, $title, '', 'coursecat', 0, array('maxfiles' => 1, 'accepted_types' => array('.jpg', '.png')));
+        $page->add($setting);
+    }
 
     $settings->add($page);
 }
