@@ -359,11 +359,11 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         $course_categories = $DB->get_records('course_categories', null, 'name');
 
         foreach ($course_categories as $category){
-            $output .= html_writer::start_tag('div', array('class'=>'col-lg-2 col-md-4 col-sm-6'));
+            $output .= html_writer::start_tag('div', array('class'=>'col-lg-6 col-md-6 col-sm-6'));
             $course_cat_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid'=>$category->id));
             $output .= html_writer::start_tag('a', array('href'=>$course_cat_url));
             $output .= html_writer::start_tag('div', array('class'=>'card category'));
-            $output .= html_writer::start_tag('img', array('class'=>'card-img-top', 'src'=>$img_path, 'alt'=>'Card image')).html_writer::end_tag('img');
+            $output .= html_writer::start_tag('img', array('class'=>'card-img-top course-cat-img', 'src'=>$img_path, 'alt'=>'Card image')).html_writer::end_tag('img');
             $output .= html_writer::start_tag('div', array('class'=>'card-img-overlay'));
             $output .= html_writer::tag('p', $category->name, array('class'=>'card-text text-white'));
             $output .= html_writer::end_tag('div');

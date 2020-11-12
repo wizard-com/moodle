@@ -245,8 +245,7 @@ function block_lw_courses_get_sorted_courses($showallcourses = false) {
 function get_new_courses() {
     global $USER, $DB;
 
-    $fields = "mdl_course.id, mdl_course.category, mdl_course.sortorder, fullname, shortname, mdl_course.idnumber, mdl_course.summary, summaryformat, mdl_course.format, mdl_course.showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, mdl_course.visible, mdl_course.visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, mdl_course.theme, mdl_course.timecreated, mdl_course.timemodified, requested, enablecompletion, completionnotify, cacherev";
-    $query = "SELECT $fields FROM {course} INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_user_enrolments.userid != $USER->id ORDER BY mdl_course.fullname";
+    $query = "SELECT * FROM {course} WHERE id != 1 AND id NOT IN (SELECT DISTINCT courseid FROM mdl_course INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE userid = $USER->id ORDER BY mdl_course.fullname)";
     $new_courses = $DB->get_records_sql($query);
 
     if(empty($new_courses)){
@@ -300,7 +299,6 @@ function block_lw_courses_build_progress($course) {
     require_once($CFG->dirroot.'/grade/querylib.php');
     require_once($CFG->dirroot.'/grade/lib.php');
     $config = get_config('block_lw_courses');
-    $completestring = get_string('complete');
 
     if ($config->progressenabled == BLOCKS_LW_COURSES_SHOWGRADES_NO) {
         return '';
@@ -315,7 +313,7 @@ function block_lw_courses_build_progress($course) {
 
     $bar = html_writer::div('', 'value', array('aria-valuenow' => "$percentage",
             'aria-valuemin' => "0", 'aria-valuemax' => "100", 'style' => "width:$percentage%"));
-    $progress = html_writer::div($bar, 'progress', array('data-label' => "$percentage% $completestring"));
+    $progress = html_writer::div($bar, 'progress', array('data-label' => "$percentage% completed"));
 
     return $progress;
 }

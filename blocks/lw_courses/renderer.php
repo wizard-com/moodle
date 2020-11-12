@@ -268,20 +268,10 @@ class block_lw_courses_renderer extends plugin_renderer_base {
                 "course-{$course->id}");
             $output .= $this->course_image($course);
 
-            if (method_exists($this->output, 'image_url')) {
-                // Use the new method.
-                $moveicon = $this->image_url('t/move');
-            } else {
-                // Still a pre Moodle 3.3 release. Use pix_url because image_url doesn't exist yet.
-                $moveicon = $this->pix_url('t/move');
-            }
             $output .= html_writer::start_tag('div', array('class' => 'course_title'));
             // No need to pass title through s() here as it will be done automatically by html_writer.
             $attributes = array('title' => $course->fullname);
             if ($course->id > 0) {
-                if (empty($course->visible)) {
-                    $attributes['class'] = 'dimmed';
-                }
                 $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
                 $coursefullname = format_string(get_course_display_name_for_list($course), true, $course->id);
                 $link = html_writer::link($courseurl, $coursefullname, $attributes);

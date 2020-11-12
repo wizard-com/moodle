@@ -663,12 +663,13 @@
     right: 0;
     border-radius: 0;
     text-align: left;
-    opacity: 0.8;
     bottom: 0;
     top: -15px;
+    font-weight: bold;
+    font-size: 13px;
     z-index: 999;
     background: #ccc;
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba(0, 0, 0, 0.4);
 }
 
 .lw_courses_list .coursebox .progress {
