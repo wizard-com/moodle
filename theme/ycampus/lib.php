@@ -152,8 +152,8 @@ function get_related_courses(){
 function get_course_categories(){
     global $DB;
 
-    $category_query = "SELECT * FROM {course_categories}";
-    $categories = $DB->get_records_sql($category_query);
+    $categories = $DB->get_records('course_categories', null, 'name');
+    $categories = array_values($categories);
 
     return $categories;
 }

@@ -345,8 +345,6 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         $img_path = $CFG->wwwroot.'/theme/ycampus/infocomm.png';
         $course_cat_url = new moodle_url($CFG->wwwroot.'/course/index.php');
 
-        $output .= html_writer::start_tag('div', array('class'=>'row'));
-
         $current_page = $this->page;
 
         if ($current_page->has_set_url()) {
@@ -355,27 +353,18 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
                 return $this->get_courses_by_category($id);
             }
         }
+        $output .= html_writer::start_tag('div', ['id'=>'demo', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
+        $output .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid']);
+        $active = html_writer::start_tag('div', ['class'=>'carousel-item row row-equal active']);
 
-        $course_categories = $DB->get_records('course_categories', null, 'name');
+        $course_categories = get_course_categories();
 
         foreach ($course_categories as $category){
-            $output .= html_writer::start_tag('div', array('class'=>'col-lg-6 col-md-6 col-sm-6'));
-            $course_cat_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid'=>$category->id));
-            $output .= html_writer::start_tag('a', array('href'=>$course_cat_url));
-            $output .= html_writer::start_tag('div', array('class'=>'card category'));
-            $output .= html_writer::start_tag('img', array('class'=>'card-img-top course-cat-img', 'src'=>$img_path, 'alt'=>'Card image')).html_writer::end_tag('img');
-            $output .= html_writer::start_tag('div', array('class'=>'card-img-overlay'));
-            $output .= html_writer::tag('p', $category->name, array('class'=>'card-text text-white'));
-            $output .= html_writer::end_tag('div');
-            $output .= html_writer::end_tag('div');
-            $output .= html_writer::end_tag('a');
-            $output .= html_writer::end_tag('div');
+            $output .= html_writer::start_tag('div', ['class'=>'col-lg-4 col-md-4 col-sm-6']);
+            $output .= html_writer::start_tag()
         }
 
-
-        $output .= html_writer::end_tag('div');
-
-        return $output;
+        return $this->render_from_template('theme_ycampus/course-categories-carousel', ['categories'=>$course_categories]);
     }
 
 

@@ -93,6 +93,14 @@ body {
     text-align: center;
 }
 
+.category-text {
+    font-size: 18px;
+    font-weight: bold;
+}
+.darken {
+    background: rgba(0, 0, 0, 0.3);
+}
+
 .padding {
     padding: 10rem !important;
     margin-left: 200px;
@@ -434,4 +442,37 @@ video {
     float: right;
     height: 20px;
     position: relative;
+}
+.breadcrumb .breadcrumb-item {
+    color: #fff;
+}
+
+/* equal card height */
+.row-equal > div[class*='col-'] {
+    display: flex;
+    flex: 1 0 auto;
+}
+
+.row-equal .card {
+    width: 100%;
+}
+
+/* ensure equal card height inside carousel */
+.carousel-inner > .row-equal.active,
+.carousel-inner > .row-equal.next,
+.carousel-inner > .row-equal.prev {
+    display: flex;
+}
+
+.carousel-inner .carousel-item-prev.carousel-item-right,
+.carousel-inner .carousel-item-next.carousel-item-left {
+    opacity: 0.5;
+    display: flex;
+}
+
+
+/* control image height */
+.card-img-top-250 {
+    max-height: 250px;
+    overflow: hidden;
 }
