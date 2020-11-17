@@ -237,9 +237,7 @@ function block_lw_courses_get_sorted_courses($showallcourses = false) {
 }
 
 /**
- * Query db to get new courses \
- * @throws dml_exception
- * @throws coding_exception
+ * Query db to get new courses
  * @return array
  */
 function get_new_courses() {

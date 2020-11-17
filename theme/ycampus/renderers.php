@@ -354,10 +354,14 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             }
         }
         $output .= html_writer::start_tag('div', ['id'=>'demo', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
-        $output .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid']);
+        $output .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid', 'style'=>'overflow: inherit']);
 
         $course_categories = get_course_categories();
-        $row_count = intval(count($course_categories)/3)+1;
+        $total = count($course_categories);
+        $row_count = intval($total/3)+1;
+        if($total % 3 == 0){
+            $row_count = $total/3;
+        }
         $active = ' active';
         for($i = 0; $i < $row_count; $i++){
             $content = '';
@@ -385,12 +389,13 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         }
 
-
         $output .= html_writer::end_tag('div');
-        $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
-        $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
-        $output .= html_writer::link('#demo', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
-        $output .= html_writer::link('#demo', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
+        if($row_count > 1){
+            $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
+            $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
+            $output .= html_writer::link('#demo', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
+            $output .= html_writer::link('#demo', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
+        }
         $output .= html_writer::end_tag('div');
 
         return $output;

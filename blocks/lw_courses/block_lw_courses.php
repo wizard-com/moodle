@@ -92,7 +92,12 @@ class block_lw_courses extends block_base {
             $this->content->text .= $renderer->lw_courses($sortedcourses);
             $this->content->text .= $renderer->hidden_courses($totalcourses - count($sortedcourses));
         }
-        $this->content->footer = $renderer->new_courses($new_courses);
+        if(count($new_courses) >= 1) {
+            $this->content->footer = '<h5>New courses Available</h5>' . $renderer->lw_courses($new_courses);
+        }
+        else {
+            $this->content->footer = '<div></div>';
+        }
         return $this->content;
     }
 

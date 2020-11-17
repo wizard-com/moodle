@@ -39,215 +39,14 @@ class block_lw_courses_renderer extends plugin_renderer_base {
      * @return string html to be displayed in lw_courses block
      */
     public function lw_courses($courses) {
-        global $CFG, $PAGE, $DB, $OUTPUT;
-        $html = '';
-        // LearningWorks.
-        $PAGE->requires->js(new moodle_url($CFG->wwwroot.'/blocks/lw_courses/js/custom.js'));
-        $config = get_config('block_lw_courses');
-        $role = $DB->get_record('role', array('shortname' => 'editingteacher'));
-        $ismovingcourse = false;
-        $courseordernumber = 0;
-        $userediting = false;
-        // Intialise string/icon etc if user is editing and courses > 1.
-        if ($this->page->user_is_editing() && (count($courses) > 1)) {
-            $userediting = true;
-            $this->page->requires->js_init_call('M.block_lw_courses.add_handles');
 
-            // Check if course is moving.
-            $ismovingcourse = optional_param('movecourse', false, PARAM_BOOL);
-            $movingcourseid = optional_param('courseid', 0, PARAM_INT);
-        }
-
-        // Render first movehere icon.
-        if ($ismovingcourse) {
-            // Remove movecourse param from url.
-            $this->page->ensure_param_not_in_url('movecourse');
-
-            // Show moving course notice, so user knows what is being moved.
-            $html .= $this->output->box_start('notice');
-            $a = new stdClass();
-            $a->fullname = $courses[$movingcourseid]->fullname;
-            $a->cancellink = html_writer::link($this->page->url, get_string('cancel'));
-            $html .= get_string('movingcourse', 'block_lw_courses', $a);
-            $html .= $this->output->box_end();
-
-            $moveurl = new moodle_url('/blocks/lw_courses/move.php',
-                array('sesskey' => sesskey(), 'moveto' => 0, 'courseid' => $movingcourseid));
-            if (method_exists($this->output, 'image_url')) {
-                // Use the new method.
-                $moveicon = $this->output->image_url('movehere');
-            } else {
-                // Still a pre Moodle 3.3 release. Use pix_url because image_url doesn't exist yet.
-                $moveicon = $this->output->pix_url('movehere');
-            }
-            // Create move icon, so it can be used.
-            $movetofirsticon = html_writer::empty_tag('img',
-                array('src' => $moveicon,
-                    'alt' => get_string('movetofirst', 'block_lw_courses', $courses[$movingcourseid]->fullname),
-                    'title' => get_string('movehere')));
-            $moveurl = html_writer::link($moveurl, $movetofirsticon);
-            $html .= html_writer::tag('div', $moveurl, array('class' => 'movehere'));
-        }
-
-        // LearningWorks.
-        $gridsplit = intval(12 / count($courses)); // Added intval to avoid any float.
-
-        // Set a minimum size for the course 'cards'.
-        $colsize = intval($config->coursegridwidth) > 0 ? intval($config->coursegridwidth) : BLOCKS_LW_COURSES_DEFAULT_COL_SIZE;
-        if ($gridsplit < $colsize) {
-            $gridsplit = $colsize;
-        }
-
-        $courseclass = $config->startgrid == BLOCKS_LW_COURSES_STARTGRID_YES ? "grid" : "list";
-        $startvalue = $courseclass == "list" ? "12" : $gridsplit;
-
-        $listonly = false;
-        if ($gridsplit == 12) {
-            $listonly = true;
-            $startvalue = 12;
-            $courseclass = "list";
-        } else {
-            $html .= html_writer::tag('a', 'Change View', array('href' => '#', 'id' => 'box-or-lines',
-            'styles' => '', 'class' => "$courseclass col-md-$startvalue span$startvalue $courseclass"));
-        }
-        $html .= html_writer::tag('div', '', array("class" => "hidden startgrid $courseclass", "grid-size" => $gridsplit));
-        $html .= html_writer::div('', 'box flush');
-
-        $allnames = get_all_user_name_fields(true, 'u');
-        $fields = 'u.id, u.confirmed, u.username, '. $allnames . ', ' .
-            'u.maildisplay, u.mailformat, u.maildigest, u.email, u.emailstop, u.city, '.
-            'u.country, u.picture, u.idnumber, u.department, u.institution, '.
-            'u.lang, u.timezone, u.lastaccess, u.mnethostid, u.imagealt, r.name AS rolename, r.sortorder, '.
-            'r.shortname AS roleshortname, rn.name AS rolecoursealias';
-
-        $html .= html_writer::start_div('lw_courses_list');
-        foreach ($courses as $key => $course) {
-
-            // If moving course, then don't show course which needs to be moved.
-            if ($ismovingcourse && ($course->id == $movingcourseid)) {
-                continue;
-            }
-
-            $html .= $this->output->box_start(
-                "coursebox $courseclass span$startvalue col-md-$startvalue $courseclass col-xs-12",
-                "course-{$course->id}");
-            $html .= $this->course_image($course);
-
-            $teacherimages = html_writer::start_div('teacher_image_wrap');
-            $teachernames = '';
-            if ($course->id > 0 && !empty($role) && $config->showteachers != BLOCKS_LW_COURSES_SHOWTEACHERS_NO) {
-                $context = context_course::instance($course->id);
-                $teachers = get_role_users($role->id, $context, false, $fields);
-                foreach ($teachers as $key => $teacher) {
-                    $teachername = get_string('defaultcourseteacher') . ': ' . fullname($teacher);
-                    $teachernames .= html_writer::tag('p', $teachername, array('class' => 'teacher_name'));
-                    $teacherimages .= html_writer::div($OUTPUT->user_picture($teacher, array('size' => 50, 'class' => '')), 'teacher_image');
-                }
-            }
-            $teacherimages .= html_writer::end_div();
-            $html .= $teacherimages;
-
-            if (method_exists($this->output, 'image_url')) {
-                // Use the new method.
-                $moveicon = $this->image_url('t/move');
-            } else {
-                // Still a pre Moodle 3.3 release. Use pix_url because image_url doesn't exist yet.
-                $moveicon = $this->pix_url('t/move');
-            }
-            $html .= html_writer::start_tag('div', array('class' => 'course_title'));
-            // If user is editing, then add move icons.
-            if ($userediting && !$ismovingcourse) {
-                $moveicon = html_writer::empty_tag('img',
-                    array('src' => $moveicon->out(false),
-                        'alt' => get_string('movecourse', 'block_lw_courses', $course->fullname),
-                        'title' => get_string('move')));
-                $moveurl = new moodle_url($this->page->url, array('sesskey' => sesskey(), 'movecourse' => 1,
-                    'courseid' => $course->id));
-                $moveurl = html_writer::link($moveurl, $moveicon);
-                $html .= html_writer::tag('div', $moveurl, array('class' => 'move'));
-            }
-
-            // No need to pass title through s() here as it will be done automatically by html_writer.
-            $attributes = array('title' => $course->fullname);
-            if ($course->id > 0) {
-                if (empty($course->visible)) {
-                    $attributes['class'] = 'dimmed';
-                }
-                $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
-                $coursefullname = format_string(get_course_display_name_for_list($course), true, $course->id);
-                $link = html_writer::link($courseurl, $coursefullname, $attributes);
-                $html .= $this->output->heading($link, 2, 'title');
-            } else {
-                $html .= $this->output->heading(html_writer::link(
-                       new moodle_url('/auth/mnet/jump.php', array(
-                       'hostid' => $course->hostid,
-                       'wantsurl' => '/course/view.php?id='.$course->remoteid)),
-                       format_string($course->shortname, true), $attributes) .
-                       ' (' . format_string($course->hostname) . ')', 2, 'title');
-            }
-            $html .= $this->output->box('', 'flush');
-            $html .= html_writer::end_tag('div');
-
-            if (!empty($config->showchildren) && ($course->id > 0)) {
-                // List children here.
-                if ($children = block_lw_courses_get_child_shortnames($course->id)) {
-                    $html .= html_writer::tag('span', $children, array('class' => 'coursechildren'));
-                }
-            }
-
-            if ($course->id > 0) {
-                $html .= $this->course_description($course);
-
-                $html .= block_lw_courses_build_progress($course);
-
-                $html .= html_writer::div($teachernames, 'teacher_names');
-            }
-
-
-            $html .= $this->output->box('', 'flush');
-            $html .= $this->output->box_end();
-            $courseordernumber++;
-            if (method_exists($this->output, 'image_url')) {
-                // Use the new method.
-                $movehere = $this->output->image_url('movehere');
-            } else {
-                // Still a pre Moodle 3.3 release. Use pix_url because image_url doesn't exist yet.
-                $movehere = $this->output->pix_url('movehere');
-            }
-            if ($ismovingcourse) {
-                $moveurl = new moodle_url('/blocks/lw_courses/move.php',
-                    array('sesskey' => sesskey(), 'moveto' => $courseordernumber, 'courseid' => $movingcourseid));
-                $a = new stdClass();
-                $a->movingcoursename = $courses[$movingcourseid]->fullname;
-                $a->currentcoursename = $course->fullname;
-                $movehereicon = html_writer::empty_tag('img',
-                    array('src' => $movehere,
-                        'alt' => get_string('moveafterhere', 'block_lw_courses', $a),
-                        'title' => get_string('movehere')));
-                $moveurl = html_writer::link($moveurl, $movehereicon);
-                $html .= html_writer::tag('div', $moveurl, array('class' => 'movehere'));
-            }
-
-        }
-
-        // Wrap course list in a div and return.
-        $html .= html_writer::end_div();
-        return $html;
-    }
-
-    /**
-     * Construct contents of new courses
-     *
-     * @param array $courses list of courses in sorted order
-     * @return string html to be displayed in lw_courses block
-     */
-    public function new_courses($courses) {
-
-        $output = html_writer::tag('h5', 'New courses Available');
+        $output = '';
 
         $courseordernumber = 0;
         $config = get_config('block_lw_courses');
-        $gridsplit = intval(12 / count($courses)); // Added intval to avoid any float.
+        $total = count($courses);
+
+        $gridsplit = intval(12 / $total); // Added intval to avoid any float.
 
         $colsize = intval($config->coursegridwidth) > 0 ? intval($config->coursegridwidth) : BLOCKS_LW_COURSES_DEFAULT_COL_SIZE;
         if ($gridsplit < $colsize) {
@@ -255,45 +54,88 @@ class block_lw_courses_renderer extends plugin_renderer_base {
         }
 
         $courseclass = $config->startgrid == BLOCKS_LW_COURSES_STARTGRID_YES ? "grid" : "list";
-        $startvalue = $courseclass == "list" ? "12" : $gridsplit;
 
-        $output .= html_writer::tag('div', '', array("class" => "hidden startgrid $courseclass", "grid-size" => $gridsplit));
-        $output .= html_writer::div('', 'box flush');
+        $output .= html_writer::start_div('carousel slide lw_courses_list', array('id'=>'demo', 'data-ride'=>'carousel'));
+        $output .= html_writer::start_div('carousel-inner container-fluid');
 
-        $output .= html_writer::start_div('lw_courses_list');
-        foreach ($courses as $key => $course) {
+        $row_count = intval($total/3)+1;
 
-            $output .= $this->output->box_start(
-                "coursebox $courseclass span$startvalue col-md-$startvalue $courseclass col-xs-12",
-                "course-{$course->id}");
-            $output .= $this->course_image($course);
+        if($total % 3 == 0){
+            $row_count = $total/3;
+        }
 
-            $output .= html_writer::start_tag('div', array('class' => 'course_title'));
-            // No need to pass title through s() here as it will be done automatically by html_writer.
-            $attributes = array('title' => $course->fullname);
-            if ($course->id > 0) {
-                $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
-                $coursefullname = format_string(get_course_display_name_for_list($course), true, $course->id);
-                $link = html_writer::link($courseurl, $coursefullname, $attributes);
-                $output .= $this->output->heading($link, 2, 'title');
+        $active = ' active';
+        for($i = 0; $i < $row_count; $i++){
+            $content = '';
+            $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'.$active));
+            $sub_array = array_slice($courses, $i*3, 3);
+            $length = count($sub_array);
+            $colwidth = 12 / $length;
+
+
+            foreach ($sub_array as $key => $course) {
+
+                $content .= $this->output->box_start(
+                    "coursebox col-lg-$colwidth col-md-6 col-sm-6 col-12",
+                    "course-{$course->id}");
+                $content .= $this->course_image($course);
+
+                $content .= html_writer::start_tag('div', array('class' => 'course_title'));
+                // No need to pass title through s() here as it will be done automatically by html_writer.
+                $attributes = array('title' => $course->fullname);
+                if ($course->id > 0) {
+                    $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
+                    $coursefullname = format_string(get_course_display_name_for_list($course), true, $course->id);
+                    $link = html_writer::link($courseurl, $coursefullname, $attributes);
+                    $content .= $this->output->heading($link, 2, 'title');
+                }
+                $content .= $this->output->box('', 'flush');
+                $content .= html_writer::end_tag('div');
+
+                if ($course->id > 0) {
+                    $content .= $this->course_description($course);
+
+                    $content .= block_lw_courses_build_progress($course);
+                }
+
+
+                $content .= $this->output->box('', 'flush');
+                $content .= $this->output->box_end();
+                $courseordernumber++;
+
             }
-            $output .= $this->output->box('', 'flush');
-            $output .= html_writer::end_tag('div');
+            $content .= html_writer::end_tag('div');
+            $output .= $content;
 
-            if ($course->id > 0) {
-                $output .= $this->course_description($course);
+            if($active == ' active'){
+                $active = '';
             }
-
-            $output .= $this->output->box('', 'flush');
-            $output .= $this->output->box_end();
-            $courseordernumber++;
 
         }
 
         // Wrap course list in a div and return.
         $output .= html_writer::end_div();
+        if($row_count > 1){
+            $output .= $this->render_control_buttons();
+        }
+        $output .= html_writer::end_div();
         return $output;
+    }
 
+
+    /**
+     * Construct prev and next buttons for slideshow
+
+     * @return string html of the buttons
+     */
+    private function render_control_buttons(){
+        $output = '';
+        $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
+        $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
+        $output .= html_writer::link('#demo', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
+        $output .= html_writer::link('#demo', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
+
+        return $output;
     }
 
     /**

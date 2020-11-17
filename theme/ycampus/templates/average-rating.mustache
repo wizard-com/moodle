@@ -42,30 +42,30 @@
 
     <div class="row">
         {{#average_ratings}}
-        <div class="col-sm-3">
+        <div class="col-3 col-sm-3">
             <div class="rating-block">
                 <h4>Average user rating</h4>
                 <h2 class="bold padding-bottom-7">{{average_rating}} <small>/ 5</small></h2>
             </div>
         </div>
         {{/average_ratings}}
-    <div class="col-sm-3">
-        <h4>{{header_text}}</h4>
-        {{#rating_breakdowns}}
-            <div class="pull-left">
-                <div class="pull-left" style="width:35px; line-height:1;">
-                    <div style="height:9px; margin:5px 0;">{{rating}} <span class="glyphicon glyphicon-star"></span></div>
-                </div>
-                <div class="pull-left" style="width:180px;">
-                    <div class="progress" style="height:9px; margin:8px 0;">
-                        <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{rating}}" aria-valuemin="0" aria-valuemax="5" style="width: {{percent}}%">
-                            <span class="sr-only">80% Complete (danger)</span>
+        <div class="col-3 col-sm-3">
+            <h4>{{header_text}}</h4>
+            {{#rating_breakdowns}}
+                <div class="pull-left">
+                    <div class="pull-left" style="width:35px; line-height:1;">
+                        <div style="height:9px; margin:5px 0;">{{rating}} <span class="glyphicon glyphicon-star"></span></div>
+                    </div>
+                    <div class="pull-left" style="width:180px;">
+                        <div class="progress" style="height:9px; margin:8px 0;">
+                            <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="{{rating}}" aria-valuemin="0" aria-valuemax="5" style="width: {{percent}}%">
+                                <span class="sr-only">80% Complete (danger)</span>
+                            </div>
                         </div>
                     </div>
+                    <div class="pull-right" style="margin-left:10px;">{{rating_count}}</div>
                 </div>
-                <div class="pull-right" style="margin-left:10px;">{{rating_count}}</div>
-            </div>
-        {{/rating_breakdowns}}
+            {{/rating_breakdowns}}
         </div>
     </div>
 </div>
