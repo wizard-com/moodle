@@ -358,9 +358,10 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         $course_categories = get_course_categories();
         $row_count = intval(count($course_categories)/3)+1;
+        $active = ' active';
         for($i = 0; $i < $row_count; $i++){
             $content = '';
-            $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'));
+            $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'.$active));
             $sub_array = array_slice($course_categories, $i*3, 3);
             foreach($sub_array as $item){
                 $content .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-4 col-sm-6'));
@@ -377,18 +378,19 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             }
             $content .= html_writer::end_tag('div');
             $output .= $content;
+
+            if($active == ' active'){
+                $active = '';
+            }
+
         }
+
+
         $output .= html_writer::end_tag('div');
-        $output .= "<a class=\"carousel-control-prev\"
-         href=\"#demo\" data-slide=\"prev\">
-        <span
-        class=\"carousel-control-prev-icon\"></span>
-      </a>
-      <a
-        class=\"carousel-control-next\" href=\"#demo\" data-slide=\"next\">
-       
-    <span class=\"carousel-control-next-icon\"></span>
-      </a>";
+        $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
+        $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
+        $output .= html_writer::link('#demo', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
+        $output .= html_writer::link('#demo', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
         $output .= html_writer::end_tag('div');
 
         return $output;

@@ -22,13 +22,13 @@
 .carousel-inner {
   position: relative;
   width: 100%;
-  overflow: hidden;
   @include clearfix();
 }
 
 .carousel-item {
   position: relative;
   float: left;
+  display: none;
   width: 100%;
   margin-right: -100%;
   backface-visibility: hidden;
@@ -129,9 +129,13 @@
   background: no-repeat 50% / 100% 100%;
 }
 .carousel-control-prev-icon {
+  height: 30px;
+  width: 30px;
   background-image: escape-svg($carousel-control-prev-icon-bg);
 }
 .carousel-control-next-icon {
+  height: 30px;
+  width: 30px;
   background-image: escape-svg($carousel-control-next-icon-bg);
 }
 

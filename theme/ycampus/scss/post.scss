@@ -456,6 +456,11 @@ video {
 .row-equal .card {
     width: 100%;
 }
+.context-header-settings-menu .dropdown-toggle > .icon, #region-main-settings-menu .dropdown-toggle > .icon,
+.dropdown-toggle::after,
+.breadcrumb .breadcrumb-item, .breadcrumb .breadcrumb-item a {
+    color: #fff;
+}
 
 /* ensure equal card height inside carousel */
 .carousel-inner > .row-equal.active,
