@@ -129,11 +129,10 @@ function get_course_reviews(){
  * @return array
  */
 function get_related_courses(){
-    global $DB, $USER, $COURSE;
+    global $DB, $COURSE;
 
-    $fields = "mdl_course.id, mdl_course.category, mdl_course.sortorder, fullname, shortname, mdl_course.idnumber, mdl_course.summary, summaryformat, mdl_course.format, mdl_course.showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, mdl_course.visible, mdl_course.visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, mdl_course.theme, mdl_course.timecreated, mdl_course.timemodified, requested, enablecompletion, completionnotify, cacherev";
     $category_id = $COURSE->category;
-    $query = "SELECT $fields FROM {course} INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE mdl_course.category = $category_id AND mdl_user_enrolments.userid != $USER->id";
+    $query = "SELECT * FROM {course} WHERE category = $category_id AND id != $COURSE->id";
     $related_courses = $DB->get_records_sql($query);
 
     foreach ($related_courses as $related) {
@@ -142,6 +141,30 @@ function get_related_courses(){
 
     return $related_courses;
 }
+
+/**
+ * Query db to get popular courses
+ *
+ * @return array
+ */
+function get_popular_courses(){
+    global $DB;
+
+    $fields = "id, category, sortorder, fullname, shortname, idnumber, summary, summaryformat, format, showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, visible, visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, theme, timecreated, timemodified, requested, enablecompletion, completionnotify, cacherev";
+    $sql = "SELECT $fields FROM mdl_course c JOIN (SELECT DISTINCT e.courseid, ue.id AS userid FROM {user_enrolments} ue JOIN {enrol} e ON e.id = ue.enrolid) ue ON ue.courseid = c.id WHERE c.id != 6 GROUP BY c.id, c.fullname ORDER BY COUNT(*) DESC, c.fullname";
+    $popular_courses = $DB->get_records_sql($sql);
+
+    if(empty($popular_courses)){
+        return array();
+    }
+
+    foreach ($popular_courses as $popular) {
+        $popular->img_url = course_image($popular);
+    }
+
+    return $popular_courses;
+}
+
 
 /**
  * Query db to get categories

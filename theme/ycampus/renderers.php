@@ -114,10 +114,11 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         if (strval($contents) === '') {
             return '';
         }
+        $popular_courses = get_popular_courses();
         $output = html_writer::link('#' . $skipdivid,
             get_string('skipa', 'access', core_text::strtolower(strip_tags($header))),
             array('class' => 'skip-block skip aabtn'));
-
+        print_object($popular_courses);
         // Wrap frontpage part in div container.
         $output .= html_writer::start_tag('div', array('id' => $contentsdivid));
         //$output .= $this->heading($header);
@@ -129,7 +130,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         $output .= html_writer::end_tag('div');
 
         $output .= html_writer::tag('span', '', array('class' => 'skip-block-to', 'id' => $skipdivid));
-        $output .= $this->render_from_template('theme_ycampus/buildings-background', (object)['img-url'=>"$CFG->wwwroot./theme/ycampus/buildings.PNG"]);
+        $output .= $this->render_from_template('theme_ycampus/buildings-background', ['img-url-building'=>"$CFG->wwwroot./theme/ycampus/buildings.PNG",'popular_courses'=>$popular_courses]);
 
         return $output;
     }
@@ -354,7 +355,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             }
         }
         $output .= html_writer::start_tag('div', ['id'=>'demo', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
-        $output .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid', 'style'=>'overflow: inherit']);
+        $output .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid']);
 
         $course_categories = get_course_categories();
         $total = count($course_categories);

@@ -81,9 +81,6 @@ $drawer-bg: darken($body-bg, 5%) !default;
         }
     }
 }
-#page {
-    margin-top: $fixed-header-y;
-}
 .pagelayout-embedded #page {
     margin-top: 0;
 }

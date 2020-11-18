@@ -22,8 +22,8 @@
 .carousel-inner {
   position: relative;
   width: 100%;
-  @include clearfix();
   overflow: hidden;
+  @include clearfix();
 }
 
 .carousel-item {
