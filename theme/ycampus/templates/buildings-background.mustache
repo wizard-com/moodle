@@ -41,7 +41,7 @@
     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
 
         <div class="card" style="border: none">
-            <img class="card-img-top" src="{{img-url-building}}" alt="Card image">
+            <img class="card-img-top" src="http://localhost/moodle/theme/ycampus/buildings.PNG" alt="Card image">
             <div class="card-img-overlay">
                 <b><h4 class="card-title">Visit a school</h4></b>
                 <div class="row" style="height: 33%;">
@@ -79,18 +79,5 @@
     </div>
 </div>
 <h4>Popular courses</h4>
-<div class="row">
-    {{#popular_courses}}
-        <div class="col-lg-3 col-md-4 col-sm-12">
-            <a href="http://localhost/moodle/course/view.php?id={{id}}">
-            <div class="card related">
-                <img class="card-img-top related-course-img related-img-height" src="{{img_url}}" alt="Card image">
-                <div class="card-img-overlay darken">
-                    <h4 class="card-title text-white">{{fullname}}</h4>
-                </div>
-            </div>
-            </a>
-        </div>
-    {{/popular_courses}}
-</div>
+{{{popular_courses}}}
 

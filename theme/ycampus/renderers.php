@@ -114,11 +114,51 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         if (strval($contents) === '') {
             return '';
         }
+        $popular_courses_content = html_writer::start_tag('div', ['id'=>'demo1', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
+        $popular_courses_content .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid']);
         $popular_courses = get_popular_courses();
-        $output = html_writer::link('#' . $skipdivid,
-            get_string('skipa', 'access', core_text::strtolower(strip_tags($header))),
-            array('class' => 'skip-block skip aabtn'));
-        print_object($popular_courses);
+        $total = count($popular_courses);
+        $row_count = intval($total/3)+1;
+        if($total % 3 == 0){
+            $row_count = $total/3;
+        }
+        $active = ' active';
+        for($i = 0; $i < $row_count; $i++){
+            $content = '';
+            $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'.$active));
+            $sub_array = array_slice($popular_courses, $i*3, 3);
+            foreach($sub_array as $item){
+                $content .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-4 col-sm-6'));
+                $course_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('id'=>$item->id));
+                $content .= html_writer::start_tag('a', array('href'=>$course_url));
+                $content .= html_writer::start_tag('div', array('class'=>'card popular'));
+                $content .= html_writer::start_tag('img', array('src'=>$item->img_url, 'alt'=>'card image', 'class'=>'card-img-top popular-img-height popular-course-img')).html_writer::end_tag('img');
+                $content .= html_writer::start_tag('div', array('class'=>'card-img-overlay darken'));
+                $content .= html_writer::tag('h4', $item->fullname, array('class'=>'card-title text-white'));
+                $content .= html_writer::end_tag('div');
+                $content .= html_writer::end_tag('div');
+                $content .= html_writer::end_tag('a');
+                $content .= html_writer::end_tag('div');
+            }
+            $content .= html_writer::end_tag('div');
+            $popular_courses_content .= $content;
+
+            if($active == ' active'){
+                $active = '';
+            }
+
+        }
+
+        $popular_courses_content .= html_writer::end_tag('div');
+        if($row_count > 1){
+            $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
+            $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
+            $popular_courses_content .= html_writer::link('#demo1', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
+            $popular_courses_content .= html_writer::link('#demo1', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
+        }
+        $popular_courses_content .= html_writer::end_tag('div');
+
+        $output = html_writer::link('#' . $skipdivid, get_string('skipa', 'access', core_text::strtolower(strip_tags($header))), array('class' => 'skip-block skip aabtn'));
         // Wrap frontpage part in div container.
         $output .= html_writer::start_tag('div', array('id' => $contentsdivid));
         //$output .= $this->heading($header);
@@ -130,7 +170,79 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         $output .= html_writer::end_tag('div');
 
         $output .= html_writer::tag('span', '', array('class' => 'skip-block-to', 'id' => $skipdivid));
-        $output .= $this->render_from_template('theme_ycampus/buildings-background', ['img-url-building'=>"$CFG->wwwroot./theme/ycampus/buildings.PNG",'popular_courses'=>$popular_courses]);
+        $output .= $this->render_from_template('theme_ycampus/buildings-background', ['popular_courses'=>$popular_courses_content]);
+
+        return $output;
+    }
+
+    /**
+     * Returns HTML to display a tree of subcategories and courses in the given category
+     *
+     * @param coursecat_helper $chelper various display options
+     * @param core_course_category $coursecat top category (this category's name and description will NOT be added to the tree)
+     * @return string
+     * @throws moodle_exception
+     */
+    protected function coursecat_tree(coursecat_helper $chelper, $coursecat) {
+
+        global $DB, $CFG;
+
+        $output = '';
+        $img_path = $CFG->wwwroot.'/theme/ycampus/infocomm.png';
+        $course_cat_url = new moodle_url($CFG->wwwroot.'/course/index.php');
+
+        $current_page = $this->page;
+
+        if ($current_page->has_set_url()) {
+            if ($current_page->url->get_param('categoryid') != null) {
+                $id = optional_param('categoryid', 0, PARAM_INT);
+                return $this->get_courses_by_category($id);
+            }
+        }
+        $output .= html_writer::start_tag('div', ['id'=>'demo', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
+        $output .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid']);
+
+        $course_categories = get_course_categories();
+        $total = count($course_categories);
+        $row_count = intval($total/3)+1;
+        if($total % 3 == 0){
+            $row_count = $total/3;
+        }
+        $active = ' active';
+        for($i = 0; $i < $row_count; $i++){
+            $content = '';
+            $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'.$active));
+            $sub_array = array_slice($course_categories, $i*3, 3);
+            foreach($sub_array as $item){
+                $content .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-4 col-sm-6'));
+                $course_cat_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid'=>$item->id));
+                $content .= html_writer::start_tag('a', array('href'=>$course_cat_url));
+                $content .= html_writer::start_tag('div', array('class'=>'card category'));
+                $content .= html_writer::start_tag('img', array('src'=>$img_path, 'alt'=>'card image', 'class'=>'card-img-top card-img-top-250 course-cat-img')).html_writer::end_tag('img');
+                $content .= html_writer::start_tag('div', array('class'=>'card-img-overlay darken'));
+                $content .= html_writer::tag('h4', $item->name, array('class'=>'card-title text-white'));
+                $content .= html_writer::end_tag('div');
+                $content .= html_writer::end_tag('div');
+                $content .= html_writer::end_tag('a');
+                $content .= html_writer::end_tag('div');
+            }
+            $content .= html_writer::end_tag('div');
+            $output .= $content;
+
+            if($active == ' active'){
+                $active = '';
+            }
+
+        }
+
+        $output .= html_writer::end_tag('div');
+        if($row_count > 1){
+            $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
+            $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
+            $output .= html_writer::link('#demo', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
+            $output .= html_writer::link('#demo', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
+        }
+        $output .= html_writer::end_tag('div');
 
         return $output;
     }
@@ -329,79 +441,6 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         }
         return $output;
     }
-
-    /**
-     * Returns HTML to display a tree of subcategories and courses in the given category
-     *
-     * @param coursecat_helper $chelper various display options
-     * @param core_course_category $coursecat top category (this category's name and description will NOT be added to the tree)
-     * @return string
-     * @throws moodle_exception
-     */
-    protected function coursecat_tree(coursecat_helper $chelper, $coursecat) {
-
-        global $DB, $CFG;
-
-        $output = '';
-        $img_path = $CFG->wwwroot.'/theme/ycampus/infocomm.png';
-        $course_cat_url = new moodle_url($CFG->wwwroot.'/course/index.php');
-
-        $current_page = $this->page;
-
-        if ($current_page->has_set_url()) {
-            if ($current_page->url->get_param('categoryid') != null) {
-                $id = optional_param('categoryid', 0, PARAM_INT);
-                return $this->get_courses_by_category($id);
-            }
-        }
-        $output .= html_writer::start_tag('div', ['id'=>'demo', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
-        $output .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid']);
-
-        $course_categories = get_course_categories();
-        $total = count($course_categories);
-        $row_count = intval($total/3)+1;
-        if($total % 3 == 0){
-            $row_count = $total/3;
-        }
-        $active = ' active';
-        for($i = 0; $i < $row_count; $i++){
-            $content = '';
-            $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'.$active));
-            $sub_array = array_slice($course_categories, $i*3, 3);
-            foreach($sub_array as $item){
-                $content .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-4 col-sm-6'));
-                $course_cat_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid'=>$item->id));
-                $content .= html_writer::start_tag('a', array('href'=>$course_cat_url));
-                $content .= html_writer::start_tag('div', array('class'=>'card category'));
-                $content .= html_writer::start_tag('img', array('src'=>$img_path, 'alt'=>'card image', 'class'=>'card-img-top card-img-top-250 course-cat-img')).html_writer::end_tag('img');
-                $content .= html_writer::start_tag('div', array('class'=>'card-img-overlay darken'));
-                $content .= html_writer::tag('h4', $item->name, array('class'=>'card-title text-white'));
-                $content .= html_writer::end_tag('div');
-                $content .= html_writer::end_tag('div');
-                $content .= html_writer::end_tag('a');
-                $content .= html_writer::end_tag('div');
-            }
-            $content .= html_writer::end_tag('div');
-            $output .= $content;
-
-            if($active == ' active'){
-                $active = '';
-            }
-
-        }
-
-        $output .= html_writer::end_tag('div');
-        if($row_count > 1){
-            $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
-            $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
-            $output .= html_writer::link('#demo', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
-            $output .= html_writer::link('#demo', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
-        }
-        $output .= html_writer::end_tag('div');
-
-        return $output;
-    }
-
 
 
     /**

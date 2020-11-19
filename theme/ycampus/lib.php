@@ -151,7 +151,7 @@ function get_popular_courses(){
     global $DB;
 
     $fields = "id, category, sortorder, fullname, shortname, idnumber, summary, summaryformat, format, showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, visible, visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, theme, timecreated, timemodified, requested, enablecompletion, completionnotify, cacherev";
-    $sql = "SELECT $fields FROM mdl_course c JOIN (SELECT DISTINCT e.courseid, ue.id AS userid FROM {user_enrolments} ue JOIN {enrol} e ON e.id = ue.enrolid) ue ON ue.courseid = c.id WHERE c.id != 6 GROUP BY c.id, c.fullname ORDER BY COUNT(*) DESC, c.fullname";
+    $sql = "SELECT $fields, COUNT(*) AS enrolments FROM mdl_course c JOIN (SELECT DISTINCT e.courseid, ue.id AS userid FROM {user_enrolments} ue JOIN {enrol} e ON e.id = ue.enrolid) ue ON ue.courseid = c.id GROUP BY c.id, c.fullname ORDER BY enrolments DESC, c.fullname";
     $popular_courses = $DB->get_records_sql($sql);
 
     if(empty($popular_courses)){
@@ -161,6 +161,8 @@ function get_popular_courses(){
     foreach ($popular_courses as $popular) {
         $popular->img_url = course_image($popular);
     }
+
+    $popular_courses = array_values($popular_courses);
 
     return $popular_courses;
 }
