@@ -188,7 +188,6 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         global $DB, $CFG;
 
         $output = '';
-        $img_path = $CFG->wwwroot.'/theme/ycampus/infocomm.png';
         $course_cat_url = new moodle_url($CFG->wwwroot.'/course/index.php');
 
         $current_page = $this->page;
@@ -214,11 +213,14 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'.$active));
             $sub_array = array_slice($course_categories, $i*3, 3);
             foreach($sub_array as $item){
-                $content .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-4 col-sm-6'));
+                $coursecat_img = get_config('theme_ycampus', 'categoryimage'.$item->id);
+                $filearea = "coursecat".$item->id;
+                $url = get_course_cat_img_url($coursecat_img, $filearea);
                 $course_cat_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid'=>$item->id));
+                $content .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-4 col-sm-6'));
                 $content .= html_writer::start_tag('a', array('href'=>$course_cat_url));
                 $content .= html_writer::start_tag('div', array('class'=>'card category'));
-                $content .= html_writer::start_tag('img', array('src'=>$img_path, 'alt'=>'card image', 'class'=>'card-img-top card-img-top-250 course-cat-img')).html_writer::end_tag('img');
+                $content .= html_writer::start_tag('img', array('src'=>$url, 'alt'=>'card image', 'class'=>'card-img-top cat-img-height course-cat-img')).html_writer::end_tag('img');
                 $content .= html_writer::start_tag('div', array('class'=>'card-img-overlay darken'));
                 $content .= html_writer::tag('h4', $item->name, array('class'=>'card-title text-white'));
                 $content .= html_writer::end_tag('div');

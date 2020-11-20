@@ -207,9 +207,27 @@ function course_image($course) {
         }
     }
     $courseimagedefault = get_config('block_lw_courses', 'courseimagedefault');
-    $url = get_default_image_url($courseimagedefault);
+    $url = get_image_url($courseimagedefault);
     return $url;
 }
+/**
+ * Build the Image url for course category
+ *
+ * @param string $filename Name of the image
+ * @param string $filearea file area name
+ * @return string
+ */
+function get_course_cat_img_url($filename, $filearea){
+    global $CFG;
+
+    if(empty($filename) || empty($filearea)){
+        return $CFG->wwwroot.'/theme/ycampus/infocomm.png';
+    }
+
+    return new moodle_url("/pluginfile.php/1/theme_ycampus/{$filearea}/0{$filename}");
+
+}
+
 
 /**
  * Build the Image url
@@ -217,7 +235,7 @@ function course_image($course) {
  * @param string $fileorfilename Name of the image
  * @return moodle_url|string
  */
-function get_default_image_url($fileorfilename) {
+function get_image_url($fileorfilename) {
     // If the fileorfilename param is a file.
     if ($fileorfilename instanceof stored_file) {
         // Separate each component of the url.
@@ -246,7 +264,7 @@ function get_default_image_url($fileorfilename) {
  */
 function get_default_heading_image_url(){
     $courseimagedefault = get_config('block_lw_courses', 'courseimagedefault');
-    $url = get_default_image_url($courseimagedefault);
+    $url = get_image_url($courseimagedefault);
     return $url;
 }
 

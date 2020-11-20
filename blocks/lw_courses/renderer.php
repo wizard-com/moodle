@@ -95,9 +95,10 @@ class block_lw_courses_renderer extends plugin_renderer_base {
                 if ($course->id > 0) {
                     $content .= $this->course_description($course);
 
+                }
+                if(empty($course->lastaccess) == false){
                     $content .= block_lw_courses_build_progress($course);
                 }
-
 
                 $content .= $this->output->box('', 'flush');
                 $content .= $this->output->box_end();

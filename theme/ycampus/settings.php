@@ -87,7 +87,8 @@ if ($ADMIN->fulltree) {
     foreach ($categories as $category){
         $name = 'theme_ycampus/categoryimage'.$category->id;
         $title = $category->name;
-        $setting = new admin_setting_configstoredfile($name, $title, '', 'coursecat', 0, array('maxfiles' => 1, 'accepted_types' => array('.jpg', '.png')));
+        $filearea = 'coursecat'.$category->id;
+        $setting = new admin_setting_configstoredfile($name, $title, '', $filearea, 1596696920, array('maxfiles' => 1, 'accepted_types' => array('.jpg', '.png')));
         $page->add($setting);
     }
 
