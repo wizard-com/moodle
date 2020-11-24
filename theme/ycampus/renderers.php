@@ -213,9 +213,8 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'.$active));
             $sub_array = array_slice($course_categories, $i*3, 3);
             foreach($sub_array as $item){
-                $coursecat_img = get_config('theme_ycampus', 'categoryimage'.$item->id);
                 $filearea = "coursecat".$item->id;
-                $url = get_course_cat_img_url($coursecat_img, $filearea);
+                $url = get_course_cat_img_url($filearea);
                 $course_cat_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('categoryid'=>$item->id));
                 $content .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-4 col-sm-6'));
                 $content .= html_writer::start_tag('a', array('href'=>$course_cat_url));

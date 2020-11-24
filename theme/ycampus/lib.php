@@ -35,6 +35,37 @@ function theme_ycampus_get_main_scss_content($theme) {
 }
 
 /**
+ * Serve the files from the theme_ycampus file areas
+ * @param string $filearea the name of the file area
+ * @return moodle_url
+ */
+function theme_ycampus_pluginfile($filearea) {
+    global $CFG;
+    // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
+    // Check the contextlevel is as expected - if your plugin is a block, this becomes CONTEXT_BLOCK, etc.
+
+    // Make sure the filearea is one of those used by the plugin.
+    if (strpos($filearea, 'coursecat') === false) {
+        echo "Invlid filearea";
+        return new moodle_url($CFG->wwwroot.'/theme/ycampus/infocomm.png');
+    }
+
+    $id = (int) substr($filearea, -1);
+    $coursecat_img = get_config('theme_ycampus', 'categoryimage'.$id);
+    // Retrieve the file from the Files API.
+
+    if(empty($coursecat_img)){
+        return new moodle_url($CFG->wwwroot.'/theme/ycampus/infocomm.png');
+    }
+    $fs = get_file_storage();
+    $area_files = $fs->get_area_files(1, 'theme_ycampus', $filearea, 1596696920);
+    print_object($area_files);
+
+    // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
+    return moodle_url::make_pluginfile_url(1, 'theme_ycampus', $filearea, 1596696920, '', $coursecat_img);
+}
+
+/**
  * Query db to get avg rating value
  *
  * @return array
@@ -217,18 +248,10 @@ function course_image($course) {
  * @param string $filearea file area name
  * @return string
  */
-function get_course_cat_img_url($filename, $filearea){
-    global $CFG;
+function get_course_cat_img_url($filearea){
 
-    if(empty($filename) || empty($filearea)){
-        return $CFG->wwwroot.'/theme/ycampus/infocomm.png';
-    }
-
-    return new moodle_url("/pluginfile.php/1/theme_ycampus/{$filearea}/0{$filename}");
-
+    return theme_ycampus_pluginfile($filearea);
 }
-
-
 /**
  * Build the Image url
  *
