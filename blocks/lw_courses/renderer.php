@@ -96,7 +96,7 @@ class block_lw_courses_renderer extends plugin_renderer_base {
                     $content .= $this->course_description($course);
 
                 }
-                if(empty($course->lastaccess) == false){
+                if(empty($course->enddate)){
                     $content .= block_lw_courses_build_progress($course);
                 }
 

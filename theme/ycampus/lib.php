@@ -58,8 +58,9 @@ function theme_ycampus_pluginfile($filearea) {
         return new moodle_url($CFG->wwwroot.'/theme/ycampus/infocomm.png');
     }
     $fs = get_file_storage();
-    $area_files = $fs->get_area_files(1, 'theme_ycampus', $filearea, 1596696920);
-    print_object($area_files);
+    //$area_files = $fs->get_area_files(1, 'theme_ycampus', $filearea, 1596696920);
+//    $fs->get_file()
+
 
     // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.
     return moodle_url::make_pluginfile_url(1, 'theme_ycampus', $filearea, 1596696920, '', $coursecat_img);
@@ -182,7 +183,7 @@ function get_popular_courses(){
     global $DB;
 
     $fields = "id, category, sortorder, fullname, shortname, idnumber, summary, summaryformat, format, showgrades, newsitems, startdate, enddate, relativedatesmode, marker, maxbytes, legacyfiles, showreports, visible, visibleold, groupmode, groupmodeforce, defaultgroupingid, lang, calendartype, theme, timecreated, timemodified, requested, enablecompletion, completionnotify, cacherev";
-    $sql = "SELECT $fields, COUNT(*) AS enrolments FROM mdl_course c JOIN (SELECT DISTINCT e.courseid, ue.id AS userid FROM {user_enrolments} ue JOIN {enrol} e ON e.id = ue.enrolid) ue ON ue.courseid = c.id GROUP BY c.id, c.fullname ORDER BY enrolments DESC, c.fullname";
+    $sql = "SELECT $fields, COUNT(*) AS enrolments FROM mdl_course c JOIN (SELECT DISTINCT e.courseid, ue.id AS userid FROM {user_enrolments} ue JOIN {enrol} e ON e.id = ue.enrolid) ue ON ue.courseid = c.id GROUP BY c.id, c.fullname HAVING enrolments > 1 ORDER BY enrolments DESC, c.fullname";
     $popular_courses = $DB->get_records_sql($sql);
 
     if(empty($popular_courses)){
