@@ -89,11 +89,11 @@ class block_lw_courses extends block_base {
             $this->content->text .= get_string('nocourses', 'my');
         } else {
             // For each course, build category cache.
-            $this->content->text .= $renderer->lw_courses($sortedcourses);
+            $this->content->text .= $renderer->lw_courses($sortedcourses,0);
             $this->content->text .= $renderer->hidden_courses($totalcourses - count($sortedcourses));
         }
         if(count($new_courses) >= 1) {
-            $this->content->footer = '<h5>New courses Available</h5>' . $renderer->lw_courses($new_courses);
+            $this->content->footer = '<h5>New courses Available</h5>' . $renderer->lw_courses($new_courses,1);
         }
         else {
             $this->content->footer = '<div></div>';

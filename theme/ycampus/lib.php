@@ -58,8 +58,15 @@ function theme_ycampus_pluginfile($filearea) {
         return new moodle_url($CFG->wwwroot.'/theme/ycampus/infocomm.png');
     }
     $fs = get_file_storage();
-    //$area_files = $fs->get_area_files(1, 'theme_ycampus', $filearea, 1596696920);
-//    $fs->get_file()
+    $area_files = $fs->get_area_files(1, 'theme_ycampus', $filearea, 1596696920);
+    foreach ($area_files as $file){
+        $isimage = $file->is_valid_image();
+        $url = "$CFG->wwwroot/pluginfile.php".'/'. $file->get_contextid(). '/'. $file->get_component(). '/'.
+            $file->get_filearea(). $file->get_filepath(). $file->get_filename();
+        if ($isimage) {
+            echo $url.'<br/>';
+        }
+    }
 
 
     // We can now send the file back to the browser - in this case with a cache lifetime of 1 day and no filtering.

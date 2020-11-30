@@ -34,11 +34,11 @@ class block_lw_courses_renderer extends plugin_renderer_base {
 
     /**
      * Construct contents of lw_courses block
-     *
+     * @param int $id
      * @param array $courses list of courses in sorted order
      * @return string html to be displayed in lw_courses block
      */
-    public function lw_courses($courses) {
+    public function lw_courses($courses, $id) {
 
         $output = '';
 
@@ -55,7 +55,7 @@ class block_lw_courses_renderer extends plugin_renderer_base {
 
         $courseclass = $config->startgrid == BLOCKS_LW_COURSES_STARTGRID_YES ? "grid" : "list";
 
-        $output .= html_writer::start_div('carousel slide lw_courses_list', array('id'=>'demo', 'data-ride'=>'carousel'));
+        $output .= html_writer::start_div('carousel slide lw_courses_list', array('id'=>"demo$id", 'data-ride'=>'carousel'));
         $output .= html_writer::start_div('carousel-inner container-fluid');
 
         $row_count = intval($total/3)+1;
@@ -82,12 +82,11 @@ class block_lw_courses_renderer extends plugin_renderer_base {
 
                 $content .= html_writer::start_tag('div', array('class' => 'course_title'));
                 // No need to pass title through s() here as it will be done automatically by html_writer.
-                $attributes = array('title' => $course->fullname);
+                $attributes = array('class' => 'title', 'style' => 'color: #fff');
                 if ($course->id > 0) {
                     $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
                     $coursefullname = format_string(get_course_display_name_for_list($course), true, $course->id);
-                    $link = html_writer::link($courseurl, $coursefullname, $attributes);
-                    $content .= $this->output->heading($link, 2, 'title');
+                    $content .= html_writer::link($courseurl, $coursefullname, $attributes);
                 }
                 $content .= $this->output->box('', 'flush');
                 $content .= html_writer::end_tag('div');
@@ -117,7 +116,7 @@ class block_lw_courses_renderer extends plugin_renderer_base {
         // Wrap course list in a div and return.
         $output .= html_writer::end_div();
         if($row_count > 1){
-            $output .= $this->render_control_buttons();
+            $output .= $this->render_control_buttons($id);
         }
         $output .= html_writer::end_div();
         return $output;
@@ -126,15 +125,15 @@ class block_lw_courses_renderer extends plugin_renderer_base {
 
     /**
      * Construct prev and next buttons for slideshow
-
+     * @param int $id
      * @return string html of the buttons
      */
-    private function render_control_buttons(){
+    private function render_control_buttons($id){
         $output = '';
         $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
         $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
-        $output .= html_writer::link('#demo', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
-        $output .= html_writer::link('#demo', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
+        $output .= html_writer::link('#demo'.$id, $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
+        $output .= html_writer::link('#demo'.$id, $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
 
         return $output;
     }
