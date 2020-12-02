@@ -268,6 +268,7 @@ function get_course_cat_img_url($filearea){
  */
 function get_image_url($fileorfilename) {
     // If the fileorfilename param is a file.
+    global $CFG;
     if ($fileorfilename instanceof stored_file) {
         // Separate each component of the url.
         $filecontextid  = $fileorfilename->get_contextid();
@@ -285,7 +286,7 @@ function get_image_url($fileorfilename) {
 
     // The fileorfilename param is not a stored_file object, assume this is the name of the file in the blocks file area.
     // Generate a moodle url to the file in the blocks file area.
-    return new moodle_url("/pluginfile.php/1/block_lw_courses/courseimagedefault{$fileorfilename}");
+    return new moodle_url($CFG->wwwroot.'/theme/ycampus/infocomm.png');
 }
 
 /**
