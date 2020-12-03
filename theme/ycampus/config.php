@@ -50,3 +50,14 @@ $THEME->addblockposition = BLOCK_ADDBLOCK_POSITION_FLATNAV;
 $THEME->scss = function($theme) {
     return theme_ycampus_get_main_scss_content($theme);
 };
+
+$THEME->layouts = [
+
+    // My dashboard page.
+    'mydashboard' => array(
+        'file' => 'columns2.php',
+        'regions' => array('side-pre'),
+        'defaultregion' => 'side-pre',
+        'options' => array('nonavbar' => true, 'langmenu' => true, 'nocontextheader' => true),
+    )
+];
