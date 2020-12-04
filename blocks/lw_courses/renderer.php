@@ -34,8 +34,8 @@ class block_lw_courses_renderer extends plugin_renderer_base {
 
     /**
      * Construct contents of lw_courses block
-     * @param int $id
      * @param array $courses list of courses in sorted order
+     * @param int $id
      * @return string html to be displayed in lw_courses block
      */
     public function lw_courses($courses, $id) {
@@ -46,14 +46,8 @@ class block_lw_courses_renderer extends plugin_renderer_base {
         $config = get_config('block_lw_courses');
         $total = count($courses);
 
-        $gridsplit = intval(12 / $total); // Added intval to avoid any float.
+        // Added intval to avoid any float.
 
-        $colsize = intval($config->coursegridwidth) > 0 ? intval($config->coursegridwidth) : BLOCKS_LW_COURSES_DEFAULT_COL_SIZE;
-        if ($gridsplit < $colsize) {
-            $gridsplit = $colsize;
-        }
-
-        $courseclass = $config->startgrid == BLOCKS_LW_COURSES_STARTGRID_YES ? "grid" : "list";
 
         $output .= html_writer::start_div('carousel slide lw_courses_list', array('id'=>"demo$id", 'data-ride'=>'carousel'));
         $output .= html_writer::start_div('carousel-inner container-fluid');

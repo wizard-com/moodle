@@ -161,6 +161,51 @@ function get_course_reviews(){
 
     return $course_reviews;
 }
+/**
+ * Get the Course description for a given course
+ *
+ * @param object $course The course whose description we want
+ * @return string
+ */
+function course_description($course) {
+    $course = new core_course_list_element($course);
+
+    $context = \context_course::instance($course->id);
+    $summary = external_format_string($course->summary, $context,
+        1, array());
+    return html_writer::div($summary, 'course_description');
+}
+
+/**
+ * The course progress builder
+ *
+ * @param object $course The course whose progress we want
+ * @return string
+ */
+function build_progress($course) {
+    global $CFG;
+
+    require_once($CFG->dirroot.'/grade/querylib.php');
+    require_once($CFG->dirroot.'/grade/lib.php');
+    $config = get_config('block_lw_courses');
+
+    if ($config->progressenabled == BLOCKS_LW_COURSES_SHOWGRADES_NO) {
+        return '';
+    }
+
+    $percentage = progress::get_course_progress_percentage($course);
+    if (!is_null($percentage)) {
+        $percentage = floor($percentage);
+    } else {
+        $percentage = 0;
+    }
+
+    $bar = html_writer::div('', 'value', array('aria-valuenow' => "$percentage",
+        'aria-valuemin' => "0", 'aria-valuemax' => "100", 'style' => "width:$percentage%"));
+    $progress = html_writer::div($bar, 'progress', array('data-label' => "$percentage% completed"));
+
+    return $progress;
+}
 
 /**
  * Query db to get related courses for a course
@@ -249,6 +294,25 @@ function course_image($course) {
     $url = get_image_url($courseimagedefault);
     return $url;
 }
+/**
+ * Query db to get new courses
+ * @return array
+ */
+function get_new_courses() {
+    global $USER, $DB;
+
+    $query = "SELECT * FROM {course} WHERE id != 1 AND id NOT IN (SELECT DISTINCT courseid FROM mdl_course INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE userid = $USER->id ORDER BY mdl_course.fullname)";
+    $new_courses = $DB->get_records_sql($query);
+
+    if(empty($new_courses)){
+        return array();
+    }
+
+    $new_courses = array_values($new_courses);
+
+    return $new_courses;
+}
+
 /**
  * Build the Image url for course category
  *

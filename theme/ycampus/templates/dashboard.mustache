@@ -1,0 +1,1044 @@
+{{!
+    This file is part of Moodle - http://moodle.org/
+
+    Moodle is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Moodle is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
+}}
+{{!
+    @template theme_ycampus/dashboard
+
+
+    Example context (json):
+    {
+        "tabs": [
+         {
+            "name": "tab1",
+            "active": 0,
+            "displayname": "Inactive tab1",
+            "html": "<p>Tab 1 content</p>"
+         },
+         {
+            "name": "tab2",
+            "active": 1,
+            "displayname": "Active tab2",
+            "html": "<p>Tab 2 content</p>"
+         }
+        ]
+    }
+}}
+<div id="page" class="container-fluid d-print-block">
+    <header id="page-header" class="row">
+        <div class="col-12 pt-3 pb-3">
+            <div class="card  header-image">
+                <img class="card-img-top"
+                     src="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/theme/ycampus/infocomm.png" alt="img">
+                <div class="card-img-overlay darken">
+                    <div class="d-sm-flex align-items-center sub-wrapper">
+                        <div class="mr-auto text-white">
+                            <div class="page-context-header">
+                                <div class="page-header-image"><a
+                                        href="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/user/profile.php?id=2"
+                                        class="d-inline-block aabtn"><img
+                                        src="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/theme/image.php/ycampus/core/1606895045/u/f1"
+                                        class="userpicture defaultuserpic" width="100" height="100"
+                                        alt="Picture of Admin User" title="Picture of Admin User"></a></div>
+                                <div class="page-header-headings"><h1>Admin User</h1></div>
+                                <div class="btn-group header-button-group"><a id="message-user-button" role="button"
+                                                                              data-conversationid="0" data-userid="2"
+                                                                              class="btn"
+                                                                              href="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/message/index.php?id=2"><span><i
+                                        class="icon fa fa-comment fa-fw iconsmall" title="Message"
+                                        aria-label="Message"></i><span class="header-button-title">Message</span></span></a><span
+                                        class="sr-only sr-only-focusable" data-region="jumpto" tabindex="-1"></span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="header-actions-container flex-shrink-0" data-region="header-actions-container">
+                        </div>
+                    </div>
+                    <div class="d-flex flex-wrap">
+                        <div id="page-navbar">
+                            <nav aria-label="Navigation bar">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/my/"
+                                           aria-current="page">Dashboard</a>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                        <div class="ml-auto d-flex">
+                            <div class="singlebutton">
+                                <form method="post"
+                                      action="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/my/index.php">
+                                    <input type="hidden" name="edit" value="1">
+                                    <input type="hidden" name="sesskey" value="SxKtqYr2M7">
+                                    <button type="submit" class="btn btn-secondary" id="single_button5fca12ce329531"
+                                            title="">Customise this page
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                        <div id="course-header">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="page-content" class="row pb-3 d-print-block">
+        <div id="region-main-box" class="col-12">
+            <div></div>
+            <section id="region-main" aria-label="Content">
+
+                <span class="notifications" id="user-notifications"></span>
+                <div role="main"><span id="maincontent"></span>
+                    <aside id="block-region-content" class="block-region" data-blockregion="content"
+                           data-droptarget="1"><a href="#sb-2" class="sr-only sr-only-focusable">Skip Recently accessed
+                        courses</a>
+
+                        <section id="inst18" class=" block_recentlyaccessedcourses block  card mb-3"
+                                 role="complementary" data-block="recentlyaccessedcourses"
+                                 aria-labelledby="instance-18-header">
+
+                            <div class="card-body p-3">
+
+                                <h5 id="instance-18-header" class="card-title d-inline">Recently accessed courses</h5>
+
+
+                                <div class="card-text content mt-3">
+                                    <div id="block-recentlyaccessedcourses-5fca12ce35dc45fca12ce329532"
+                                         class="block-recentlyaccessedcourses block-cards"
+                                         data-region="recentlyaccessedcourses" data-userid="2"
+                                         data-displaycoursecategory="1">
+                                        <div class="container-fluid p-0">
+                                            <div id="recentlyaccessedcourses-view-5fca12ce35dc45fca12ce329532"
+                                                 data-region="recentlyaccessedcourses-view">
+                                                <div data-region="loading-placeholder" class="hidden">
+                                                    <div class="card-deck dashboard-card-deck one-row overflow-hidden"
+                                                         style="height: 13.05rem">
+                                                        <div class="card dashboard-card border-0">
+                                                            <div class="card-img-top bg-pulse-grey w-100"
+                                                                 style="height: 7rem">
+                                                            </div>
+                                                            <div class="card-body pr-1 course-info-container">
+                                                                <div class="bg-pulse-grey w-100"
+                                                                     style="height: 1rem"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card dashboard-card border-0">
+                                                            <div class="card-img-top bg-pulse-grey w-100"
+                                                                 style="height: 7rem">
+                                                            </div>
+                                                            <div class="card-body pr-1 course-info-container">
+                                                                <div class="bg-pulse-grey w-100"
+                                                                     style="height: 1rem"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card dashboard-card border-0">
+                                                            <div class="card-img-top bg-pulse-grey w-100"
+                                                                 style="height: 7rem">
+                                                            </div>
+                                                            <div class="card-body pr-1 course-info-container">
+                                                                <div class="bg-pulse-grey w-100"
+                                                                     style="height: 1rem"></div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="card dashboard-card border-0">
+                                                            <div class="card-img-top bg-pulse-grey w-100"
+                                                                 style="height: 7rem">
+                                                            </div>
+                                                            <div class="card-body pr-1 course-info-container">
+                                                                <div class="bg-pulse-grey w-100"
+                                                                     style="height: 1rem"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="hidden" data-region="view-content">
+                                                    <div class="d-flex paging-bar-container mb-3"
+                                                         data-region="paging-bar-container">
+                                                        <div data-region="paging-control-container" class="d-flex">
+
+                                                            <nav id="paging-bar-5fca12ce35dc45fca12ce329532" class=""
+                                                                 data-region="paging-bar"
+                                                                 data-ignore-control-while-loading=""
+                                                                 data-hide-control-on-single-page=""
+                                                                 data-active-page-number="1" data-items-per-page=""
+                                                                 aria-label="Pagination navigation"
+                                                                 data-aria-label-components-pagination-item="pagedcontentnavigationitem, core"
+                                                                 data-aria-label-components-pagination-active-item="pagedcontentnavigationactiveitem, core">
+
+                                                                <ul class="pagination mb-0">
+                                                                    <li class="page-item  " data-region="page-item"
+                                                                        data-control="previous">
+
+                                                                        <a href="#" class="page-link"
+                                                                           data-region="page-link"
+                                                                           aria-label="Previous page">
+                                                                            <span class="icon-no-margin dir-rtl-hide"
+                                                                                  aria-hidden="true"><i
+                                                                                    class="icon fa fa-chevron-left fa-fw "
+                                                                                    aria-hidden="true"></i></span>
+                                                                            <span class="icon-no-margin dir-ltr-hide"
+                                                                                  aria-hidden="true"><i
+                                                                                    class="icon fa fa-chevron-right fa-fw "
+                                                                                    aria-hidden="true"></i></span>
+                                                                        </a>
+                                                                    </li>
+                                                                    <li class="page-item  " data-region="page-item"
+                                                                        data-control="next">
+
+                                                                        <a href="#" class="page-link"
+                                                                           data-region="page-link"
+                                                                           aria-label="Next page">
+                                                                            <span class="icon-no-margin dir-rtl-hide"
+                                                                                  aria-hidden="true"><i
+                                                                                    class="icon fa fa-chevron-right fa-fw "
+                                                                                    aria-hidden="true"></i></span>
+                                                                            <span class="icon-no-margin dir-ltr-hide"
+                                                                                  aria-hidden="true"><i
+                                                                                    class="icon fa fa-chevron-left fa-fw "
+                                                                                    aria-hidden="true"></i></span>
+                                                                        </a>
+                                                                    </li>
+                                                                </ul>
+                                                            </nav>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="card-deck dashboard-card-deck one-row fixed-width-cards justify-content-center overflow-hidden"
+                                                         data-region="card-deck" role="list">
+                                                    </div>
+                                                </div>
+                                                <div class="text-xs-center text-center mt-3"
+                                                     data-region="empty-message">
+                                                    <img class="empty-placeholder-image-lg mt-1"
+                                                         src="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/theme/image.php/ycampus/block_recentlyaccessedcourses/1606895045/courses"
+                                                         alt="No recent courses" role="presentation">
+                                                    <p class="text-muted mt-3">No recent courses</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="footer"></div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <span id="sb-2"></span>
+                        <section id="inst19" class=" block_myoverview block  card mb-3" role="complementary"
+                                 data-block="myoverview" aria-label="Course overview">
+
+                            <div class="card-body p-3">
+
+
+                                <div class="card-text content mt-3">
+                                    text
+                                    <div class="footer">footer</div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+                        <a href="#sb-4" class="sr-only sr-only-focusable">Skip Timeline</a>
+
+                        <section id="inst11" class=" block_timeline block  card mb-3" role="complementary"
+                                 data-block="timeline" aria-labelledby="instance-11-header">
+
+                            <div class="card-body p-3">
+
+                                <h5 id="instance-11-header" class="card-title d-inline">Timeline</h5>
+
+
+                                <div class="card-text content mt-3">
+                                    <div id="block-timeline-5fca12ce3681f5fca12ce329533" class="block-timeline"
+                                         data-region="timeline">
+                                        <div class="container p-0 pb-3 border-bottom">
+                                            <div class="row no-gutters">
+                                                <div class="col-sm d-flex justify-content-start">
+                                                    <div data-region="day-filter" class="dropdown">
+                                                        <button type="button"
+                                                                class="btn btn-outline-secondary dropdown-toggle icon-no-margin"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false" aria-label="Filter timeline items"
+                                                                aria-controls="menudayfilter">
+                                                            <i class="icon fa fa-clock-o fa-fw " aria-hidden="true"></i>
+                                                            <span class="sr-only" data-active-item-text="">
+
+
+                             Next 7 days
+
+
+
+                        </span>
+                                                        </button>
+                                                        <div id="menudayfilter" role="menu" class="dropdown-menu"
+                                                             data-show-active-item="">
+                                                            <a class="dropdown-item " href="#" data-from="-14"
+                                                               data-filtername="all" aria-label="All filter option"
+                                                               role="menuitem">
+                                                                All
+                                                            </a>
+                                                            <a class="dropdown-item " href="#" data-from="-14"
+                                                               data-to="0" data-filtername="overdue"
+                                                               aria-label="Overdue filter option" role="menuitem">
+                                                                Overdue
+                                                            </a>
+                                                            <div class="dropdown-divider" role="separator"></div>
+                                                            <h6 class="dropdown-header">Due date</h6>
+                                                            <a class="dropdown-item  active " href="#" data-from="0"
+                                                               data-to="7" data-filtername="next7days"
+                                                               aria-label="Next 7 days filter option" role="menuitem"
+                                                               aria-current="true">
+                                                                Next 7 days
+                                                            </a>
+                                                            <a class="dropdown-item " href="#" data-from="0"
+                                                               data-to="30" data-filtername="next30days"
+                                                               aria-label="Next 30 days filter option" role="menuitem">
+                                                                Next 30 days
+                                                            </a>
+                                                            <a class="dropdown-item " href="#" data-from="0"
+                                                               data-to="90" data-filtername="next3months"
+                                                               aria-label="Next 3 months filter option" role="menuitem">
+                                                                Next 3 months
+                                                            </a>
+                                                            <a class="dropdown-item " href="#" data-from="0"
+                                                               data-to="180" data-filtername="next6months"
+                                                               aria-label="Next 6 months filter option" role="menuitem">
+                                                                Next 6 months
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm d-flex justify-content-end">
+                                                    <div data-region="view-selector" class="btn-group">
+                                                        <button type="button"
+                                                                class="btn btn-outline-secondary dropdown-toggle icon-no-margin"
+                                                                data-toggle="dropdown" aria-haspopup="true"
+                                                                aria-expanded="false" aria-label="Sort timeline items"
+                                                                aria-controls="menusortby">
+                                                            <i class="icon fa fa-sort-amount-asc fa-fw "
+                                                               aria-hidden="true"></i>
+                                                            <span class="sr-only" data-active-item-text="">
+
+                            Sort by dates
+                        </span>
+                                                        </button>
+                                                        <div id="menusortby" role="menu"
+                                                             class="dropdown-menu dropdown-menu-right list-group hidden"
+                                                             data-show-active-item="" data-skip-active-class="true">
+                                                            <a class="dropdown-item active"
+                                                               href="#view_dates_5fca12ce3681f5fca12ce329533"
+                                                               data-toggle="tab" data-filtername="sortbydates"
+                                                               aria-label="Sort by dates sort option" role="menuitem"
+                                                               aria-current="true">
+                                                                Sort by dates
+                                                            </a>
+                                                            <a class="dropdown-item "
+                                                               href="#view_courses_5fca12ce3681f5fca12ce329533"
+                                                               data-toggle="tab" data-filtername="sortbycourses"
+                                                               aria-label="Sort by courses sort option" role="menuitem">
+                                                                Sort by courses
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="container p-0">
+                                            <div data-region="timeline-view">
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active show fade" data-limit="5"
+                                                         data-region="view-dates"
+                                                         id="view_dates_5fca12ce3681f5fca12ce329533">
+                                                        <div data-region="timeline-view-dates">
+                                                            <div data-region="event-list-container" data-days-offset="0"
+                                                                 data-days-limit="7" data-course-id=""
+                                                                 data-midnight="1607040000">
+                                                                <div data-region="event-list-loading-placeholder"
+                                                                     class="hidden">
+                                                                    <ul class="pl-0 list-group list-group-flush">
+                                                                        <li class="list-group-item pl-0 pr-0">
+                                                                            <div class="row">
+                                                                                <div class="col-8 pr-0">
+                                                                                    <div class="d-flex flex-row align-items-center"
+                                                                                         style="height: 32px">
+                                                                                        <div class="bg-pulse-grey rounded-circle"
+                                                                                             style="height: 32px; width: 32px;"></div>
+                                                                                        <div style="flex: 1"
+                                                                                             class="pl-2">
+                                                                                            <div class="bg-pulse-grey w-100"
+                                                                                                 style="height: 15px;"></div>
+                                                                                            <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                 style="height: 10px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-4 pr-3">
+                                                                                    <div class="d-flex flex-row justify-content-end"
+                                                                                         style="height: 32px; padding-top: 2px">
+                                                                                        <div class="bg-pulse-grey w-75"
+                                                                                             style="height: 15px;"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="list-group-item pl-0 pr-0">
+                                                                            <div class="row">
+                                                                                <div class="col-8 pr-0">
+                                                                                    <div class="d-flex flex-row align-items-center"
+                                                                                         style="height: 32px">
+                                                                                        <div class="bg-pulse-grey rounded-circle"
+                                                                                             style="height: 32px; width: 32px;"></div>
+                                                                                        <div style="flex: 1"
+                                                                                             class="pl-2">
+                                                                                            <div class="bg-pulse-grey w-100"
+                                                                                                 style="height: 15px;"></div>
+                                                                                            <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                 style="height: 10px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-4 pr-3">
+                                                                                    <div class="d-flex flex-row justify-content-end"
+                                                                                         style="height: 32px; padding-top: 2px">
+                                                                                        <div class="bg-pulse-grey w-75"
+                                                                                             style="height: 15px;"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="list-group-item pl-0 pr-0">
+                                                                            <div class="row">
+                                                                                <div class="col-8 pr-0">
+                                                                                    <div class="d-flex flex-row align-items-center"
+                                                                                         style="height: 32px">
+                                                                                        <div class="bg-pulse-grey rounded-circle"
+                                                                                             style="height: 32px; width: 32px;"></div>
+                                                                                        <div style="flex: 1"
+                                                                                             class="pl-2">
+                                                                                            <div class="bg-pulse-grey w-100"
+                                                                                                 style="height: 15px;"></div>
+                                                                                            <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                 style="height: 10px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-4 pr-3">
+                                                                                    <div class="d-flex flex-row justify-content-end"
+                                                                                         style="height: 32px; padding-top: 2px">
+                                                                                        <div class="bg-pulse-grey w-75"
+                                                                                             style="height: 15px;"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="list-group-item pl-0 pr-0">
+                                                                            <div class="row">
+                                                                                <div class="col-8 pr-0">
+                                                                                    <div class="d-flex flex-row align-items-center"
+                                                                                         style="height: 32px">
+                                                                                        <div class="bg-pulse-grey rounded-circle"
+                                                                                             style="height: 32px; width: 32px;"></div>
+                                                                                        <div style="flex: 1"
+                                                                                             class="pl-2">
+                                                                                            <div class="bg-pulse-grey w-100"
+                                                                                                 style="height: 15px;"></div>
+                                                                                            <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                 style="height: 10px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-4 pr-3">
+                                                                                    <div class="d-flex flex-row justify-content-end"
+                                                                                         style="height: 32px; padding-top: 2px">
+                                                                                        <div class="bg-pulse-grey w-75"
+                                                                                             style="height: 15px;"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                        <li class="list-group-item pl-0 pr-0">
+                                                                            <div class="row">
+                                                                                <div class="col-8 pr-0">
+                                                                                    <div class="d-flex flex-row align-items-center"
+                                                                                         style="height: 32px">
+                                                                                        <div class="bg-pulse-grey rounded-circle"
+                                                                                             style="height: 32px; width: 32px;"></div>
+                                                                                        <div style="flex: 1"
+                                                                                             class="pl-2">
+                                                                                            <div class="bg-pulse-grey w-100"
+                                                                                                 style="height: 15px;"></div>
+                                                                                            <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                 style="height: 10px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <div class="col-4 pr-3">
+                                                                                    <div class="d-flex flex-row justify-content-end"
+                                                                                         style="height: 32px; padding-top: 2px">
+                                                                                        <div class="bg-pulse-grey w-75"
+                                                                                             style="height: 15px;"></div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </li>
+                                                                    </ul>
+                                                                    <div class="pt-3 d-flex justify-content-between">
+                                                                        <div class="w-25 bg-pulse-grey"
+                                                                             style="height: 35px"></div>
+                                                                        <div class="w-25 bg-pulse-grey"
+                                                                             style="height: 35px"></div>
+                                                                    </div>
+                                                                </div>
+                                                                <div data-region="event-list-content" class="hidden">
+                                                                    <div id="paged-content-container-3"
+                                                                         data-region="paged-content-container" class="">
+
+
+                                                                        <div id="page-container-3"
+                                                                             data-region="page-container"
+                                                                             class="paged-content-page-container"
+                                                                             aria-live="polite">
+                                                                            <div data-region="paged-content-page"
+                                                                                 data-page="1" class="">
+
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="mt-1">
+
+
+                                                                            <div data-region="paging-control-container"
+                                                                                 class="d-flex">
+                                                                                <div id="paging-control-limit-container-3"
+                                                                                     data-region="paging-control-limit-container"
+                                                                                     class="d-inline-flex align-items-center">
+                                                                                    <span class="mr-1">Show</span>
+                                                                                    <div class="btn-group">
+                                                                                        <button type="button"
+                                                                                                class="btn btn-outline-secondary dropdown-toggle"
+                                                                                                data-toggle="dropdown"
+                                                                                                aria-haspopup="true"
+                                                                                                aria-expanded="false"
+                                                                                                data-action="limit-toggle"
+                                                                                                aria-label="Show 5 activities per page">
+                                                                                            5
+
+                                                                                        </button>
+                                                                                        <div role="menu"
+                                                                                             class="dropdown-menu"
+                                                                                             data-show-active-item=""
+                                                                                             data-active-item-button-aria-label-components="ariaeventlistpagelimit, block_timeline">
+                                                                                            <a class="dropdown-item active"
+                                                                                               href="#" data-limit="5"
+                                                                                               role="menuitem"
+                                                                                               aria-current="true">
+                                                                                                5
+
+                                                                                            </a>
+                                                                                            <a class="dropdown-item "
+                                                                                               href="#" data-limit="10"
+                                                                                               role="menuitem">
+                                                                                                10
+
+                                                                                            </a>
+                                                                                            <a class="dropdown-item "
+                                                                                               href="#" data-limit="25"
+                                                                                               role="menuitem">
+                                                                                                25
+
+                                                                                            </a>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <nav id="paging-bar-3"
+                                                                                     class="ml-auto hidden"
+                                                                                     data-region="paging-bar"
+                                                                                     data-ignore-control-while-loading="true"
+                                                                                     data-hide-control-on-single-page="true"
+                                                                                     data-active-page-number="1"
+                                                                                     data-items-per-page="5"
+                                                                                     aria-label="Timeline activities pagination"
+                                                                                     data-aria-label-components-pagination-item="pagedcontentnavigationitem, core"
+                                                                                     data-aria-label-components-pagination-active-item="pagedcontentnavigationactiveitem, core"
+                                                                                     data-last-page-number="1">
+
+                                                                                    <ul class="pagination mb-0">
+
+
+                                                                                        <li class="page-item disabled"
+                                                                                            data-region="page-item"
+                                                                                            data-control="previous"
+                                                                                            aria-disabled="true">
+
+                                                                                            <a href="#"
+                                                                                               class="page-link"
+                                                                                               data-region="page-link"
+                                                                                               aria-label="Previous page">
+
+                                                                                                <span class="icon-no-margin dir-rtl-hide"
+                                                                                                      aria-hidden="true"><i
+                                                                                                        class="icon fa fa-chevron-left fa-fw "
+                                                                                                        aria-hidden="true"></i></span>
+                                                                                                <span class="icon-no-margin dir-ltr-hide"
+                                                                                                      aria-hidden="true"><i
+                                                                                                        class="icon fa fa-chevron-right fa-fw "
+                                                                                                        aria-hidden="true"></i></span>
+                                                                                            </a>
+                                                                                        </li>
+
+
+                                                                                        <li class="page-item disabled"
+                                                                                            data-region="page-item"
+                                                                                            data-control="next"
+                                                                                            aria-disabled="true">
+
+                                                                                            <a href="#"
+                                                                                               class="page-link"
+                                                                                               data-region="page-link"
+                                                                                               aria-label="Next page">
+
+                                                                                                <span class="icon-no-margin dir-rtl-hide"
+                                                                                                      aria-hidden="true"><i
+                                                                                                        class="icon fa fa-chevron-right fa-fw "
+                                                                                                        aria-hidden="true"></i></span>
+                                                                                                <span class="icon-no-margin dir-ltr-hide"
+                                                                                                      aria-hidden="true"><i
+                                                                                                        class="icon fa fa-chevron-left fa-fw "
+                                                                                                        aria-hidden="true"></i></span>
+                                                                                            </a>
+                                                                                        </li>
+                                                                                    </ul>
+                                                                                </nav>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="text-xs-center text-center mt-3"
+                                                                     data-region="empty-message">
+                                                                    <img src="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/theme/image.php/ycampus/block_timeline/1606895045/activities"
+                                                                         alt="No upcoming activities due"
+                                                                         role="presentation"
+                                                                         style="height: 70px; width: 70px">
+                                                                    <p class="text-muted mt-1">No upcoming activities
+                                                                        due</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="tab-pane  fade" data-region="view-courses"
+                                                         data-midnight="1607040000" data-limit="2" data-offset="0"
+                                                         data-days-limit="7" data-days-offset="0"
+                                                         data-no-events-url="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/theme/image.php/ycampus/block_timeline/1606895045/activities"
+                                                         id="view_courses_5fca12ce3681f5fca12ce329533">
+                                                        <div data-region="course-items-loading-placeholder">
+                                                            <ul class="list-group unstyled">
+                                                                <li class="list-group-item mt-3 p-0 border-0">
+                                                                    <div class="w-50 bg-pulse-grey mb-2"
+                                                                         style="height: 20px"></div>
+                                                                    <div>
+                                                                        <ul class="pl-0 list-group list-group-flush">
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div class="pt-3 d-flex justify-content-between">
+                                                                            <div class="w-25 bg-pulse-grey"
+                                                                                 style="height: 35px"></div>
+                                                                            <div class="w-25 bg-pulse-grey"
+                                                                                 style="height: 35px"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-group-item mt-3 p-0 border-0">
+                                                                    <div class="w-50 bg-pulse-grey mb-2"
+                                                                         style="height: 20px"></div>
+                                                                    <div>
+                                                                        <ul class="pl-0 list-group list-group-flush">
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                            <li class="list-group-item pl-0 pr-0">
+                                                                                <div class="row">
+                                                                                    <div class="col-8 pr-0">
+                                                                                        <div class="d-flex flex-row align-items-center"
+                                                                                             style="height: 32px">
+                                                                                            <div class="bg-pulse-grey rounded-circle"
+                                                                                                 style="height: 32px; width: 32px;"></div>
+                                                                                            <div style="flex: 1"
+                                                                                                 class="pl-2">
+                                                                                                <div class="bg-pulse-grey w-100"
+                                                                                                     style="height: 15px;"></div>
+                                                                                                <div class="bg-pulse-grey w-75 mt-1"
+                                                                                                     style="height: 10px;"></div>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-4 pr-3">
+                                                                                        <div class="d-flex flex-row justify-content-end"
+                                                                                             style="height: 32px; padding-top: 2px">
+                                                                                            <div class="bg-pulse-grey w-75"
+                                                                                                 style="height: 15px;"></div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </li>
+                                                                        </ul>
+                                                                        <div class="pt-3 d-flex justify-content-between">
+                                                                            <div class="w-25 bg-pulse-grey"
+                                                                                 style="height: 35px"></div>
+                                                                            <div class="w-25 bg-pulse-grey"
+                                                                                 style="height: 35px"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                            <div class="bg-pulse-grey mt-1"
+                                                                 style="width: 100px; height: 30px; margin-left: auto; margin-right: auto"></div>
+                                                        </div>
+                                                        <ul class="list-group unstyled" data-region="courses-list"></ul>
+                                                        <div class="hidden text-xs-center text-center pt-3"
+                                                             data-region="more-courses-button-container">
+                                                            <button type="button" class="btn btn-secondary"
+                                                                    data-action="more-courses">
+                                                                More courses
+                                                                <span class="hidden"
+                                                                      data-region="loading-icon-container">
+                                <span class="loading-icon icon-no-margin"><i
+                                        class="icon fa fa-circle-o-notch fa-spin fa-fw " title="Loading"
+                                        aria-label="Loading"></i></span>
+                            </span>
+                                                            </button>
+                                                        </div>
+                                                        <div class="hidden text-xs-center text-center mt-3"
+                                                             data-region="no-courses-empty-message">
+                                                            <img src="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/theme/image.php/ycampus/block_timeline/1606895045/activities"
+                                                                 alt="No in-progress courses" role="presentation"
+                                                                 style="height: 70px; width: 70px">
+                                                            <p class="text-muted mt-1">No in-progress courses</p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="footer"></div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <span id="sb-4"></span><a href="#sb-5" class="sr-only sr-only-focusable">Skip Private files</a>
+
+                        <section id="inst12" class=" block_private_files block  card mb-3" role="complementary"
+                                 data-block="private_files" aria-labelledby="instance-12-header">
+
+                            <div class="card-body p-3">
+
+                                <h5 id="instance-12-header" class="card-title d-inline">Private files</h5>
+
+
+                                <div class="card-text content mt-3">
+                                    <div class="box py-3 generalbox row">No files available</div>
+                                    <div class="footer"><a
+                                            href="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/user/files.php?returnurl=http%3A%2F%2Fymoodle.southeastasia.cloudapp.azure.com%2Fmoodle%2Fmy%2Findex.php">Manage
+                                        private files...</a></div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+                        <span id="sb-5"></span><a href="#sb-6" class="sr-only sr-only-focusable">Skip Online users</a>
+
+                        <section id="inst13" class=" block_online_users block  card mb-3" role="complementary"
+                                 data-block="online_users" aria-labelledby="instance-13-header">
+
+                            <div class="card-body p-3">
+
+                                <h5 id="instance-13-header" class="card-title d-inline">Online users</h5>
+
+
+                                <div class="card-text content mt-3">
+                                    <div class="info">1 online user (last 5 minutes)</div>
+                                    <ul class="list">
+                                        <li class="listentry">
+                                            <div class="user"><a
+                                                    href="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/user/view.php?id=2&amp;course=1"
+                                                    title="24 secs"><img
+                                                    src="http://ymoodle.southeastasia.cloudapp.azure.com/moodle/theme/image.php/ycampus/core/1606895045/u/f2"
+                                                    class="userpicture defaultuserpic" width="16" height="16">Admin User</a>
+                                            </div>
+                                            <div class="uservisibility"><a
+                                                    title="Hide my online status from other users" data-action="hide"
+                                                    data-userid="2" id="change-user-visibility" href=""><i
+                                                    class="icon fa fa-eye fa-fw "
+                                                    title="Hide my online status from other users"
+                                                    aria-label="Hide my online status from other users"></i></a></div>
+                                        </li>
+                                    </ul>
+                                    <div class="clearer"><!-- --></div>
+                                    <div class="footer"></div>
+
+                                </div>
+
+                            </div>
+
+                        </section>
+
+
+
+
+
+
+
+
+
+                </div>
+
+
+            </section>
+        </div>
+    </div>
+</div>

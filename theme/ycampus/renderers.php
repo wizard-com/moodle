@@ -198,7 +198,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
                 return $this->get_courses_by_category($id);
             }
         }
-        $output .= html_writer::start_tag('div', ['id'=>'demo', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
+        $output .= html_writer::start_tag('div', ['id'=>'demo0', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
         $output .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid']);
 
         $course_categories = get_course_categories();
@@ -238,17 +238,111 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
         $output .= html_writer::end_tag('div');
         if($row_count > 1){
-            $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
-            $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
-            $output .= html_writer::link('#demo', $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
-            $output .= html_writer::link('#demo', $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
+            $output .= $this->render_control_buttons(0);
         }
         $output .= html_writer::end_tag('div');
 
         return $output;
     }
 
+    /**
+     * Construct contents of lw_courses block
+     * @param array $courses list of courses in sorted order
+     * @param int $id
+     * @return string html to be displayed in lw_courses block
+     */
+    public function lw_courses($courses, $id): string {
 
+        $output = '';
+
+        $courseordernumber = 0;
+        $total = count($courses);
+
+
+        $output .= html_writer::start_div('carousel slide lw_courses_list', array('id'=>"demo$id", 'data-ride'=>'carousel'));
+        $output .= html_writer::start_div('carousel-inner container-fluid');
+
+        $row_count = intval($total/3)+1;
+
+        if($total % 3 == 0){
+            $row_count = $total/3;
+        }
+
+        $active = ' active';
+        for($i = 0; $i < $row_count; $i++){
+            $content = '';
+            $content .= html_writer::start_tag('div', array('class'=>'carousel-item row row-equal'.$active));
+            $sub_array = array_slice($courses, $i*3, 3);
+            $length = count($sub_array);
+            $colwidth = 12 / $length;
+
+
+            foreach ($sub_array as $key => $course) {
+
+                $content .= $this->output->box_start(
+                    "coursebox col-lg-$colwidth col-md-6 col-sm-6 col-12",
+                    "course-{$course->id}");
+                $url = course_image($course);
+                $content .= html_writer::div('', 'course_image_embed',
+                    array("style" => 'background-image:url('.$url.'); background-size:cover'));;
+
+                $content .= html_writer::start_tag('div', array('class' => 'course_title'));
+                // No need to pass title through s() here as it will be done automatically by html_writer.
+                $attributes = array('class' => 'title', 'style' => 'color: #fff');
+                if ($course->id > 0) {
+                    $courseurl = new moodle_url('/course/view.php', array('id' => $course->id));
+                    $coursefullname = format_string(get_course_display_name_for_list($course), true, $course->id);
+                    $content .= html_writer::link($courseurl, $coursefullname, $attributes);
+                }
+                $content .= $this->output->box('', 'flush');
+                $content .= html_writer::end_tag('div');
+
+                if ($course->id > 0) {
+                    $content .= course_description($course);
+
+                }
+                if(empty($course->enddate)){
+                    $content .= build_progress($course);
+                }
+
+                $content .= $this->output->box('', 'flush');
+                $content .= $this->output->box_end();
+                $courseordernumber++;
+
+            }
+            $content .= html_writer::end_tag('div');
+            $output .= $content;
+
+            if($active == ' active'){
+                $active = '';
+            }
+
+        }
+
+        // Wrap course list in a div and return.
+        $output .= html_writer::end_div();
+        if($row_count > 1){
+            $output .= $this->render_control_buttons($id);
+        }
+        $output .= html_writer::end_div();
+        return $output;
+    }
+
+
+    /**
+     * Construct prev and next buttons for slideshow
+     * @param int $id
+     * @return string html of the buttons
+     */
+    private function render_control_buttons($id){
+        $output = '';
+        $span_prev = html_writer::tag('span', '', ['class'=>'carousel-control-prev-icon']);
+        $span_next = html_writer::tag('span', '', ['class'=>'carousel-control-next-icon']);
+        $output .= html_writer::link('#demo'.$id, $span_prev, ['class'=>'carousel-control-prev','data-slide'=>'prev']);
+        $output .= html_writer::link('#demo'.$id, $span_next, ['class'=>'carousel-control-next','data-slide'=>'next']);
+
+        return $output;
+    }
 
     /**
      * Renders HTML to display one course module for display within a section.
