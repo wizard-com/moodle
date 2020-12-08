@@ -251,7 +251,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
      * @param int $id
      * @return string html to be displayed in lw_courses block
      */
-    public function lw_courses($courses, $id): string {
+    public function lw_courses($courses, $id) {
 
         $output = '';
 
@@ -581,6 +581,25 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 }
 
 class theme_ycampus_core_renderer extends core_renderer{
+
+    public $unique_main_content_token;
+
+    /**
+     * Returns standard main content placeholder.
+     * Designed to be called in theme layout.php files.
+     *
+     * @return string HTML fragment.
+     */
+    public function main_content() {
+        // This is here because it is the only place we can inject the "main" role over the entire main content area
+        // without requiring all theme's to manually do it, and without creating yet another thing people need to
+        // remember in the theme.
+        // This is an unfortunate hack. DO NO EVER add anything more here.
+        // DO NOT add classes.
+        // DO NOT add an id.
+        return '<div role="main">'.$this->unique_main_content_token.'</div>';
+    }
+
 
     /**
      * Wrapper for header elements.

@@ -6,6 +6,9 @@
 defined('MOODLE_INTERNAL') || die();
 
 // We will add callbacks here as we add features to our theme.
+require_once($CFG->libdir . '/completionlib.php');
+use core_completion\progress;
+
 function theme_ycampus_get_main_scss_content($theme) {
     global $CFG;
 
@@ -171,9 +174,9 @@ function course_description($course) {
     $course = new core_course_list_element($course);
 
     $context = \context_course::instance($course->id);
-    $summary = external_format_string($course->summary, $context,
-        1, array());
-    return html_writer::div($summary, 'course_description');
+//    $summary = external_format_string($course->summary, $context,
+//        1, array());
+    return html_writer::div($course->summary, 'course_description');
 }
 
 /**
@@ -316,7 +319,6 @@ function get_new_courses() {
 /**
  * Build the Image url for course category
  *
- * @param string $filename Name of the image
  * @param string $filearea file area name
  * @return string
  */

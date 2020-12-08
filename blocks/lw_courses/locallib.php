@@ -236,24 +236,24 @@ function block_lw_courses_get_sorted_courses($showallcourses = false) {
     return array($sortedcourses, count($courses));
 }
 
-/**
- * Query db to get new courses
- * @return array
- */
-function get_new_courses() {
-    global $USER, $DB;
-
-    $query = "SELECT * FROM {course} WHERE id != 1 AND id NOT IN (SELECT DISTINCT courseid FROM mdl_course INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE userid = $USER->id ORDER BY mdl_course.fullname)";
-    $new_courses = $DB->get_records_sql($query);
-
-    if(empty($new_courses)){
-        return array();
-    }
-
-    $new_courses = array_values($new_courses);
-
-    return $new_courses;
-}
+///**
+// * Query db to get new courses
+// * @return array
+// */
+//function get_new_courses() {
+//    global $USER, $DB;
+//
+//    $query = "SELECT * FROM {course} WHERE id != 1 AND id NOT IN (SELECT DISTINCT courseid FROM mdl_course INNER JOIN mdl_enrol ON mdl_course.id = mdl_enrol.courseid INNER JOIN mdl_user_enrolments ON mdl_enrol.id = mdl_user_enrolments.enrolid WHERE userid = $USER->id ORDER BY mdl_course.fullname)";
+//    $new_courses = $DB->get_records_sql($query);
+//
+//    if(empty($new_courses)){
+//        return array();
+//    }
+//
+//    $new_courses = array_values($new_courses);
+//
+//    return $new_courses;
+//}
 
 // Custom LearningWorks functions.
 
@@ -285,33 +285,33 @@ function block_lw_courses_get_course_image_url($fileorfilename) {
     return new moodle_url("/pluginfile.php/1/block_lw_courses/courseimagedefault{$fileorfilename}");
 }
 
-/**
- * The course progress builder
- *
- * @param object $course The course whose progress we want
- * @return string
- */
-function block_lw_courses_build_progress($course) {
-    global $CFG;
-
-    require_once($CFG->dirroot.'/grade/querylib.php');
-    require_once($CFG->dirroot.'/grade/lib.php');
-    $config = get_config('block_lw_courses');
-
-    if ($config->progressenabled == BLOCKS_LW_COURSES_SHOWGRADES_NO) {
-        return '';
-    }
-
-    $percentage = progress::get_course_progress_percentage($course);
-    if (!is_null($percentage)) {
-        $percentage = floor($percentage);
-    } else {
-        $percentage = 0;
-    }
-
-    $bar = html_writer::div('', 'value', array('aria-valuenow' => "$percentage",
-            'aria-valuemin' => "0", 'aria-valuemax' => "100", 'style' => "width:$percentage%"));
-    $progress = html_writer::div($bar, 'progress', array('data-label' => "$percentage% completed"));
-
-    return $progress;
-}
+///**
+// * The course progress builder
+// *
+// * @param object $course The course whose progress we want
+// * @return string
+// */
+//function block_lw_courses_build_progress($course) {
+//    global $CFG;
+//
+//    require_once($CFG->dirroot.'/grade/querylib.php');
+//    require_once($CFG->dirroot.'/grade/lib.php');
+//    $config = get_config('block_lw_courses');
+//
+//    if ($config->progressenabled == BLOCKS_LW_COURSES_SHOWGRADES_NO) {
+//        return '';
+//    }
+//
+//    $percentage = progress::get_course_progress_percentage($course);
+//    if (!is_null($percentage)) {
+//        $percentage = floor($percentage);
+//    } else {
+//        $percentage = 0;
+//    }
+//
+//    $bar = html_writer::div('', 'value', array('aria-valuenow' => "$percentage",
+//            'aria-valuemin' => "0", 'aria-valuemax' => "100", 'style' => "width:$percentage%"));
+//    $progress = html_writer::div($bar, 'progress', array('data-label' => "$percentage% completed"));
+//
+//    return $progress;
+//}

@@ -8,23 +8,30 @@
 
 defined('MOODLE_INTERNAL') || die();
 
-global $PAGE, $OUTPUT;
-$renderer = $PAGE->get_renderer('theme_ycampus', 'core_course');
+user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
+require_once($CFG->libdir . '/behat/lib.php');
+
+global $OUTPUT, $PAGE;
+
+$core_renderer = $PAGE->get_renderer('theme_ycampus', 'core');
+$course_renderer = $PAGE->get_renderer('theme_ycampus', 'core_course');
+$header = $core_renderer->full_header();
 
 $enrolled_courses = enrol_get_my_courses();
 $new_courses = get_new_courses();
 
-$html_block = html_writer::tag('h4', 'My Courses');
+$htmlblock = '';
 
-if (count($enrolled_courses) >= 1) {
-    $html_block .= $renderer->lw_courses($enrolled_courses, 1);
+
+if(count($enrolled_courses) > 0){
+    $htmlblock .= $course_renderer->lw_courses($enrolled_courses, 1);
 }
-if(count($new_courses) >= 1) {
-    $html_block .= '<h4>New courses Available</h4>' . $renderer->lw_courses($new_courses, 2);
+if(count($new_courses) > 0){
+    $htmlblock .= $course_renderer->lw_courses($new_courses, 1);
 }
-else {
-    $html_block = '<div></div>';
-}
+$core_renderer->unique_main_content_token = $htmlblock;
+
+
 if (isloggedin()) {
     $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
 } else {
@@ -35,25 +42,18 @@ if ($navdraweropen) {
     $extraclasses[] = 'drawer-open-left';
 }
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
-$blockshtml = $OUTPUT->blocks('side-pre');
-$hasblocks = strpos($blockshtml, 'data-block=') !== false;
 $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions();
 // If the settings menu will be included in the header then don't add it here.
 $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settings_menu() : false;
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
-    'sidepreblocks' => $blockshtml,
-    'hasblocks' => $hasblocks,
+    'header'=> $header,
     'bodyattributes' => $bodyattributes,
-    'navdraweropen' => $navdraweropen,
-    'regionmainsettingsmenu' => $regionmainsettingsmenu,
-    'hasregionmainsettingsmenu' => !empty($regionmainsettingsmenu),
-    'html_block'=> $html_block
+    'navdraweropen' => $navdraweropen
 ];
 
 $nav = $PAGE->flatnav;
 $templatecontext['flatnavigation'] = $nav;
 $templatecontext['firstcollectionlabel'] = $nav->get_collectionlabel();
-
 echo $OUTPUT->render_from_template('theme_ycampus/dashboard', $templatecontext);
