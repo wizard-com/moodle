@@ -284,7 +284,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
                     "course-{$course->id}");
                 $url = course_image($course);
                 $content .= html_writer::div('', 'course_image_embed',
-                    array("style" => 'background-image:url('.$url.'); background-size:cover'));;
+                    array("style" => 'background-image:url('.$url.'); background-size:cover'));
 
                 $content .= html_writer::start_tag('div', array('class' => 'course_title'));
                 // No need to pass title through s() here as it will be done automatically by html_writer.
