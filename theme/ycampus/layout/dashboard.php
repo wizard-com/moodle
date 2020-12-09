@@ -29,7 +29,7 @@ if(count($enrolled_courses) > 0){
 if(count($new_courses) > 0){
     $htmlblock .= $course_renderer->lw_courses($new_courses, 1);
 }
-$core_renderer->unique_main_content_token = $htmlblock;
+$core_renderer->html_content = $htmlblock;
 
 
 if (isloggedin()) {
@@ -49,6 +49,7 @@ $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
     'header'=> $header,
+    'html' => $htmlblock,
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen
 ];

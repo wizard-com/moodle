@@ -582,7 +582,6 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
 class theme_ycampus_core_renderer extends core_renderer{
 
-    public $unique_main_content_token;
 
     /**
      * Returns standard main content placeholder.
