@@ -190,11 +190,7 @@ function build_progress($course) {
 
     require_once($CFG->dirroot.'/grade/querylib.php');
     require_once($CFG->dirroot.'/grade/lib.php');
-    $config = get_config('block_lw_courses');
 
-    if ($config->progressenabled == BLOCKS_LW_COURSES_SHOWGRADES_NO) {
-        return '';
-    }
 
     $percentage = progress::get_course_progress_percentage($course);
     if (!is_null($percentage)) {

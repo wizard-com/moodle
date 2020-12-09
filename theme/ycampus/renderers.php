@@ -301,7 +301,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
                     $content .= course_description($course);
 
                 }
-                if(empty($course->enddate)){
+                if(empty($course->theme)){
                     $content .= build_progress($course);
                 }
 

@@ -55,6 +55,9 @@ $THEME->layouts = [
 
     // My dashboard page.
     'mydashboard' => array(
-        'file' => 'dashboard.php'
+        'file' => 'dashboard.php',
+        'regions' => array('side-pre', 'side-post'),
+        'defaultregion' => 'side-pre',
+        'options' => array('nonavbar' => true, 'footer' => true, 'langmenu' => true, 'nocontextheader' => true)
     )
 ];

@@ -1165,3 +1165,9 @@ video {
     border-radius: 0;
     position: relative;
 }
+@media (min-width: 576px) {
+
+    .d-sm-flex {
+        display: inherit;
+    }
+}

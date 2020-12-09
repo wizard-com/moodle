@@ -70,7 +70,7 @@
 
                             <div class="card-body p-3" id="yui_3_17_2_1_1605838931509_24">
 
-                                <h5 id="instance-73-header" class="card-title d-inline">My Courses</h5>
+                                {{{heading}}}
 
 
                                 <div class="card-text content mt-3" id="yui_3_17_2_1_1605838931509_23">
@@ -88,3 +88,9 @@
 </div>
 
 </body>
+{{#js}}
+    M.util.js_pending('theme_boost/loader');
+    require(['theme_boost/loader'], function() {
+    M.util.js_complete('theme_boost/loader');
+    });
+{{/js}}

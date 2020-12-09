@@ -18,16 +18,21 @@ $course_renderer = $PAGE->get_renderer('theme_ycampus', 'core_course');
 $header = $core_renderer->full_header();
 
 $enrolled_courses = enrol_get_my_courses();
+
 $new_courses = get_new_courses();
 
-$htmlblock = '';
 
+$htmlblock = '';
+$enrolled_course_heading = '';
 
 if(count($enrolled_courses) > 0){
+    $enrolled_course_heading = '<h5 id="instance-73-header" class="card-title d-inline">My Courses</h5>';
     $htmlblock .= $course_renderer->lw_courses($enrolled_courses, 1);
 }
 if(count($new_courses) > 0){
-    $htmlblock .= $course_renderer->lw_courses($new_courses, 1);
+    $new_course_heading = html_writer::tag('h5', 'New courses available');
+    $htmlblock .= $new_course_heading;
+    $htmlblock .= $course_renderer->lw_courses($new_courses, 2);
 }
 $core_renderer->html_content = $htmlblock;
 
@@ -50,6 +55,7 @@ $templatecontext = [
     'output' => $OUTPUT,
     'header'=> $header,
     'html' => $htmlblock,
+    'heading'=> $enrolled_course_heading,
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen
 ];
