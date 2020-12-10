@@ -608,7 +608,7 @@ class theme_ycampus_core_renderer extends core_renderer{
      * @throws moodle_exception
      */
     public function full_header() {
-        global $DB, $CFG;
+        global $DB, $CFG, $COURSE;
 
         if ($this->page->include_region_main_settings_in_header_actions() &&
             !$this->page->blocks->is_block_present('settings')) {
@@ -630,6 +630,7 @@ class theme_ycampus_core_renderer extends core_renderer{
         $header->pageheadingbutton = $this->page_heading_button();
         $header->courseheader = $this->course_header();
         $header->headeractions = $this->page->get_header_actions();
+        $header->coursename = "<h3 style='color:#fff; font-weight: bold;'>$COURSE->fullname</h3>";
 
         $course_id = optional_param('id', 0, PARAM_INT);
 

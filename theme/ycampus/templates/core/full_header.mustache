@@ -33,7 +33,8 @@
         <div class="card {{^contextheader}}border-0 bg-transparent{{/contextheader}} header-image">
                 <img class="card-img-top" src="{{img_url}}" alt="img"/>
                 <div class="card-img-overlay darken">
-                    <div class="d-sm-flex align-items-center sub-wrapper">
+                    {{{coursename}}}
+                    <div class="align-items-center sub-wrapper">
 
                         {{#settingsmenu}}
                             <div class="context-header-settings-menu">
@@ -47,7 +48,7 @@
                         </div>
                     </div>
                     <div class="d-flex flex-wrap">
-                        <div class="ml-auto d-flex">
+                        <div class="ml-auto d-flex" style="padding-right: 10px">
                             {{{pageheadingbutton}}}
                         </div>
 
