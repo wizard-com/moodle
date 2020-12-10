@@ -129,7 +129,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
             $sub_array = array_slice($popular_courses, $i*3, 3);
             foreach($sub_array as $item){
                 $content .= html_writer::start_tag('div', array('class'=>'col-lg-4 col-md-4 col-sm-6'));
-                $course_url =  new moodle_url($CFG->wwwroot.'/course/index.php', array('id'=>$item->id));
+                $course_url =  new moodle_url($CFG->wwwroot.'/course/view.php', array('id'=>$item->id));
                 $content .= html_writer::start_tag('a', array('href'=>$course_url));
                 $content .= html_writer::start_tag('div', array('class'=>'card popular'));
                 $content .= html_writer::start_tag('img', array('src'=>$item->img_url, 'alt'=>'card image', 'class'=>'card-img-top popular-img-height popular-course-img')).html_writer::end_tag('img');
@@ -170,7 +170,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         $output .= html_writer::end_tag('div');
 
         $output .= html_writer::tag('span', '', array('class' => 'skip-block-to', 'id' => $skipdivid));
-        $output .= $this->render_from_template('theme_ycampus/buildings-background', ['popular_courses'=>$popular_courses_content]);
+        $output .= $this->render_from_template('theme_ycampus/buildings-background', ['popular_courses'=>$popular_courses_content,'root'=>$CFG->wwwroot]);
 
         return $output;
     }
