@@ -86,6 +86,7 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
         return html_writer::start_tag('div', array('class'=>'course-content')).html_writer::start_tag('ul', ['class' => 'topics list-group']);
     }
     protected function end_section_list(){
+
         $end_list = parent::end_section_list().html_writer::end_tag('div');
         $course_reviews = get_course_reviews();
         if(empty($course_reviews)){

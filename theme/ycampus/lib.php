@@ -161,6 +161,7 @@ function get_course_reviews(){
         $course_reviews['rating_breakdowns'] = array_values($rating_breakdown);
         $course_reviews['header_text'] = 'Rating breakdown';
     }
+    $course_reviews['root'] = $CFG->wwwroot;
 
     return $course_reviews;
 }
