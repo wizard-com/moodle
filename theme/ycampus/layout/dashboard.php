@@ -21,7 +21,6 @@ $enrolled_courses = enrol_get_my_courses();
 
 $new_courses = get_new_courses();
 
-
 $htmlblock = '';
 $enrolled_course_heading = '';
 
@@ -34,7 +33,6 @@ if(count($new_courses) > 0){
     $htmlblock .= $new_course_heading;
     $htmlblock .= $course_renderer->lw_courses($new_courses, 2);
 }
-$core_renderer->html_content = $htmlblock;
 
 
 if (isloggedin()) {

@@ -302,7 +302,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
                     $content .= course_description($course);
 
                 }
-                if(empty($course->theme)){
+                if(array_key_exists("enddate", $course) == false){
                     $content .= build_progress($course);
                 }
 

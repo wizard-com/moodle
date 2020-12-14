@@ -3,6 +3,20 @@
     float: right;
 }
 
+[data-key="contentbank"], [data-key="calendar"], [data-key="privatefiles"], [data-key="mycourses"]{
+    display: none;
+}
+#nav-drawer{
+    width: initial;
+    padding:0;
+    background-color:#343a40;
+}
+
+.list-group-item{
+    background-color: #343a40;
+    color: White;
+}
+
 // Required for IE11 to prevent blocks being pushed under the content.
 #region-main-settings-menu.has-blocks,
 #region-main.has-blocks {
@@ -1164,10 +1178,4 @@ video {
     height: 25px;
     border-radius: 0;
     position: relative;
-}
-@media (min-width: 576px) {
-
-    .d-sm-flex {
-        display: inherit;
-    }
 }
