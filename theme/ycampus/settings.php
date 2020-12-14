@@ -77,6 +77,17 @@ if ($ADMIN->fulltree) {
 
     $settings->add($page);
 
+    //header image
+    $page = new admin_settingpage('theme_ycampus_heading_image', get_string('headingimagesettings', 'theme_ycampus'));
+
+    $name = 'theme_ycampus/headingimage';
+    $title = get_string('headingimage', 'theme_ycampus');
+    $setting = new admin_setting_configstoredfile($name, $title, '', 'heading', 100, array('maxfiles' => 1, 'accepted_types' => array('.jpg', '.png')));
+    $page->add($setting);
+
+    $settings->add($page);
+
+    //Category Image
     $page = new admin_settingpage('theme_ycampus_category_images', get_string('categoryimagesettings', 'theme_ycampus'));
 
     try {

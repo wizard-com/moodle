@@ -46,3 +46,7 @@ $string['categoryimagesettings'] = 'Category Images';
 $string['categoryimage'] = 'Category';
 //Description for category image settings
 $string['categoryimage_desc'] = 'Image for the category';
+//Name of the heading image settings tab
+$string['headingimagesettings'] = 'Heading Image';
+//Heading image settings
+$string['headingimage'] = 'Image for heading';
