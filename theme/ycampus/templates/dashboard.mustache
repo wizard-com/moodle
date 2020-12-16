@@ -36,18 +36,13 @@
         ]
     }
 }}
-<!--<div role="main"><span id="maincontent"></span>-->
-<!--    <aside id="block-region-content" class="block-region" data-blockregion="content" data-droptarget="1"><a href="#sb-1"-->
-<!--                                                                                                            class="sr-only sr-only-focusable">Skip My Courses</a>-->
-<!--      -->
-
-<!--        <span id="sb-1"></span></aside>-->
-<!--</div>-->
-<!---->
 {{> theme_boost/head }}
 <body {{{ bodyattributes }}}>
+{{> core/local/toast/wrapper}}
 
 <div id="page-wrapper" class="d-print-block">
+
+    {{{ output.standard_top_of_body_html }}}
 
     {{> theme_boost/navbar }}
     {{> theme_boost/nav-drawer }}
@@ -59,7 +54,7 @@
         <div id="page-content" class="row pb-3 d-print-block">
             <div id="region-main-box" class="col-12">
 
-                <section id="region-main" aria-label="Content">
+                <section id="region-main" aria-label="content">
                     {{{ output.main_content }}}
                     <div role="main">
                     <aside id="block-region-content" class="block-region" data-blockregion="content" data-droptarget="1">

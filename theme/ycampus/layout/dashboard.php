@@ -9,9 +9,19 @@
 defined('MOODLE_INTERNAL') || die();
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
-require_once($CFG->libdir . '/behat/lib.php');
 
-global $OUTPUT, $PAGE;
+global $OUTPUT, $PAGE, $CFG;
+
+require_once($CFG->libdir . '/behat/lib.php');
+if (isloggedin()) {
+    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
+} else {
+    $navdraweropen = false;
+}
+$extraclasses = [];
+if ($navdraweropen) {
+    $extraclasses[] = 'drawer-open-left';
+}
 
 $core_renderer = $PAGE->get_renderer('theme_ycampus', 'core');
 $course_renderer = $PAGE->get_renderer('theme_ycampus', 'core_course');
@@ -34,16 +44,6 @@ if(count($new_courses) > 0){
     $htmlblock .= $course_renderer->lw_courses($new_courses, 2);
 }
 
-
-if (isloggedin()) {
-    $navdraweropen = (get_user_preferences('drawer-open-nav', 'true') == 'true');
-} else {
-    $navdraweropen = false;
-}
-$extraclasses = [];
-if ($navdraweropen) {
-    $extraclasses[] = 'drawer-open-left';
-}
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions();
 // If the settings menu will be included in the header then don't add it here.
