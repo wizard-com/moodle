@@ -49,31 +49,15 @@
 
     <div id="page" class="container-fluid d-print-block">
 
-        {{{header}}}
+        {{{render.full_header}}}
 
         <div id="page-content" class="row pb-3 d-print-block">
             <div id="region-main-box" class="col-12">
 
                 <section id="region-main" aria-label="content">
                     {{{ output.main_content }}}
-                    <div role="main">
-                    <aside id="block-region-content" class="block-region" data-blockregion="content" data-droptarget="1">
-                        <a href="#sb-1" class="sr-only sr-only-focusable">Skip My Courses</a>
 
-                        <section id="inst73" class=" block_lw_courses block card mb-3" role="complementary" data-block="lw_courses"
-                                 aria-labelledby="instance-73-header">
-
-                            <div class="card-body p-3" id="yui_3_17_2_1_1605838931509_24">
-
-                                {{{heading}}}
-
-
-                                <div class="card-text content mt-3" id="yui_3_17_2_1_1605838931509_23">
-                                    {{{html}}}
-                                </div>
-                            </div>
-                        </section>
-                    </aside></div>
+                    {{{render.main_content}}}
 
                 </section>
             </div>

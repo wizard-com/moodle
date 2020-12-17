@@ -583,7 +583,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
 
 class theme_ycampus_core_renderer extends core_renderer{
 
-
+    protected $unique_main_content_token;
     /**
      * Returns standard main content placeholder.
      * Designed to be called in theme layout.php files.
@@ -597,8 +597,29 @@ class theme_ycampus_core_renderer extends core_renderer{
         // This is an unfortunate hack. DO NO EVER add anything more here.
         // DO NOT add classes.
         // DO NOT add an id.
+        $course_renderer = $this->page->get_renderer('theme_ycampus', 'core_course');
+        $enrolled_courses = enrol_get_my_courses();
+
+        $new_courses = get_new_courses();
+
+        $htmlblock = '<aside id="block-region-content" class="block-region" data-blockregion="content" data-droptarget="1">';
+        $htmlblock .= '<a href="#sb-1" class="sr-only sr-only-focusable">Skip My Courses</a><section id="inst73" class=" block_lw_courses block card mb-3" role="complementary" data-block="lw_courses" aria-labelledby="instance-73-header"><div class="card-body p-3" id="yui_3_17_2_1_1605838931509_24">';
+
+        if(count($enrolled_courses) > 0){
+            $htmlblock .= '<h5 id="instance-73-header" class="card-title d-inline">My Courses</h5>';
+            $htmlblock .= '<div class="card-text content mt-3" id="yui_3_17_2_1_1605838931509_23">';
+            $htmlblock .= $course_renderer->lw_courses($enrolled_courses, 1);
+        }
+        if(count($new_courses) > 0){
+            $new_course_heading = html_writer::tag('h5', 'New courses available');
+            $htmlblock .= $new_course_heading;
+            $htmlblock .= $course_renderer->lw_courses($new_courses, 2);
+        }
+        $htmlblock .= '</div></div></section></aside>';
+        $this->unique_main_content_token = $htmlblock;
         return '<div role="main">'.$this->unique_main_content_token.'</div>';
     }
+
 
 
     /**
