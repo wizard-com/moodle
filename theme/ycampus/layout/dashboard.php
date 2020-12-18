@@ -10,7 +10,7 @@ defined('MOODLE_INTERNAL') || die();
 
 user_preference_allow_ajax_update('drawer-open-nav', PARAM_ALPHA);
 
-global $OUTPUT, $PAGE, $CFG;
+global $OUTPUT, $PAGE, $CFG, $SITE;
 
 require_once($CFG->libdir . '/behat/lib.php');
 if (isloggedin()) {
@@ -24,6 +24,24 @@ if ($navdraweropen) {
 }
 
 $core_renderer = $PAGE->get_renderer('theme_ycampus', 'core');
+$course_renderer = $PAGE->get_renderer('theme_ycampus', 'core_course');
+
+$enrolled_courses = enrol_get_my_courses();
+
+$new_courses = get_new_courses();
+
+$htmlblock = '';
+$enrolled_course_heading = '';
+
+if(count($enrolled_courses) > 0){
+    $enrolled_course_heading = '<h5 id="instance-73-header" class="card-title d-inline">My Courses</h5>';
+    $htmlblock .= $course_renderer->lw_courses($enrolled_courses, 1);
+}
+if(count($new_courses) > 0){
+    $new_course_heading = html_writer::tag('h5', 'New courses available');
+    $htmlblock .= $new_course_heading;
+    $htmlblock .= $course_renderer->lw_courses($new_courses, 2);
+}
 
 $bodyattributes = $OUTPUT->body_attributes($extraclasses);
 $buildregionmainsettings = !$PAGE->include_region_main_settings_in_header_actions();
@@ -34,7 +52,9 @@ $regionmainsettingsmenu = $buildregionmainsettings ? $OUTPUT->region_main_settin
 $templatecontext = [
     'sitename' => format_string($SITE->shortname, true, ['context' => context_course::instance(SITEID), "escape" => false]),
     'output' => $OUTPUT,
-    'render'=> $core_renderer,
+    'core_renderer'=> $core_renderer,
+    'heading' => $enrolled_course_heading,
+    'html'=> $htmlblock,
     'bodyattributes' => $bodyattributes,
     'navdraweropen' => $navdraweropen
 ];
