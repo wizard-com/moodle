@@ -101,20 +101,32 @@ class theme_ycampus_format_topics_renderer extends format_topics_renderer {
 class theme_ycampus_core_course_renderer extends core_course_renderer {
 
     /**
-     * Renders part of frontpage with a skip link (i.e. "My courses", "Site news", etc.)
+     * Outputs contents for frontpage as configured in $CFG->frontpage or $CFG->frontpageloggedin
      *
-     * @param string $skipdivid
-     * @param string $contentsdivid
-     * @param string $header Header of the part
-     * @param string $contents Contents of the part
      * @return string
      */
-    protected function frontpage_part($skipdivid, $contentsdivid, $header, $contents) {
-        global $CFG;
+    public function frontpage() {
+        global $CFG, $SITE;
 
-        if (strval($contents) === '') {
-            return '';
-        }
+        $output = '';
+
+        if (isloggedin() and !isguestuser() and isset($CFG->frontpageloggedin)) {
+
+            $output .= $this->frontpage_part('skipcategories', 'frontpage-category-names',
+                            html_writer::tag('h4', 'Find a topic').'<br/>', $this->frontpage_categories_list());
+
+                $output .= '<br />';
+            }
+        return $output;
+    }
+
+    /**
+     * Course category footer
+     *
+     * @return string
+     */
+    private function coursecat_footer(){
+        global $CFG;
         $popular_courses_content = html_writer::start_tag('div', ['id'=>'demo1', 'class'=>'carousel slide', 'data-ride'=>'carousel']);
         $popular_courses_content .= html_writer::start_tag('div', ['class'=>'carousel-inner container-fluid']);
         $popular_courses = get_popular_courses();
@@ -159,22 +171,15 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         }
         $popular_courses_content .= html_writer::end_tag('div');
 
-        $output = html_writer::link('#' . $skipdivid, get_string('skipa', 'access', core_text::strtolower(strip_tags($header))), array('class' => 'skip-block skip aabtn'));
+        $output = '';
         // Wrap frontpage part in div container.
-        $output .= html_writer::start_tag('div', array('id' => $contentsdivid));
-        //$output .= $this->heading($header);
-        $output .= html_writer::tag('h4', 'Find a topic').'<br/>';
 
-        $output .= $contents;
 
-        // End frontpage part div container.
-        $output .= html_writer::end_tag('div');
-
-        $output .= html_writer::tag('span', '', array('class' => 'skip-block-to', 'id' => $skipdivid));
         $output .= $this->render_from_template('theme_ycampus/buildings-background', ['popular_courses'=>$popular_courses_content,'root'=>$CFG->wwwroot]);
 
         return $output;
     }
+
 
     /**
      * Returns HTML to display a tree of subcategories and courses in the given category
@@ -243,6 +248,7 @@ class theme_ycampus_core_course_renderer extends core_course_renderer {
         }
         $output .= html_writer::end_tag('div');
 
+        $output .= $this->coursecat_footer();
         return $output;
     }
 
